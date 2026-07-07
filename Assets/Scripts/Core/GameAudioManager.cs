@@ -5,7 +5,7 @@ using UnityEngine;
 namespace BokeGameJam.Core
 {
     /// <summary>
-    /// Global audio manager. Resource loading is delegated to ResourcesManager.
+    /// Global audio manager. Audio assets are resolved through ResourcesManager.
     /// </summary>
     public class GameAudioManager : MonoBehaviour
     {
@@ -24,13 +24,15 @@ namespace BokeGameJam.Core
         private AudioSource sfxOneShotSource;
 
         private readonly Dictionary<string, AudioSource> loopingSfxSources = new();
+        private readonly Dictionary<string, float> loopingSfxVolumeScales = new();
 
-        private string currentBgmName;
+        private string currentBgmId;
+        private float currentBgmVolumeScale = 1f;
         private Coroutine bgmFadeCoroutine;
 
         public float BgmVolume => bgmVolume;
         public float SfxVolume => sfxVolume;
-        public string CurrentBgmName => currentBgmName;
+        public string CurrentBgmId => currentBgmId;
 
         private void Awake()
         {
@@ -53,39 +55,61 @@ namespace BokeGameJam.Core
 
         #region BGM
 
-        public void PlayBGM(string musicName, bool loop = true, float fadeDuration = -1f)
+        public void PlayBGM(ResourceDefinitionDatabase.SoundResource music, float fadeDuration = -1f)
         {
-            AudioClip clip = ResourcesManager.LoadMusic(musicName);
-            if (clip == null)
+            if (!TryLoadSound(music, ResourceDefinitionDatabase.SoundCategory.Music, out AudioClip clip))
                 return;
 
-            if (currentBgmName == musicName && bgmActiveSource.isPlaying)
+            string musicId = music.Id;
+            if (currentBgmId == musicId && bgmActiveSource.isPlaying)
                 return;
 
             float fade = fadeDuration < 0f ? defaultBgmFadeDuration : fadeDuration;
 
-            if (string.IsNullOrEmpty(currentBgmName) || fade <= 0f)
+            if (string.IsNullOrEmpty(currentBgmId) || fade <= 0f)
             {
                 StopBgmFade();
-                PlayBgmImmediate(clip, musicName, loop);
+                PlayBgmImmediate(clip, music, musicId);
                 return;
             }
 
-            SwitchBGM(musicName, fade, loop);
+            SwitchBGM(music, fade);
         }
 
-        public void SwitchBGM(string musicName, float fadeDuration = -1f, bool loop = true)
+        public void PlayBGMById(string musicId, float fadeDuration = -1f)
         {
-            AudioClip clip = ResourcesManager.LoadMusic(musicName);
-            if (clip == null)
+            if (!ResourcesManager.TryGetSound(musicId, out ResourceDefinitionDatabase.SoundResource music))
+            {
+                Debug.LogError($"[GameAudioManager] Cannot find music id: {musicId}");
+                return;
+            }
+
+            PlayBGM(music, fadeDuration);
+        }
+
+        public void SwitchBGM(ResourceDefinitionDatabase.SoundResource music, float fadeDuration = -1f)
+        {
+            if (!TryLoadSound(music, ResourceDefinitionDatabase.SoundCategory.Music, out AudioClip clip))
                 return;
 
-            if (currentBgmName == musicName && bgmActiveSource.isPlaying)
+            string musicId = music.Id;
+            if (currentBgmId == musicId && bgmActiveSource.isPlaying)
                 return;
 
             float fade = fadeDuration < 0f ? defaultBgmFadeDuration : fadeDuration;
             StopBgmFade();
-            bgmFadeCoroutine = StartCoroutine(CrossfadeBgmRoutine(clip, musicName, loop, fade));
+            bgmFadeCoroutine = StartCoroutine(CrossfadeBgmRoutine(clip, music, musicId, fade));
+        }
+
+        public void SwitchBGMById(string musicId, float fadeDuration = -1f)
+        {
+            if (!ResourcesManager.TryGetSound(musicId, out ResourceDefinitionDatabase.SoundResource music))
+            {
+                Debug.LogError($"[GameAudioManager] Cannot find music id: {musicId}");
+                return;
+            }
+
+            SwitchBGM(music, fadeDuration);
         }
 
         public void StopBGM(float fadeDuration = 0f)
@@ -95,7 +119,9 @@ namespace BokeGameJam.Core
                 StopBgmFade();
                 bgmSourceA.Stop();
                 bgmSourceB.Stop();
-                currentBgmName = null;
+                currentBgmId = null;
+                currentBgmVolumeScale = 1f;
+                ApplyVolumes();
                 return;
             }
 
@@ -110,43 +136,79 @@ namespace BokeGameJam.Core
 
         #region SFX
 
-        public void PlaySFX(string sfxName, float volumeScale = 1f)
+        public void PlaySFX(ResourceDefinitionDatabase.SoundResource sfx, float volumeScale = 1f)
         {
-            AudioClip clip = ResourcesManager.LoadSound(sfxName);
-            if (clip == null)
+            if (!TryLoadSound(sfx, ResourceDefinitionDatabase.SoundCategory.SFX, out AudioClip clip))
                 return;
 
-            sfxOneShotSource.PlayOneShot(clip, sfxVolume * volumeScale);
+            sfxOneShotSource.PlayOneShot(clip, sfxVolume * sfx.VolumeScale * volumeScale);
         }
 
-        public void PlaySFXLoop(string sfxName, float volumeScale = 1f)
+        public void PlaySFXById(string sfxId, float volumeScale = 1f)
         {
-            AudioClip clip = ResourcesManager.LoadSound(sfxName);
-            if (clip == null)
-                return;
-
-            if (loopingSfxSources.TryGetValue(sfxName, out AudioSource existing))
+            if (!ResourcesManager.TryGetSound(sfxId, out ResourceDefinitionDatabase.SoundResource sfx))
             {
-                existing.Stop();
-                Destroy(existing.gameObject);
-                loopingSfxSources.Remove(sfxName);
+                Debug.LogError($"[GameAudioManager] Cannot find SFX id: {sfxId}");
+                return;
             }
 
-            AudioSource source = CreateChildSource($"SFX_Loop_{sfxName}", loop: true);
-            source.clip = clip;
-            source.volume = sfxVolume * volumeScale;
-            source.Play();
-            loopingSfxSources[sfxName] = source;
+            PlaySFX(sfx, volumeScale);
         }
 
-        public void StopSFX(string sfxName)
+        public void PlaySFXLoop(ResourceDefinitionDatabase.SoundResource sfx, float volumeScale = 1f)
         {
-            if (!loopingSfxSources.TryGetValue(sfxName, out AudioSource source))
+            if (!TryLoadSound(sfx, ResourceDefinitionDatabase.SoundCategory.SFX, out AudioClip clip))
+                return;
+
+            StopSFXById(sfx.Id);
+
+            AudioSource source = CreateChildSource($"SFX_Loop_{sfx.Id}", loop: true);
+            float finalVolumeScale = sfx.VolumeScale * volumeScale;
+            source.clip = clip;
+            source.volume = sfxVolume * finalVolumeScale;
+            source.Play();
+
+            loopingSfxSources[sfx.Id] = source;
+            loopingSfxVolumeScales[sfx.Id] = finalVolumeScale;
+        }
+
+        public void PlaySFXLoopById(string sfxId, float volumeScale = 1f)
+        {
+            if (!ResourcesManager.TryGetSound(sfxId, out ResourceDefinitionDatabase.SoundResource sfx))
+            {
+                Debug.LogError($"[GameAudioManager] Cannot find SFX id: {sfxId}");
+                return;
+            }
+
+            PlaySFXLoop(sfx, volumeScale);
+        }
+
+        public void StopSFX(ResourceDefinitionDatabase.SoundResource sfx)
+        {
+            if (sfx == null)
+            {
+                Debug.LogWarning("[GameAudioManager] SFX resource is null.");
+                return;
+            }
+
+            StopSFXById(sfx.Id);
+        }
+
+        public void StopSFXById(string sfxId)
+        {
+            if (string.IsNullOrWhiteSpace(sfxId))
+            {
+                Debug.LogWarning("[GameAudioManager] SFX id is empty.");
+                return;
+            }
+
+            if (!loopingSfxSources.TryGetValue(sfxId, out AudioSource source))
                 return;
 
             source.Stop();
             Destroy(source.gameObject);
-            loopingSfxSources.Remove(sfxName);
+            loopingSfxSources.Remove(sfxId);
+            loopingSfxVolumeScales.Remove(sfxId);
         }
 
         public void StopAllSFX()
@@ -158,6 +220,7 @@ namespace BokeGameJam.Core
             }
 
             loopingSfxSources.Clear();
+            loopingSfxVolumeScales.Clear();
         }
 
         #endregion
@@ -193,23 +256,28 @@ namespace BokeGameJam.Core
 
         private void ApplyVolumes()
         {
-            bgmSourceA.volume = bgmVolume;
-            bgmSourceB.volume = bgmVolume;
+            float currentBgmVolume = bgmVolume * currentBgmVolumeScale;
+            bgmSourceA.volume = currentBgmVolume;
+            bgmSourceB.volume = currentBgmVolume;
 
             foreach (var pair in loopingSfxSources)
             {
-                if (pair.Value != null)
-                    pair.Value.volume = sfxVolume;
+                if (pair.Value == null)
+                    continue;
+
+                float volumeScale = loopingSfxVolumeScales.TryGetValue(pair.Key, out float scale) ? scale : 1f;
+                pair.Value.volume = sfxVolume * volumeScale;
             }
         }
 
-        private void PlayBgmImmediate(AudioClip clip, string musicName, bool loop)
+        private void PlayBgmImmediate(AudioClip clip, ResourceDefinitionDatabase.SoundResource music, string musicId)
         {
+            currentBgmVolumeScale = music.VolumeScale;
             bgmActiveSource.clip = clip;
-            bgmActiveSource.loop = loop;
-            bgmActiveSource.volume = bgmVolume;
+            bgmActiveSource.loop = music.Loop;
+            bgmActiveSource.volume = bgmVolume * currentBgmVolumeScale;
             bgmActiveSource.Play();
-            currentBgmName = musicName;
+            currentBgmId = musicId;
         }
 
         private void StopBgmFade()
@@ -221,18 +289,20 @@ namespace BokeGameJam.Core
             }
         }
 
-        private IEnumerator CrossfadeBgmRoutine(AudioClip nextClip, string musicName, bool loop, float duration)
+        private IEnumerator CrossfadeBgmRoutine(AudioClip nextClip, ResourceDefinitionDatabase.SoundResource music, string musicId, float duration)
         {
             AudioSource from = bgmActiveSource;
             AudioSource to = from == bgmSourceA ? bgmSourceB : bgmSourceA;
+            float nextVolumeScale = music.VolumeScale;
+            float nextVolume = bgmVolume * nextVolumeScale;
 
             to.clip = nextClip;
-            to.loop = loop;
+            to.loop = music.Loop;
             to.volume = 0f;
             to.Play();
 
             float elapsed = 0f;
-            float fromStartVolume = bgmVolume;
+            float fromStartVolume = from.volume;
 
             while (elapsed < duration)
             {
@@ -240,16 +310,17 @@ namespace BokeGameJam.Core
                 float t = elapsed / duration;
 
                 from.volume = Mathf.Lerp(fromStartVolume, 0f, t);
-                to.volume = Mathf.Lerp(0f, bgmVolume, t);
+                to.volume = Mathf.Lerp(0f, nextVolume, t);
                 yield return null;
             }
 
             from.Stop();
-            from.volume = bgmVolume;
-            to.volume = bgmVolume;
+            from.volume = nextVolume;
+            to.volume = nextVolume;
 
             bgmActiveSource = to;
-            currentBgmName = musicName;
+            currentBgmId = musicId;
+            currentBgmVolumeScale = nextVolumeScale;
             bgmFadeCoroutine = null;
         }
 
@@ -268,10 +339,29 @@ namespace BokeGameJam.Core
 
             bgmSourceA.Stop();
             bgmSourceB.Stop();
-            bgmSourceA.volume = bgmVolume;
-            bgmSourceB.volume = bgmVolume;
-            currentBgmName = null;
+            currentBgmId = null;
+            currentBgmVolumeScale = 1f;
+            ApplyVolumes();
             bgmFadeCoroutine = null;
+        }
+
+        private bool TryLoadSound(ResourceDefinitionDatabase.SoundResource sound, ResourceDefinitionDatabase.SoundCategory expectedCategory, out AudioClip clip)
+        {
+            clip = null;
+            if (sound == null)
+            {
+                Debug.LogWarning("[GameAudioManager] Sound resource is null.");
+                return false;
+            }
+
+            if (sound.Category != expectedCategory)
+            {
+                Debug.LogWarning($"[GameAudioManager] Sound '{sound.Id}' is {sound.Category}, expected {expectedCategory}.");
+                return false;
+            }
+
+            clip = ResourcesManager.LoadSound(sound);
+            return clip != null;
         }
 
         #endregion

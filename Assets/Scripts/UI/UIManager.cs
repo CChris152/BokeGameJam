@@ -6,16 +6,11 @@ using UnityEngine.UI;
 namespace BokeGameJam.UI
 {
     /// <summary>
-    /// Runtime UI manager. By default, UI prefabs are loaded from Resources/Prefabs/UI/.
+    /// Runtime UI manager. UI prefab references are resolved through ResourcesManager.
     /// </summary>
     public class UIManager : MonoBehaviour
     {
         public static UIManager Instance { get; private set; }
-
-        private const string DefaultUIResourcePath = "Prefabs/UI/";
-
-        [Header("UI Prefab Loading")]
-        [SerializeField] private string uiResourcePath = DefaultUIResourcePath;
 
         [Header("UI Root")]
         [SerializeField] private Transform uiRoot;
@@ -51,17 +46,17 @@ namespace BokeGameJam.UI
         /// <summary>
         /// Loads a UI prefab if needed, then shows it.
         /// </summary>
-        public GameObject LoadUI(string uiName)
+        public GameObject LoadUI(ResourceDefinitionDatabase.UIResource uiResource)
         {
-            return LoadUI(uiName, UIRoot);
+            return LoadUI(uiResource, UIRoot);
         }
 
         /// <summary>
         /// Loads a UI prefab under the given parent if needed, then shows it.
         /// </summary>
-        public GameObject LoadUI(string uiName, Transform parent)
+        public GameObject LoadUI(ResourceDefinitionDatabase.UIResource uiResource, Transform parent)
         {
-            string cacheKey = BuildResourcePath(uiName);
+            string cacheKey = GetUIId(uiResource);
             if (string.IsNullOrEmpty(cacheKey))
                 return null;
 
@@ -79,49 +74,74 @@ namespace BokeGameJam.UI
                 }
             }
 
-            GameObject prefab = ResourcesManager.LoadUIAtPath(cacheKey);
+            GameObject prefab = ResourcesManager.LoadUI(uiResource);
             if (prefab == null)
                 return null;
 
             Transform targetParent = parent != null ? parent : UIRoot;
             GameObject uiInstance = Instantiate(prefab, targetParent, false);
-            uiInstance.name = GetDisplayName(cacheKey);
+            uiInstance.name = cacheKey;
             uiInstance.SetActive(true);
             loadedUIs[cacheKey] = uiInstance;
 
             return uiInstance;
         }
 
-        public T LoadUI<T>(string uiName) where T : Component
+        public GameObject LoadUIById(string uiId)
         {
-            GameObject ui = LoadUI(uiName);
+            return LoadUIById(uiId, UIRoot);
+        }
+
+        public GameObject LoadUIById(string uiId, Transform parent)
+        {
+            if (!ResourcesManager.TryGetUI(uiId, out ResourceDefinitionDatabase.UIResource uiResource))
+            {
+                Debug.LogError($"[UIManager] Cannot find UI resource id: {uiId}");
+                return null;
+            }
+
+            return LoadUI(uiResource, parent);
+        }
+
+        public T LoadUI<T>(ResourceDefinitionDatabase.UIResource uiResource) where T : Component
+        {
+            GameObject ui = LoadUI(uiResource);
             return ui != null ? ui.GetComponent<T>() : null;
         }
 
-        public bool HideUI(string uiName)
+        public T LoadUIById<T>(string uiId) where T : Component
         {
-            if (!TryGetLoadedUI(uiName, out GameObject ui))
+            GameObject ui = LoadUIById(uiId);
+            return ui != null ? ui.GetComponent<T>() : null;
+        }
+
+        public bool HideUI(ResourceDefinitionDatabase.UIResource uiResource)
+        {
+            if (!TryGetLoadedUI(uiResource, out GameObject ui))
                 return false;
 
             ui.SetActive(false);
             return true;
         }
 
-        public bool CloseUI(string uiName)
+        public bool HideUIById(string uiId)
         {
-            string cacheKey = BuildResourcePath(uiName);
-            if (string.IsNullOrEmpty(cacheKey))
+            if (!TryGetLoadedUIById(uiId, out GameObject ui))
                 return false;
 
-            if (!loadedUIs.TryGetValue(cacheKey, out GameObject ui))
-                return false;
-
-            loadedUIs.Remove(cacheKey);
-
-            if (ui != null)
-                Destroy(ui);
-
+            ui.SetActive(false);
             return true;
+        }
+
+        public bool CloseUI(ResourceDefinitionDatabase.UIResource uiResource)
+        {
+            string cacheKey = GetUIId(uiResource);
+            return CloseUIByCacheKey(cacheKey);
+        }
+
+        public bool CloseUIById(string uiId)
+        {
+            return CloseUIByCacheKey(NormalizeId(uiId));
         }
 
         public void HideAllUI()
@@ -144,33 +164,35 @@ namespace BokeGameJam.UI
             loadedUIs.Clear();
         }
 
-        public bool TryGetLoadedUI(string uiName, out GameObject ui)
+        public bool TryGetLoadedUI(ResourceDefinitionDatabase.UIResource uiResource, out GameObject ui)
         {
-            string cacheKey = BuildResourcePath(uiName);
-            if (string.IsNullOrEmpty(cacheKey))
-            {
-                ui = null;
-                return false;
-            }
-
-            if (!loadedUIs.TryGetValue(cacheKey, out ui))
-                return false;
-
-            if (ui != null)
-                return true;
-
-            loadedUIs.Remove(cacheKey);
-            return false;
+            string cacheKey = GetUIId(uiResource);
+            return TryGetLoadedUIByCacheKey(cacheKey, out ui);
         }
 
-        public T GetLoadedUI<T>(string uiName) where T : Component
+        public bool TryGetLoadedUIById(string uiId, out GameObject ui)
         {
-            return TryGetLoadedUI(uiName, out GameObject ui) ? ui.GetComponent<T>() : null;
+            return TryGetLoadedUIByCacheKey(NormalizeId(uiId), out ui);
         }
 
-        public bool IsUIVisible(string uiName)
+        public T GetLoadedUI<T>(ResourceDefinitionDatabase.UIResource uiResource) where T : Component
         {
-            return TryGetLoadedUI(uiName, out GameObject ui) && ui.activeSelf;
+            return TryGetLoadedUI(uiResource, out GameObject ui) ? ui.GetComponent<T>() : null;
+        }
+
+        public T GetLoadedUIById<T>(string uiId) where T : Component
+        {
+            return TryGetLoadedUIById(uiId, out GameObject ui) ? ui.GetComponent<T>() : null;
+        }
+
+        public bool IsUIVisible(ResourceDefinitionDatabase.UIResource uiResource)
+        {
+            return TryGetLoadedUI(uiResource, out GameObject ui) && ui.activeSelf;
+        }
+
+        public bool IsUIVisibleById(string uiId)
+        {
+            return TryGetLoadedUIById(uiId, out GameObject ui) && ui.activeSelf;
         }
 
         private void EnsureUIRoot()
@@ -194,32 +216,59 @@ namespace BokeGameJam.UI
             uiRoot = root.transform;
         }
 
-        private string BuildResourcePath(string uiName)
+        private bool CloseUIByCacheKey(string cacheKey)
         {
-            if (string.IsNullOrWhiteSpace(uiName))
+            if (string.IsNullOrEmpty(cacheKey))
+                return false;
+
+            if (!loadedUIs.TryGetValue(cacheKey, out GameObject ui))
+                return false;
+
+            loadedUIs.Remove(cacheKey);
+
+            if (ui != null)
+                Destroy(ui);
+
+            return true;
+        }
+
+        private bool TryGetLoadedUIByCacheKey(string cacheKey, out GameObject ui)
+        {
+            if (string.IsNullOrEmpty(cacheKey))
             {
-                Debug.LogWarning("[UIManager] UI name is empty.");
+                ui = null;
+                return false;
+            }
+
+            if (!loadedUIs.TryGetValue(cacheKey, out ui))
+                return false;
+
+            if (ui != null)
+                return true;
+
+            loadedUIs.Remove(cacheKey);
+            return false;
+        }
+
+        private string GetUIId(ResourceDefinitionDatabase.UIResource uiResource)
+        {
+            if (uiResource == null)
+            {
+                Debug.LogWarning("[UIManager] UI resource is null.");
                 return null;
             }
 
-            string normalizedName = uiName.Trim().Replace('\\', '/');
-            string normalizedRoot = string.IsNullOrWhiteSpace(uiResourcePath)
-                ? string.Empty
-                : uiResourcePath.Trim().Replace('\\', '/').Trim('/');
+            string id = NormalizeId(uiResource.Id);
+            if (!string.IsNullOrEmpty(id))
+                return id;
 
-            if (string.IsNullOrEmpty(normalizedRoot))
-                return normalizedName.Trim('/');
-
-            if (normalizedName.StartsWith(normalizedRoot + "/"))
-                return normalizedName.Trim('/');
-
-            return $"{normalizedRoot}/{normalizedName.Trim('/')}";
+            Debug.LogWarning("[UIManager] UI resource id is empty.");
+            return null;
         }
 
-        private string GetDisplayName(string resourcePath)
+        private string NormalizeId(string id)
         {
-            int lastSlashIndex = resourcePath.LastIndexOf('/');
-            return lastSlashIndex >= 0 ? resourcePath[(lastSlashIndex + 1)..] : resourcePath;
+            return string.IsNullOrWhiteSpace(id) ? null : id.Trim();
         }
     }
 }

@@ -2,17 +2,19 @@ using BokeGameJam.Core;
 using UnityEngine;
 
 /// <summary>
-/// 场景切换测试：左键点击切换到 NewScene。
+/// 场景切换测试：左键点击切换到配置的目标场景。
 /// </summary>
 public class Test : MonoBehaviour
 {
+    [SerializeField] private ResourceDefinitionDatabase.SceneResource targetScene;
+
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
-            SwitchToNewScene();
+            SwitchToTargetScene();
     }
 
-    private void SwitchToNewScene()
+    private void SwitchToTargetScene()
     {
         if (GameSceneManager.Instance == null)
         {
@@ -20,7 +22,7 @@ public class Test : MonoBehaviour
             return;
         }
 
-        Debug.Log($"[Test] 切换到 {SceneNames.NewScene}");
-        GameSceneManager.Instance.LoadScene(SceneNames.NewScene);
+        Debug.Log($"[Test] 切换到 {targetScene?.SceneName}");
+        GameSceneManager.Instance.LoadScene(targetScene);
     }
 }

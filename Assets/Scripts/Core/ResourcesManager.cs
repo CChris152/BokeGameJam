@@ -4,117 +4,176 @@ using UnityEngine;
 namespace BokeGameJam.Core
 {
     /// <summary>
-    /// Lightweight global Resources loader for common UI, sprite, and sound assets.
-    /// Usage: ResourcesManager.LoadUI("Panel"), ResourcesManager.LoadSprite("Icon"), ResourcesManager.LoadSound("Click").
+    /// Bottom-level access point for resources defined in ResourceDefinitionDatabase.
     /// </summary>
     public static class ResourcesManager
     {
-        private const string UIPrefabResourcePath = "Prefabs/UI/";
-        private const string SpriteResourcePath = "Art/Pictures/";
-        private const string SoundResourcePath = "Audio/SFX/";
-        private const string MusicResourcePath = "Audio/Music/";
+        private const string DatabaseResourcePath = "ScriptableObjects/ResourceDefinitionDatabase";
 
         private static readonly Dictionary<string, GameObject> uiPrefabs = new();
         private static readonly Dictionary<string, Sprite> sprites = new();
         private static readonly Dictionary<string, AudioClip> sounds = new();
-        private static readonly Dictionary<string, AudioClip> music = new();
 
-        public static GameObject LoadUI(string prefabName)
+        private static ResourceDefinitionDatabase database;
+
+        public static ResourceDefinitionDatabase Database
         {
-            return LoadResource(UIPrefabResourcePath, prefabName, uiPrefabs, "UI prefab");
+            get
+            {
+                EnsureDatabase();
+                return database;
+            }
         }
 
-        public static GameObject LoadUIAtPath(string resourcePath)
+        public static void SetDatabase(ResourceDefinitionDatabase resourceDatabase)
         {
-            return LoadResourceAtPath(resourcePath, uiPrefabs, "UI prefab");
+            database = resourceDatabase;
+            ClearAll();
         }
 
-        public static GameObject SpawnUI(string prefabName, Transform parent = null)
+        public static bool TryGetUI(string id, out ResourceDefinitionDatabase.UIResource resource)
         {
-            GameObject prefab = LoadUI(prefabName);
-            if (prefab == null)
+            resource = null;
+            return EnsureDatabase() && database.TryGetUI(id, out resource);
+        }
+
+        public static bool TryGetSprite(string id, out ResourceDefinitionDatabase.SpriteResource resource)
+        {
+            resource = null;
+            return EnsureDatabase() && database.TryGetSprite(id, out resource);
+        }
+
+        public static bool TryGetSound(string id, out ResourceDefinitionDatabase.SoundResource resource)
+        {
+            resource = null;
+            return EnsureDatabase() && database.TryGetSound(id, out resource);
+        }
+
+        public static bool TryGetScene(string id, out ResourceDefinitionDatabase.SceneResource resource)
+        {
+            resource = null;
+            return EnsureDatabase() && database.TryGetScene(id, out resource);
+        }
+
+        public static GameObject LoadUI(ResourceDefinitionDatabase.UIResource resource)
+        {
+            if (resource == null)
+            {
+                Debug.LogWarning("[ResourcesManager] UI resource is null.");
                 return null;
+            }
 
-            return Object.Instantiate(prefab, parent);
+            return LoadAsset(resource.Id, resource.Prefab, uiPrefabs, "UI prefab");
         }
 
-        public static GameObject SpawnUIAtPath(string resourcePath, Transform parent = null)
+        public static GameObject LoadUIById(string id)
         {
-            GameObject prefab = LoadUIAtPath(resourcePath);
-            if (prefab == null)
+            if (!TryGetUI(id, out ResourceDefinitionDatabase.UIResource resource))
+            {
+                Debug.LogError($"[ResourcesManager] Cannot find UI resource id: {id}");
                 return null;
+            }
 
-            return Object.Instantiate(prefab, parent);
+            return LoadUI(resource);
         }
 
-        public static Sprite LoadSprite(string spriteName)
+        public static GameObject SpawnUI(ResourceDefinitionDatabase.UIResource resource, Transform parent = null)
         {
-            return LoadResource(SpriteResourcePath, spriteName, sprites, "Sprite");
+            GameObject prefab = LoadUI(resource);
+            return prefab != null ? Object.Instantiate(prefab, parent) : null;
         }
 
-        public static Sprite LoadSpriteAtPath(string resourcePath)
+        public static GameObject SpawnUIById(string id, Transform parent = null)
         {
-            return LoadResourceAtPath(resourcePath, sprites, "Sprite");
+            GameObject prefab = LoadUIById(id);
+            return prefab != null ? Object.Instantiate(prefab, parent) : null;
         }
 
-        public static AudioClip LoadSound(string soundName)
+        public static Sprite LoadSprite(ResourceDefinitionDatabase.SpriteResource resource)
         {
-            return LoadResource(SoundResourcePath, soundName, sounds, "Sound");
+            if (resource == null)
+            {
+                Debug.LogWarning("[ResourcesManager] Sprite resource is null.");
+                return null;
+            }
+
+            return LoadAsset(resource.Id, resource.Sprite, sprites, "Sprite");
         }
 
-        public static AudioClip LoadSoundAtPath(string resourcePath)
+        public static Sprite LoadSpriteById(string id)
         {
-            return LoadResourceAtPath(resourcePath, sounds, "Sound");
+            if (!TryGetSprite(id, out ResourceDefinitionDatabase.SpriteResource resource))
+            {
+                Debug.LogError($"[ResourcesManager] Cannot find sprite resource id: {id}");
+                return null;
+            }
+
+            return LoadSprite(resource);
         }
 
-        public static AudioClip LoadMusic(string musicName)
+        public static AudioClip LoadSound(ResourceDefinitionDatabase.SoundResource resource)
         {
-            return LoadResource(MusicResourcePath, musicName, music, "Music");
+            if (resource == null)
+            {
+                Debug.LogWarning("[ResourcesManager] Sound resource is null.");
+                return null;
+            }
+
+            return LoadAsset(resource.Id, resource.Clip, sounds, "Sound");
         }
 
-        public static AudioClip LoadMusicAtPath(string resourcePath)
+        public static AudioClip LoadSoundById(string id)
         {
-            return LoadResourceAtPath(resourcePath, music, "Music");
+            if (!TryGetSound(id, out ResourceDefinitionDatabase.SoundResource resource))
+            {
+                Debug.LogError($"[ResourcesManager] Cannot find sound resource id: {id}");
+                return null;
+            }
+
+            return LoadSound(resource);
         }
 
-        public static void ClearUI(string prefabName)
+        public static string GetSceneName(ResourceDefinitionDatabase.SceneResource resource)
         {
-            ClearCache(UIPrefabResourcePath, prefabName, uiPrefabs);
+            if (resource == null)
+            {
+                Debug.LogWarning("[ResourcesManager] Scene resource is null.");
+                return null;
+            }
+
+            if (string.IsNullOrWhiteSpace(resource.SceneName))
+            {
+                Debug.LogError($"[ResourcesManager] Scene resource '{resource.Id}' has no scene name.");
+                return null;
+            }
+
+            return resource.SceneName.Trim();
         }
 
-        public static void ClearUIAtPath(string resourcePath)
+        public static string GetSceneNameById(string id)
         {
-            ClearCacheAtPath(resourcePath, uiPrefabs);
+            if (!TryGetScene(id, out ResourceDefinitionDatabase.SceneResource resource))
+            {
+                Debug.LogError($"[ResourcesManager] Cannot find scene resource id: {id}");
+                return null;
+            }
+
+            return GetSceneName(resource);
         }
 
-        public static void ClearSprite(string spriteName)
+        public static void ClearUI(ResourceDefinitionDatabase.UIResource resource)
         {
-            ClearCache(SpriteResourcePath, spriteName, sprites);
+            ClearCache(resource?.Id, uiPrefabs);
         }
 
-        public static void ClearSpriteAtPath(string resourcePath)
+        public static void ClearSprite(ResourceDefinitionDatabase.SpriteResource resource)
         {
-            ClearCacheAtPath(resourcePath, sprites);
+            ClearCache(resource?.Id, sprites);
         }
 
-        public static void ClearSound(string soundName)
+        public static void ClearSound(ResourceDefinitionDatabase.SoundResource resource)
         {
-            ClearCache(SoundResourcePath, soundName, sounds);
-        }
-
-        public static void ClearSoundAtPath(string resourcePath)
-        {
-            ClearCacheAtPath(resourcePath, sounds);
-        }
-
-        public static void ClearMusic(string musicName)
-        {
-            ClearCache(MusicResourcePath, musicName, music);
-        }
-
-        public static void ClearMusicAtPath(string resourcePath)
-        {
-            ClearCacheAtPath(resourcePath, music);
+            ClearCache(resource?.Id, sounds);
         }
 
         public static void ClearAll()
@@ -122,90 +181,57 @@ namespace BokeGameJam.Core
             uiPrefabs.Clear();
             sprites.Clear();
             sounds.Clear();
-            music.Clear();
         }
 
-        private static T LoadResource<T>(string resourcePath, string resourceName, Dictionary<string, T> cache, string resourceType)
+        private static T LoadAsset<T>(string id, T asset, Dictionary<string, T> cache, string resourceType)
             where T : Object
         {
-            string fullPath = BuildResourcePath(resourcePath, resourceName, resourceType);
-            if (string.IsNullOrEmpty(fullPath))
-                return null;
-
-            return LoadResourceAtPath(fullPath, cache, resourceType);
-        }
-
-        private static T LoadResourceAtPath<T>(string resourcePath, Dictionary<string, T> cache, string resourceType)
-            where T : Object
-        {
-            string normalizedPath = NormalizePath(resourcePath);
-            if (string.IsNullOrEmpty(normalizedPath))
+            string normalizedId = NormalizeId(id);
+            if (string.IsNullOrEmpty(normalizedId))
             {
-                Debug.LogWarning($"[ResourcesManager] {resourceType} path is empty.");
+                Debug.LogWarning($"[ResourcesManager] {resourceType} id is empty.");
                 return null;
             }
 
-            if (cache.TryGetValue(normalizedPath, out T cached) && cached != null)
+            if (cache.TryGetValue(normalizedId, out T cached) && cached != null)
                 return cached;
 
-            T resource = Resources.Load<T>(normalizedPath);
-            if (resource == null)
+            if (asset == null)
             {
-                Debug.LogError($"[ResourcesManager] Cannot find {resourceType}: {normalizedPath}");
+                Debug.LogError($"[ResourcesManager] {resourceType} '{normalizedId}' has no asset reference.");
                 return null;
             }
 
-            cache[normalizedPath] = resource;
-            return resource;
+            cache[normalizedId] = asset;
+            return asset;
         }
 
-        private static void ClearCache<T>(string resourcePath, string resourceName, Dictionary<string, T> cache)
+        private static void ClearCache<T>(string id, Dictionary<string, T> cache)
             where T : Object
         {
-            string fullPath = BuildResourcePath(resourcePath, resourceName, "Resource");
-            if (string.IsNullOrEmpty(fullPath))
+            string normalizedId = NormalizeId(id);
+            if (string.IsNullOrEmpty(normalizedId))
                 return;
 
-            ClearCacheAtPath(fullPath, cache);
+            cache.Remove(normalizedId);
         }
 
-        private static void ClearCacheAtPath<T>(string resourcePath, Dictionary<string, T> cache)
-            where T : Object
+        private static bool EnsureDatabase()
         {
-            string normalizedPath = NormalizePath(resourcePath);
-            if (string.IsNullOrEmpty(normalizedPath))
-            {
-                Debug.LogWarning("[ResourcesManager] Resource path is empty.");
-                return;
-            }
+            if (database != null)
+                return true;
 
-            cache.Remove(normalizedPath);
+            database = Resources.Load<ResourceDefinitionDatabase>(DatabaseResourcePath);
+            if (database != null)
+                return true;
+
+            Debug.LogError($"[ResourcesManager] Cannot load resource database at Resources/{DatabaseResourcePath}.");
+            return false;
         }
 
-        private static string BuildResourcePath(string resourcePath, string resourceName, string resourceType)
+        private static string NormalizeId(string id)
         {
-            string normalizedName = NormalizePath(resourceName);
-            if (string.IsNullOrEmpty(normalizedName))
-            {
-                Debug.LogWarning($"[ResourcesManager] {resourceType} name is empty.");
-                return null;
-            }
-
-            string normalizedRoot = NormalizePath(resourcePath);
-            if (string.IsNullOrEmpty(normalizedRoot))
-                return normalizedName;
-
-            if (normalizedName.StartsWith(normalizedRoot + "/"))
-                return normalizedName;
-
-            return $"{normalizedRoot}/{normalizedName}";
-        }
-
-        private static string NormalizePath(string path)
-        {
-            return string.IsNullOrWhiteSpace(path)
-                ? null
-                : path.Trim().Replace('\\', '/').Trim('/');
+            return string.IsNullOrWhiteSpace(id) ? null : id.Trim();
         }
     }
 }

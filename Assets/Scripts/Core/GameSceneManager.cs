@@ -31,24 +31,64 @@ namespace BokeGameJam.Core
             DontDestroyOnLoad(gameObject);
         }
 
-        /// <summary>按场景名同步切换</summary>
-        public void LoadScene(string sceneName)
+        /// <summary>按场景资源同步切换</summary>
+        public void LoadScene(ResourceDefinitionDatabase.SceneResource scene)
         {
-            if (isLoading) return;
+            if (isLoading)
+                return;
+
+            string sceneName = ResourcesManager.GetSceneName(scene);
+            if (string.IsNullOrEmpty(sceneName))
+                return;
+
+            SceneManager.LoadScene(sceneName);
+        }
+
+        /// <summary>按场景资源 ID 同步切换</summary>
+        public void LoadSceneById(string sceneId)
+        {
+            if (isLoading)
+                return;
+
+            string sceneName = ResourcesManager.GetSceneNameById(sceneId);
+            if (string.IsNullOrEmpty(sceneName))
+                return;
+
             SceneManager.LoadScene(sceneName);
         }
 
         /// <summary>按 Build Settings 索引同步切换</summary>
         public void LoadScene(int buildIndex)
         {
-            if (isLoading) return;
+            if (isLoading)
+                return;
+
             SceneManager.LoadScene(buildIndex);
         }
 
-        /// <summary>按场景名异步切换（推荐，可配合加载界面）</summary>
-        public void LoadSceneAsync(string sceneName)
+        /// <summary>按场景资源异步切换（推荐，可配合加载界面）</summary>
+        public void LoadSceneAsync(ResourceDefinitionDatabase.SceneResource scene)
         {
-            if (isLoading) return;
+            if (isLoading)
+                return;
+
+            string sceneName = ResourcesManager.GetSceneName(scene);
+            if (string.IsNullOrEmpty(sceneName))
+                return;
+
+            StartCoroutine(LoadSceneAsyncRoutine(sceneName));
+        }
+
+        /// <summary>按场景资源 ID 异步切换</summary>
+        public void LoadSceneAsyncById(string sceneId)
+        {
+            if (isLoading)
+                return;
+
+            string sceneName = ResourcesManager.GetSceneNameById(sceneId);
+            if (string.IsNullOrEmpty(sceneName))
+                return;
+
             StartCoroutine(LoadSceneAsyncRoutine(sceneName));
         }
 
