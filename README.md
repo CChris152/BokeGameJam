@@ -17,7 +17,6 @@ Assets/
 │   ├── Audio/
 │   │   ├── Music/          # 背景音乐源文件
 │   │   └── SFX/            # 音效源文件
-│   ├── Config/             # 配置数据
 │   ├── Prefabs/            # 可运行时实例化的预制体
 │   └── ScriptableObjects/  # ResourceDefinitionDatabase 等 SO 配置
 ├── Scenes/                 # Unity 场景
