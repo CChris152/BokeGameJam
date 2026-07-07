@@ -5,21 +5,17 @@ using UnityEngine;
 namespace BokeGameJam.Core
 {
     /// <summary>
-    /// 全局音频管理器（单例，跨场景不销毁）。
-    /// 通过 Resources 加载：Resources/Audio/Music/ 与 Resources/Audio/SFX/
+    /// Global audio manager. Resource loading is delegated to ResourcesManager.
     /// </summary>
     public class GameAudioManager : MonoBehaviour
     {
         public static GameAudioManager Instance { get; private set; }
 
-        private const string MusicResourcePath = "Audio/Music/";
-        private const string SfxResourcePath = "Audio/SFX/";
-
-        [Header("音量")]
+        [Header("Volume")]
         [Range(0f, 1f)] [SerializeField] private float bgmVolume = 0.6f;
         [Range(0f, 1f)] [SerializeField] private float sfxVolume = 1f;
 
-        [Header("BGM 切换")]
+        [Header("BGM Switch")]
         [SerializeField] private float defaultBgmFadeDuration = 0.5f;
 
         private AudioSource bgmSourceA;
@@ -27,8 +23,6 @@ namespace BokeGameJam.Core
         private AudioSource bgmActiveSource;
         private AudioSource sfxOneShotSource;
 
-        private readonly Dictionary<string, AudioClip> musicClips = new();
-        private readonly Dictionary<string, AudioClip> sfxClips = new();
         private readonly Dictionary<string, AudioSource> loopingSfxSources = new();
 
         private string currentBgmName;
@@ -59,11 +53,11 @@ namespace BokeGameJam.Core
 
         #region BGM
 
-        /// <summary>播放 BGM（默认循环）</summary>
         public void PlayBGM(string musicName, bool loop = true, float fadeDuration = -1f)
         {
-            AudioClip clip = LoadMusic(musicName);
-            if (clip == null) return;
+            AudioClip clip = ResourcesManager.LoadMusic(musicName);
+            if (clip == null)
+                return;
 
             if (currentBgmName == musicName && bgmActiveSource.isPlaying)
                 return;
@@ -80,11 +74,11 @@ namespace BokeGameJam.Core
             SwitchBGM(musicName, fade, loop);
         }
 
-        /// <summary>切换 BGM（淡入淡出）</summary>
         public void SwitchBGM(string musicName, float fadeDuration = -1f, bool loop = true)
         {
-            AudioClip clip = LoadMusic(musicName);
-            if (clip == null) return;
+            AudioClip clip = ResourcesManager.LoadMusic(musicName);
+            if (clip == null)
+                return;
 
             if (currentBgmName == musicName && bgmActiveSource.isPlaying)
                 return;
@@ -94,7 +88,6 @@ namespace BokeGameJam.Core
             bgmFadeCoroutine = StartCoroutine(CrossfadeBgmRoutine(clip, musicName, loop, fade));
         }
 
-        /// <summary>停止 BGM</summary>
         public void StopBGM(float fadeDuration = 0f)
         {
             if (fadeDuration <= 0f)
@@ -117,20 +110,20 @@ namespace BokeGameJam.Core
 
         #region SFX
 
-        /// <summary>播放单次音效</summary>
         public void PlaySFX(string sfxName, float volumeScale = 1f)
         {
-            AudioClip clip = LoadSfx(sfxName);
-            if (clip == null) return;
+            AudioClip clip = ResourcesManager.LoadSound(sfxName);
+            if (clip == null)
+                return;
 
             sfxOneShotSource.PlayOneShot(clip, sfxVolume * volumeScale);
         }
 
-        /// <summary>播放循环音效，同名重复调用会先停止再重播</summary>
         public void PlaySFXLoop(string sfxName, float volumeScale = 1f)
         {
-            AudioClip clip = LoadSfx(sfxName);
-            if (clip == null) return;
+            AudioClip clip = ResourcesManager.LoadSound(sfxName);
+            if (clip == null)
+                return;
 
             if (loopingSfxSources.TryGetValue(sfxName, out AudioSource existing))
             {
@@ -146,7 +139,6 @@ namespace BokeGameJam.Core
             loopingSfxSources[sfxName] = source;
         }
 
-        /// <summary>停止指定循环音效</summary>
         public void StopSFX(string sfxName)
         {
             if (!loopingSfxSources.TryGetValue(sfxName, out AudioSource source))
@@ -157,7 +149,6 @@ namespace BokeGameJam.Core
             loopingSfxSources.Remove(sfxName);
         }
 
-        /// <summary>停止所有循环音效</summary>
         public void StopAllSFX()
         {
             foreach (var pair in loopingSfxSources)
@@ -210,38 +201,6 @@ namespace BokeGameJam.Core
                 if (pair.Value != null)
                     pair.Value.volume = sfxVolume;
             }
-        }
-
-        private AudioClip LoadMusic(string musicName)
-        {
-            if (musicClips.TryGetValue(musicName, out AudioClip cached))
-                return cached;
-
-            AudioClip clip = Resources.Load<AudioClip>(MusicResourcePath + musicName);
-            if (clip == null)
-            {
-                Debug.LogError($"[GameAudioManager] 找不到 Music: {musicName}，请确认文件在 Assets/Resources/Audio/Music/");
-                return null;
-            }
-
-            musicClips[musicName] = clip;
-            return clip;
-        }
-
-        private AudioClip LoadSfx(string sfxName)
-        {
-            if (sfxClips.TryGetValue(sfxName, out AudioClip cached))
-                return cached;
-
-            AudioClip clip = Resources.Load<AudioClip>(SfxResourcePath + sfxName);
-            if (clip == null)
-            {
-                Debug.LogError($"[GameAudioManager] 找不到 SFX: {sfxName}，请确认文件在 Assets/Resources/Audio/SFX/");
-                return null;
-            }
-
-            sfxClips[sfxName] = clip;
-            return clip;
         }
 
         private void PlayBgmImmediate(AudioClip clip, string musicName, bool loop)
