@@ -19,22 +19,80 @@ namespace BokeGameJam.Core
 
         public bool TryGetUI(string id, out UIResource resource)
         {
-            return TryGetById(uiPrefabs, id, out resource);
+            return TryGetByIdOrFirst(uiPrefabs, id, out resource);
         }
 
         public bool TryGetSprite(string id, out SpriteResource resource)
         {
-            return TryGetById(sprites, id, out resource);
+            return TryGetByIdOrFirst(sprites, id, out resource);
         }
 
         public bool TryGetSound(string id, out SoundResource resource)
         {
-            return TryGetById(sounds, id, out resource);
+            return TryGetByIdOrFirst(sounds, id, out resource);
         }
 
         public bool TryGetScene(string id, out SceneResource resource)
         {
-            return TryGetById(scenes, id, out resource);
+            return TryGetByIdOrFirst(scenes, id, out resource);
+        }
+
+        public UIResource ResolveUI(UIResource resource)
+        {
+            return ResolveResource(resource, uiPrefabs, IsUIConfigured);
+        }
+
+        public SpriteResource ResolveSprite(SpriteResource resource)
+        {
+            return ResolveResource(resource, sprites, IsSpriteConfigured);
+        }
+
+        public SoundResource ResolveSound(SoundResource resource)
+        {
+            return ResolveResource(resource, sounds, IsSoundConfigured);
+        }
+
+        public SceneResource ResolveScene(SceneResource resource)
+        {
+            if (resource == null)
+                return TryGetFirst(scenes, out SceneResource first) ? first : null;
+
+            string normalizedId = NormalizeId(resource.Id);
+            if (!string.IsNullOrEmpty(normalizedId) && TryGetById(scenes, normalizedId, out SceneResource byId))
+                return byId;
+
+            if (resource.TryApplySceneAssetName())
+                return resource;
+
+            if (!string.IsNullOrWhiteSpace(resource.SceneName))
+                return resource;
+
+            return TryGetFirst(scenes, out SceneResource fallback) ? fallback : resource;
+        }
+
+        private static T ResolveResource<T>(T resource, List<T> resources, Func<T, bool> isConfigured)
+            where T : ResourceEntry
+        {
+            if (isConfigured(resource))
+                return resource;
+
+            if (resource != null)
+            {
+                string normalizedId = NormalizeId(resource.Id);
+                if (!string.IsNullOrEmpty(normalizedId) && TryGetById(resources, normalizedId, out T byId))
+                    return byId;
+            }
+
+            return TryGetFirst(resources, out T first) ? first : resource;
+        }
+
+        private static bool TryGetByIdOrFirst<T>(List<T> resources, string id, out T resource)
+            where T : ResourceEntry
+        {
+            if (TryGetById(resources, id, out resource))
+                return true;
+
+            return string.IsNullOrEmpty(NormalizeId(id)) && TryGetFirst(resources, out resource);
         }
 
         private static bool TryGetById<T>(IEnumerable<T> resources, string id, out T resource)
@@ -60,6 +118,38 @@ namespace BokeGameJam.Core
             return false;
         }
 
+        private static bool TryGetFirst<T>(IEnumerable<T> resources, out T resource)
+            where T : ResourceEntry
+        {
+            resource = null;
+
+            foreach (T item in resources)
+            {
+                if (item == null || string.IsNullOrWhiteSpace(item.Id))
+                    continue;
+
+                resource = item;
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool IsUIConfigured(UIResource resource)
+        {
+            return resource != null && resource.Prefab != null;
+        }
+
+        private static bool IsSpriteConfigured(SpriteResource resource)
+        {
+            return resource != null && resource.Sprite != null;
+        }
+
+        private static bool IsSoundConfigured(SoundResource resource)
+        {
+            return resource != null && resource.Clip != null;
+        }
+
         private static string NormalizeId(string id)
         {
             return string.IsNullOrWhiteSpace(id) ? null : id.Trim();
@@ -70,7 +160,7 @@ namespace BokeGameJam.Core
         {
             foreach (SceneResource scene in scenes)
             {
-                scene?.RefreshSceneName();
+                scene?.SyncSceneNameFromAsset();
             }
         }
 #endif
@@ -123,13 +213,28 @@ namespace BokeGameJam.Core
 
             public string SceneName => sceneName;
 
-#if UNITY_EDITOR
-            internal void RefreshSceneName()
+            /// <summary>编辑器中把场景资源名写入 sceneName，便于打包后与编辑器一致。</summary>
+            public void SyncSceneNameFromAsset()
             {
+#if UNITY_EDITOR
                 if (sceneAsset != null)
                     sceneName = sceneAsset.name;
-            }
 #endif
+            }
+
+            /// <summary>按优先级取场景名：Id 查库 → 场景资源 → 场景名。</summary>
+            internal bool TryApplySceneAssetName()
+            {
+#if UNITY_EDITOR
+                if (sceneAsset == null)
+                    return false;
+
+                sceneName = sceneAsset.name;
+                return true;
+#else
+                return false;
+#endif
+            }
         }
 
         public enum SoundCategory

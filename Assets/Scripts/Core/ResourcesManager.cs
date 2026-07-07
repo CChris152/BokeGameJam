@@ -57,6 +57,7 @@ namespace BokeGameJam.Core
 
         public static GameObject LoadUI(ResourceDefinitionDatabase.UIResource resource)
         {
+            resource = Database?.ResolveUI(resource);
             if (resource == null)
             {
                 Debug.LogWarning("[ResourcesManager] UI resource is null.");
@@ -91,6 +92,7 @@ namespace BokeGameJam.Core
 
         public static Sprite LoadSprite(ResourceDefinitionDatabase.SpriteResource resource)
         {
+            resource = Database?.ResolveSprite(resource);
             if (resource == null)
             {
                 Debug.LogWarning("[ResourcesManager] Sprite resource is null.");
@@ -113,6 +115,7 @@ namespace BokeGameJam.Core
 
         public static AudioClip LoadSound(ResourceDefinitionDatabase.SoundResource resource)
         {
+            resource = Database?.ResolveSound(resource);
             if (resource == null)
             {
                 Debug.LogWarning("[ResourcesManager] Sound resource is null.");
@@ -135,6 +138,7 @@ namespace BokeGameJam.Core
 
         public static string GetSceneName(ResourceDefinitionDatabase.SceneResource resource)
         {
+            resource = Database?.ResolveScene(resource);
             if (resource == null)
             {
                 Debug.LogWarning("[ResourcesManager] Scene resource is null.");
