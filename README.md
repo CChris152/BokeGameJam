@@ -179,3 +179,27 @@ EventManager.Off<int>("ScoreChanged", OnScoreChanged);
 - `.meta` 文件需要跟随资源一起提交。
 - 不要提交 `Library/`、`Temp/`、`Logs/`、`UserSettings/` 等 Unity 生成目录。
 - 新资源优先登记到 `ResourceDefinitionDatabase.asset`，避免在业务代码里散落资源路径字符串。
+
+## 模板测试记录（2026-07-08）
+
+测试分支：`test`
+
+测试构建产物：
+
+`Build/TemplateTest/BokeGameJamTemplate.exe`
+
+本次 Smoke Test 覆盖内容：
+
+- 音频控制器：
+  - 启动后自动播放 BGM（`template_bgm`）。
+  - 点击按钮播放 SFX（`template_click`）。
+- 场景切换器：
+  - 在 `TemplateMenu` 与 `TemplateGallery` 两个场景之间可双向切换。
+  - 场景切换后 UI 与交互状态正常。
+- 图片展示：
+  - 成功加载并显示 `template_image`（`TemplatePreview.png`）。
+  - 图片在两个模板场景中均可正常展示。
+
+测试结论：
+
+- 三个基础能力（音频、场景切换、图片展示）在测试 `exe` 中均验证通过。
