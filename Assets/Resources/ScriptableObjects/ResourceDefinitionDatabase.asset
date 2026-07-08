@@ -13,8 +13,20 @@ MonoBehaviour:
   m_Name: ResourceDefinitionDatabase
   m_EditorClassIdentifier: 
   uiPrefabs: []
-  sprites: []
-  sounds: []
+  sprites:
+  - id: template_image
+    sprite: {fileID: 21300000, guid: 70a158a638c67954990aed6664fd28d2, type: 3}
+  sounds:
+  - id: template_bgm
+    category: 0
+    clip: {fileID: 8300000, guid: d13bfdc006203d646a349366faaa8487, type: 3}
+    loop: 1
+    volumeScale: 0.55
+  - id: template_click
+    category: 1
+    clip: {fileID: 8300000, guid: e6fc4d3abc7d49b4aa5949e5370fc905, type: 3}
+    loop: 0
+    volumeScale: 1
   scenes:
   - id: SampleScene
     sceneAsset: {fileID: 102900000, guid: 8c9cfa26abfee488c85f1582747f6a02, type: 3}
@@ -22,3 +34,9 @@ MonoBehaviour:
   - id: NewScene
     sceneAsset: {fileID: 102900000, guid: a7d9870980654cd4dbbc240ad1d45680, type: 3}
     sceneName: NewScene
+  - id: template_menu
+    sceneAsset: {fileID: 102900000, guid: 772007b223af9a74098d7d4b8159e770, type: 3}
+    sceneName: TemplateMenu
+  - id: template_gallery
+    sceneAsset: {fileID: 102900000, guid: e22fe0c9be9527b4e92545fdc2276f2c, type: 3}
+    sceneName: TemplateGallery
