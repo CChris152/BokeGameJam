@@ -23,6 +23,9 @@ namespace BokeGameJam.Core
         /// <summary>玩家持有物变化，payload = HeldItemInfo（可能为空）</summary>
         public const string HeldItemChanged = "Game.HeldItemChanged";
 
+        /// <summary>物品 B 机制成功触发，payload = string mechanismId</summary>
+        public const string MechanismSatisfied = "Game.MechanismSatisfied";
+
         /// <summary>全局游戏状态切换，payload = GameState</summary>
         public const string GameStateChanged = "Game.GameStateChanged";
     }
@@ -42,21 +45,23 @@ namespace BokeGameJam.Core
         LevelCompleted
     }
 
-    /// <summary>当前持有物展示信息（UI 用）。</summary>
+    /// <summary>当前持有物展示信息（UI / 交付处检定用）。</summary>
     public readonly struct HeldItemInfo
     {
         public readonly bool HasItem;
         public readonly UnityEngine.Sprite Icon;
         public readonly string DisplayName;
+        public readonly string MechanismId;
 
-        public HeldItemInfo(bool hasItem, UnityEngine.Sprite icon, string displayName)
+        public HeldItemInfo(bool hasItem, UnityEngine.Sprite icon, string displayName, string mechanismId = null)
         {
             HasItem = hasItem;
             Icon = icon;
             DisplayName = displayName ?? string.Empty;
+            MechanismId = mechanismId ?? string.Empty;
         }
 
-        public static HeldItemInfo Empty => new(false, null, string.Empty);
+        public static HeldItemInfo Empty => new(false, null, string.Empty, string.Empty);
     }
 
     /// <summary>关卡选择事件 payload。</summary>

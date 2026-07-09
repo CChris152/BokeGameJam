@@ -174,7 +174,7 @@ namespace BokeGameJam.Gameplay
 
             EventManager.Emit(
                 GameEvents.HeldItemChanged,
-                new HeldItemInfo(true, held.Icon, held.DisplayName));
+                new HeldItemInfo(true, held.Icon, held.DisplayName, held.MechanismId));
         }
     }
 }

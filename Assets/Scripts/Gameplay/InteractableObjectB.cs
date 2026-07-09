@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using BokeGameJam.Core;
 
 namespace BokeGameJam.Gameplay
 {
@@ -198,15 +199,17 @@ namespace BokeGameJam.Gameplay
             if (string.IsNullOrEmpty(id))
                 return;
 
+            bool ready = false;
             if (!string.IsNullOrWhiteSpace(sequenceGroupId))
-            {
-                if (AreAllActivatedInGroup() || pendingResetGroups.Contains(sequenceGroupId))
-                    satisfiedMechanisms.Add(id);
-                return;
-            }
+                ready = AreAllActivatedInGroup() || pendingResetGroups.Contains(sequenceGroupId);
+            else
+                ready = activated;
 
-            if (activated)
-                satisfiedMechanisms.Add(id);
+            if (!ready || satisfiedMechanisms.Contains(id))
+                return;
+
+            satisfiedMechanisms.Add(id);
+            EventManager.Emit(GameEvents.MechanismSatisfied, id);
         }
 
         private static bool IsBSatisfied(InteractableObjectB item)

@@ -40,6 +40,7 @@
 - 默认锁定；满足以下**任意一条**才 `CanInteract`：
   1. 玩家持有 **同 `mechanismId`** 的物品 A
   2. **同 `mechanismId`** 的物品 B 已成功触发
+- 外观由事件刷新：`HeldItemChanged`（含 `MechanismId`）、`MechanismSatisfied`。
 - 交互成功后标记 `completed`，不再可互动；若手上是匹配的 A，则 `ConsumeHeldItem` 销毁持有物。
 - 空手但 B 已满足时，也可对 C 按 E 完成交付（纯开关线）。
 

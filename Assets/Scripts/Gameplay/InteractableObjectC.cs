@@ -1,4 +1,5 @@
 using UnityEngine;
+using BokeGameJam.Core;
 
 namespace BokeGameJam.Gameplay
 {
@@ -15,7 +16,7 @@ namespace BokeGameJam.Gameplay
         [SerializeField] private Color completedColor = new(0.25f, 0.45f, 0.9f, 1f);
 
         private bool completed;
-        private bool wasOpen;
+        private bool holdingMatchingA;
 
         public override InteractMode Mode => InteractMode.Trigger;
         public bool IsCompleted => completed;
@@ -26,19 +27,29 @@ namespace BokeGameJam.Gameplay
             ApplyVisual(false);
         }
 
+        private void OnEnable()
+        {
+            EventManager.On<HeldItemInfo>(GameEvents.HeldItemChanged, OnHeldItemChanged);
+            EventManager.On<string>(GameEvents.MechanismSatisfied, OnMechanismSatisfied);
+
+            // 订阅前若已持有物品，补一次状态（事件不会重放）。
+            PlayerInteractor player = Object.FindObjectOfType<PlayerInteractor>();
+            holdingMatchingA = HasMatchingHeldItemA(player);
+            RefreshVisual();
+        }
+
+        private void OnDisable()
+        {
+            EventManager.Off<HeldItemInfo>(GameEvents.HeldItemChanged, OnHeldItemChanged);
+            EventManager.Off<string>(GameEvents.MechanismSatisfied, OnMechanismSatisfied);
+        }
+
         public override bool CanInteract(PlayerInteractor interactor)
         {
             if (completed)
                 return false;
 
-            bool open = IsRequirementMet(interactor);
-            if (open != wasOpen)
-            {
-                wasOpen = open;
-                ApplyVisual(open);
-            }
-
-            return open;
+            return IsRequirementMet(interactor);
         }
 
         public override void OnInteract(PlayerInteractor interactor)
@@ -50,8 +61,39 @@ namespace BokeGameJam.Gameplay
                 interactor.ConsumeHeldItem();
 
             completed = true;
-            wasOpen = true;
-            ApplyVisual(true);
+            ApplyVisual(false);
+        }
+
+        private void OnHeldItemChanged(HeldItemInfo info)
+        {
+            holdingMatchingA = info.HasItem
+                && !string.IsNullOrEmpty(MechanismId)
+                && string.Equals(info.MechanismId, MechanismId, System.StringComparison.Ordinal);
+
+            RefreshVisual();
+        }
+
+        private void OnMechanismSatisfied(string mechanismId)
+        {
+            if (string.IsNullOrEmpty(MechanismId))
+                return;
+
+            if (!string.Equals(mechanismId, MechanismId, System.StringComparison.Ordinal))
+                return;
+
+            RefreshVisual();
+        }
+
+        private void RefreshVisual()
+        {
+            if (completed)
+            {
+                ApplyVisual(false);
+                return;
+            }
+
+            bool open = holdingMatchingA || InteractableObjectB.IsMechanismSatisfied(MechanismId);
+            ApplyVisual(open);
         }
 
         private bool IsRequirementMet(PlayerInteractor interactor)
