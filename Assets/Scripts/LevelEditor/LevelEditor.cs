@@ -654,14 +654,20 @@ namespace BokeGameJam.LevelEditor
             }
         }
 
+        /// <summary>
+        /// 放置前清理冲突格：A/B 地块可同格共存；Shared 与世界层互斥。
+        /// </summary>
         private void ClearCellExcept(Vector2Int cell, LevelLayer keepLayer)
         {
-            if (keepLayer != LevelLayer.A)
+            if (keepLayer == LevelLayer.Shared)
+            {
                 RemoveFromMap(placedTilesA, cell);
-            if (keepLayer != LevelLayer.B)
                 RemoveFromMap(placedTilesB, cell);
-            if (keepLayer != LevelLayer.Shared)
-                RemoveFromMap(placedTilesShared, cell);
+                return;
+            }
+
+            // 放置 A 或 B：只清 Shared，不碰另一世界层
+            RemoveFromMap(placedTilesShared, cell);
         }
 
         private static void RemoveFromMap(Dictionary<Vector2Int, PlacedTile> map, Vector2Int cell)

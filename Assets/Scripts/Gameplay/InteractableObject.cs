@@ -14,7 +14,7 @@ namespace BokeGameJam.Gameplay
     /// 所属层级由 <see cref="LevelObject.LevelLayer"/> 决定（Shared / A / B）。
     /// </summary>
     [RequireComponent(typeof(Collider2D))]
-    public class InteractableObject : LevelObject
+    public class InteractableObject : LevelObject, IInteractable
     {
         [SerializeField] private string mechanismId;
         [SerializeField] private string displayName;

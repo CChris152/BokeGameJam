@@ -5,1054 +5,1842 @@
         {
             "x": -1,
             "y": 0,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -2,
             "y": 0,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -3,
             "y": 0,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -4,
             "y": 0,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -5,
             "y": 0,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -6,
             "y": 0,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -6,
             "y": -1,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -6,
             "y": -2,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -5,
             "y": -2,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -4,
             "y": -2,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -3,
             "y": -2,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -2,
             "y": -2,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -1,
             "y": -2,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 0,
             "y": -2,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 0,
             "y": -3,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 1,
             "y": -3,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 2,
             "y": -3,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 3,
             "y": -3,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 4,
             "y": -3,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 5,
             "y": -3,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 1,
             "y": 0,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 2,
             "y": 0,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 3,
             "y": 0,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 4,
             "y": 0,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 5,
             "y": 0,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 6,
             "y": 0,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 7,
             "y": 0,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 7,
             "y": -1,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 7,
             "y": -2,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 7,
             "y": -3,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 6,
             "y": -3,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -5,
             "y": -1,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -4,
             "y": -1,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -3,
             "y": -1,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -2,
             "y": -1,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -1,
             "y": -1,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 0,
             "y": -1,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 1,
             "y": -1,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 2,
             "y": -1,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 3,
             "y": -1,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 3,
             "y": -2,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 4,
             "y": -2,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 5,
             "y": -2,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 6,
             "y": -2,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 6,
             "y": -1,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 5,
             "y": -1,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 4,
             "y": -1,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 2,
             "y": -2,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 1,
             "y": -2,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -3,
             "y": -3,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -2,
             "y": -3,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -2,
             "y": -4,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -1,
             "y": -4,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -1,
             "y": -3,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -7,
             "y": -2,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -8,
             "y": -2,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -8,
             "y": -3,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -7,
             "y": -4,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -6,
             "y": -4,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -5,
             "y": -4,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -4,
             "y": -4,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -4,
             "y": -5,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -3,
             "y": -5,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -3,
             "y": -4,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 0,
             "y": -4,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 0,
             "y": -5,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 1,
             "y": -5,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 2,
             "y": -5,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 3,
             "y": -5,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 4,
             "y": -5,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 5,
             "y": -4,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 6,
             "y": -4,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 2,
             "y": -4,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 5,
             "y": -5,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 6,
             "y": -5,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 7,
             "y": -4,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 8,
             "y": -4,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 8,
             "y": -3,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 9,
             "y": -3,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 10,
             "y": -3,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 10,
             "y": -2,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 9,
             "y": -1,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 8,
             "y": -1,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -2,
             "y": -5,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -1,
             "y": -5,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 1,
             "y": -4,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -7,
             "y": -1,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -8,
             "y": 0,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -9,
             "y": 0,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -10,
             "y": 0,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -11,
             "y": 0,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -11,
             "y": -1,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -11,
             "y": -2,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -10,
             "y": -2,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -9,
             "y": -2,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -7,
             "y": -3,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -6,
             "y": -3,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -5,
             "y": -3,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -4,
             "y": -3,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -9,
             "y": -3,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -10,
             "y": -3,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -11,
             "y": -3,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -12,
             "y": -3,
-            "tileId": "Ground/Ground"
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -9,
+            "y": 7,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -9,
+            "y": 8,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -8,
+            "y": 8,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -7,
+            "y": 8,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -6,
+            "y": 8,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -5,
+            "y": 8,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -4,
+            "y": 8,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -3,
+            "y": 8,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -2,
+            "y": 8,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -1,
+            "y": 8,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 0,
+            "y": 8,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 1,
+            "y": 8,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 2,
+            "y": 8,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 3,
+            "y": 8,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 4,
+            "y": 8,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 5,
+            "y": 8,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 6,
+            "y": 8,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 7,
+            "y": 8,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 8,
+            "y": 8,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 9,
+            "y": 8,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 9,
+            "y": 7,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 9,
+            "y": 6,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 9,
+            "y": 5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 9,
+            "y": 4,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 9,
+            "y": 3,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 9,
+            "y": 2,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 9,
+            "y": 1,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 9,
+            "y": 0,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 9,
+            "y": -2,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 8,
+            "y": -2,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -10,
+            "y": -1,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -9,
+            "y": -1,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -9,
+            "y": 1,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -9,
+            "y": 2,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -9,
+            "y": 3,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -9,
+            "y": 4,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -9,
+            "y": 5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -9,
+            "y": 6,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         }
     ],
     "tilesB": [
         {
-            "x": -11,
-            "y": 0,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -10,
-            "y": 0,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -9,
-            "y": 0,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -8,
-            "y": 0,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -11,
-            "y": -1,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -11,
-            "y": -2,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -11,
-            "y": -3,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -12,
-            "y": -3,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -10,
-            "y": -3,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -10,
-            "y": -2,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -9,
-            "y": -2,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -8,
-            "y": -2,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -8,
-            "y": -3,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -9,
-            "y": -3,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -7,
-            "y": -3,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -7,
-            "y": -2,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -7,
-            "y": -1,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -7,
-            "y": -4,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -6,
-            "y": -4,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -5,
-            "y": -4,
-            "tileId": "Ground/BGround"
-        },
-        {
             "x": -4,
-            "y": -4,
-            "tileId": "Ground/BGround"
+            "y": 8,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -5,
-            "y": -3,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -6,
-            "y": -3,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -6,
-            "y": -2,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -6,
-            "y": -1,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -5,
-            "y": -2,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -7,
-            "y": 0,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -6,
-            "y": 0,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -5,
-            "y": 0,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -5,
-            "y": -1,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -4,
-            "y": -2,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -4,
-            "y": -1,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -4,
-            "y": 0,
-            "tileId": "Ground/BGround"
+            "y": 8,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -3,
-            "y": 0,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -3,
-            "y": -1,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -2,
-            "y": -1,
-            "tileId": "Ground/BGround"
+            "y": 8,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -1,
-            "y": -1,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 0,
-            "y": -1,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 0,
-            "y": 0,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -1,
-            "y": 0,
-            "tileId": "Ground/BGround"
+            "y": 8,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": -2,
-            "y": 0,
-            "tileId": "Ground/BGround"
+            "y": 8,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
-            "x": 1,
-            "y": 0,
-            "tileId": "Ground/BGround"
+            "x": 0,
+            "y": 8,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -9,
+            "y": 4,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -5,
+            "y": -2,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -6,
+            "y": -2,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -7,
+            "y": -2,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 2,
-            "y": 0,
-            "tileId": "Ground/BGround"
+            "y": 8,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
-            "x": 3,
-            "y": 0,
-            "tileId": "Ground/BGround"
+            "x": 1,
+            "y": 8,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 9,
+            "y": 8,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 7,
+            "y": 8,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -6,
+            "y": 8,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -8,
+            "y": 8,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -9,
+            "y": 2,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -8,
+            "y": -2,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 4,
-            "y": 0,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 5,
-            "y": 0,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 6,
-            "y": 0,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 7,
-            "y": 0,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 7,
-            "y": -1,
-            "tileId": "Ground/BGround"
+            "y": 8,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 8,
+            "y": 8,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 3,
+            "y": 8,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -4,
+            "y": -2,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -3,
+            "y": -2,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -2,
+            "y": -2,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -9,
+            "y": 1,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -9,
+            "y": 0,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -7,
+            "y": 8,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 0,
+            "y": -2,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 1,
+            "y": -2,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -1,
+            "y": -2,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 2,
+            "y": -2,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -9,
+            "y": -2,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -9,
             "y": -1,
-            "tileId": "Ground/BGround"
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 9,
+            "y": -2,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 5,
+            "y": 8,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 3,
+            "y": -2,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -9,
+            "y": 8,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -9,
+            "y": 7,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -9,
+            "y": 6,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 6,
+            "y": -2,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 6,
+            "y": 8,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 4,
+            "y": -2,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 5,
+            "y": -2,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 7,
+            "y": -2,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -9,
+            "y": 3,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -9,
+            "y": 5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 8,
+            "y": -2,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 9,
+            "y": 6,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 9,
+            "y": 7,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 9,
+            "y": 3,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 9,
+            "y": 2,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 9,
+            "y": 0,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 9,
             "y": -1,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 6,
-            "y": -1,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 5,
-            "y": -1,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 4,
-            "y": -1,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 3,
-            "y": -1,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 2,
-            "y": -1,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 2,
-            "y": -2,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 1,
-            "y": -2,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 0,
-            "y": -2,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -1,
-            "y": -2,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -1,
-            "y": -3,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -2,
-            "y": -3,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -2,
-            "y": -4,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -3,
-            "y": -4,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -3,
-            "y": -3,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -3,
-            "y": -2,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -2,
-            "y": -2,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 1,
-            "y": -1,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -4,
-            "y": -3,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -4,
-            "y": -5,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -3,
-            "y": -5,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -2,
-            "y": -5,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -1,
-            "y": -4,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 0,
-            "y": -4,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 0,
-            "y": -3,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 0,
-            "y": -5,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 1,
-            "y": -5,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": -1,
-            "y": -5,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 2,
-            "y": -5,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 2,
-            "y": -4,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 2,
-            "y": -3,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 1,
-            "y": -3,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 1,
-            "y": -4,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 3,
-            "y": -4,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 3,
-            "y": -3,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 3,
-            "y": -5,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 4,
-            "y": -5,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 5,
-            "y": -5,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 6,
-            "y": -5,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 6,
-            "y": -4,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 6,
-            "y": -3,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 5,
-            "y": -3,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 5,
-            "y": -2,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 4,
-            "y": -2,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 4,
-            "y": -3,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 4,
-            "y": -4,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 5,
-            "y": -4,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 7,
-            "y": -4,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 7,
-            "y": -3,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 8,
-            "y": -3,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 7,
-            "y": -2,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 6,
-            "y": -2,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 3,
-            "y": -2,
-            "tileId": "Ground/BGround"
-        },
-        {
-            "x": 8,
-            "y": -4,
-            "tileId": "Ground/BGround"
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
             "x": 9,
-            "y": -3,
-            "tileId": "Ground/BGround"
+            "y": 1,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
-            "x": 10,
-            "y": -3,
-            "tileId": "Ground/BGround"
+            "x": -6,
+            "y": 1,
+            "tileId": "Interactable/GhostObject",
+            "mechanismId": "0",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         },
         {
-            "x": 10,
-            "y": -2,
-            "tileId": "Ground/BGround"
+            "x": 9,
+            "y": 5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 9,
+            "y": 4,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        }
+    ],
+    "tilesShared": [
+        {
+            "x": -5,
+            "y": 1,
+            "tileId": "Interactable/PickableObject",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 4,
+            "y": 3,
+            "tileId": "Interactable/PickableObjectB",
+            "mechanismId": "0",
+            "sequenceGroupId": "0",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": 7,
+            "y": 1,
+            "tileId": "Interactable/PickableObjectB",
+            "mechanismId": "0",
+            "sequenceGroupId": "0",
+            "sequenceIndex": 1,
+            "dialogueText": ""
+        },
+        {
+            "x": 2,
+            "y": 1,
+            "tileId": "Interactable/PickableObjectB",
+            "mechanismId": "0",
+            "sequenceGroupId": "0",
+            "sequenceIndex": 2,
+            "dialogueText": ""
+        },
+        {
+            "x": 6,
+            "y": 3,
+            "tileId": "Interactable/PickableObjectC",
+            "mechanismId": "0",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
+        },
+        {
+            "x": -2,
+            "y": 3,
+            "tileId": "Interactable/PickableObjectC",
+            "mechanismId": "0",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": ""
         }
     ],
     "tiles": []

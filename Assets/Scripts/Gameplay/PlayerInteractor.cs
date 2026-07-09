@@ -207,7 +207,7 @@ namespace BokeGameJam.Gameplay
 
             nearby.RemoveWhere(item => item == null);
 
-            foreach (InteractableObject item in nearby)
+            foreach (IInteractable item in nearby)
             {
                 if (item is not InteractableObjectD ghost)
                     continue;
@@ -224,6 +224,8 @@ namespace BokeGameJam.Gameplay
             }
 
             return best;
+        }
+
         private bool TryInteractWith(IInteractable interactable)
         {
             if (!IsValidInteractable(interactable))
