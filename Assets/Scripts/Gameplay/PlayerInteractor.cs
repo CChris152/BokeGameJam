@@ -6,7 +6,8 @@ using BokeGameJam.Input;
 namespace BokeGameJam.Gameplay
 {
     /// <summary>
-    /// 玩家交互：范围内无持有物时按 E 捡起最近的 <see cref="InteractableObject"/>，持有时按 E 丢弃。
+    /// 玩家交互：范围内按 E 对最近可交互物执行捡起或触发；
+    /// 持有物品时优先对附近交付处 C 交付，否则丢弃。
     /// </summary>
     public sealed class PlayerInteractor : MonoBehaviour
     {
@@ -33,7 +34,7 @@ namespace BokeGameJam.Gameplay
         private void OnTriggerEnter2D(Collider2D other)
         {
             InteractableObject item = other.GetComponentInParent<InteractableObject>();
-            if (item != null && !item.IsHeld)
+            if (item != null)
                 nearby.Add(item);
         }
 
@@ -48,13 +49,28 @@ namespace BokeGameJam.Gameplay
         {
             if (held != null)
             {
+                InteractableObjectC delivery = FindNearestDelivery();
+                if (delivery != null)
+                {
+                    delivery.OnInteract(this);
+                    return;
+                }
+
                 DropHeld();
                 return;
             }
 
             InteractableObject target = FindNearestNearby();
-            if (target != null)
-                PickUp(target);
+            if (target == null)
+                return;
+
+            if (target.Mode == InteractMode.Trigger)
+            {
+                target.OnInteract(this);
+                return;
+            }
+
+            PickUp(target);
         }
 
         private void PickUp(InteractableObject item)
@@ -75,13 +91,26 @@ namespace BokeGameJam.Gameplay
             EmitHeldChanged();
         }
 
+        /// <summary>交付处消耗当前持有物（销毁）。</summary>
+        public void ConsumeHeldItem()
+        {
+            if (held == null)
+                return;
+
+            InteractableObject item = held;
+            held = null;
+            nearby.Remove(item);
+            Destroy(item.gameObject);
+            EmitHeldChanged();
+        }
+
         private InteractableObject FindNearestNearby()
         {
             InteractableObject best = null;
             float bestDist = float.MaxValue;
             Vector2 origin = transform.position;
 
-            nearby.RemoveWhere(item => item == null || item.IsHeld);
+            nearby.RemoveWhere(item => item == null || !item.CanInteract(this));
 
             foreach (InteractableObject item in nearby)
             {
@@ -90,6 +119,33 @@ namespace BokeGameJam.Gameplay
                 {
                     bestDist = dist;
                     best = item;
+                }
+            }
+
+            return best;
+        }
+
+        private InteractableObjectC FindNearestDelivery()
+        {
+            InteractableObjectC best = null;
+            float bestDist = float.MaxValue;
+            Vector2 origin = transform.position;
+
+            nearby.RemoveWhere(item => item == null);
+
+            foreach (InteractableObject item in nearby)
+            {
+                if (item is not InteractableObjectC delivery)
+                    continue;
+
+                if (!delivery.CanInteract(this))
+                    continue;
+
+                float dist = ((Vector2)delivery.transform.position - origin).sqrMagnitude;
+                if (dist < bestDist)
+                {
+                    bestDist = dist;
+                    best = delivery;
                 }
             }
 
