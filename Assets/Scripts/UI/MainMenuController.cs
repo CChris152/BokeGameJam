@@ -26,10 +26,6 @@ namespace BokeGameJam.UI
         [Tooltip("退出游戏按钮")]
         [SerializeField] private Button quitButton;
 
-        [Header("设置弹窗资源（可选）")]
-        [Tooltip("若填写了有效 id，则优先用该资源打开设置；否则回退到 SettingsPanelController.UiId")]
-        [SerializeField] private ResourceDefinitionDatabase.UIResource settingsPanelResource;
-
         private void Awake()
         {
             BindButton(startButton, OnStartGameClicked);
@@ -66,14 +62,6 @@ namespace BokeGameJam.UI
             }
 
             UIManager.Instance.Load(SettingsPanelController.ResourceId);
-            // 优先使用 Inspector 指定的资源条目，否则按固定 id 加载
-            if (settingsPanelResource != null && !string.IsNullOrWhiteSpace(settingsPanelResource.Id))
-            {
-                UIManager.Instance.LoadUI(settingsPanelResource);
-                return;
-            }
-
-            UIManager.Instance.LoadUIById(SettingsPanelController.UiId);
         }
 
         /// <summary>退出游戏：编辑器中停止 Play，真机中退出应用。</summary>

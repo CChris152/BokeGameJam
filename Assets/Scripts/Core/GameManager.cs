@@ -36,17 +36,6 @@ namespace BokeGameJam.Core
         [SerializeField]
         private List<string> mainMenuSceneNames = new() { "StartScene", "MainMenu", "LevelSelect" };
 
-        [Header("按状态需要加载的 UI（ResourceDefinitionDatabase.uiPrefabs 的 resourceId）")]
-        [Tooltip("进入 LevelPlaying 时加载的 HUD 列表，默认包含物品栏。")]
-        [FormerlySerializedAs("levelPlayingUiIds")]
-        [SerializeField]
-        private List<string> levelPlayingResourceIds = new() { InventorySlotUI.ResourceId };
-
-        [Tooltip("离开 LevelPlaying 时要卸载（Close）的 resourceId。默认与 levelPlayingResourceIds 相同。")]
-        [FormerlySerializedAs("uiToCloseOnLevelExit")]
-        [SerializeField]
-        private List<string> resourceIdsToCloseOnLevelExit = new() { InventorySlotUI.ResourceId };
-
         [Header("Start Game")]
         [Tooltip("主菜单点开始时进入的关卡 id（写入 LevelSelection）。")]
         [SerializeField] private string startLevelId = "level_1";
@@ -182,23 +171,19 @@ namespace BokeGameJam.Core
 
         private void HandleStateTransition(GameState prev, GameState next)
         {
-            // 离开 LevelPlaying：关闭 HUD、禁用 ESC 暂停
+            // 离开 LevelPlaying：禁用 ESC 暂停
             if (prev == GameState.LevelPlaying && next != GameState.LevelPlaying)
             {
-                CloseUIList(resourceIdsToCloseOnLevelExit);
                 SetEscPauseEnabled(false);
             }
 
             switch (next)
             {
                 case GameState.MainMenu:
-                    // 回主菜单：确保 HUD 关掉、ESC 暂停关闭
-                    CloseUIList(resourceIdsToCloseOnLevelExit);
                     SetEscPauseEnabled(false);
                     break;
 
                 case GameState.LevelPlaying:
-                    LoadUIList(levelPlayingResourceIds);
                     // 关卡进行中允许玩家按 ESC 打开暂停菜单
                     SetEscPauseEnabled(true);
                     break;
@@ -246,26 +231,5 @@ namespace BokeGameJam.Core
             return false;
         }
 
-        private static void LoadUIList(List<string> resourceIds)
-        {
-            if (resourceIds == null || UIManager.Instance == null) return;
-
-            foreach (string id in resourceIds)
-            {
-                if (string.IsNullOrWhiteSpace(id)) continue;
-                UIManager.Instance.Load(id);
-            }
-        }
-
-        private static void CloseUIList(List<string> resourceIds)
-        {
-            if (resourceIds == null || UIManager.Instance == null) return;
-
-            foreach (string id in resourceIds)
-            {
-                if (string.IsNullOrWhiteSpace(id)) continue;
-                UIManager.Instance.Close(id);
-            }
-        }
     }
 }
