@@ -133,5 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1d2e3f4a5b6478890a1b2c3d4e5f607, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyOnPickup: 1
-  canPickupMultipleTimes: 0
+  dropPrefab: {fileID: 5733472278246412508, guid: 4783b77d3f5745347a0da7ae1440e90f, type: 3}
+  displayName: 
+  iconOverride: {fileID: 0}
+  highlightMaterial: {fileID: 0}

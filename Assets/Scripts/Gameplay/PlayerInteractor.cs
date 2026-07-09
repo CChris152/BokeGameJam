@@ -6,8 +6,7 @@ using BokeGameJam.Input;
 namespace BokeGameJam.Gameplay
 {
     /// <summary>
-    /// 玩家交互：跟踪范围内的 <see cref="PickableObject"/>，响应 E 键拾取最近的一个。
-    /// 挂在 Player 上；可拾取物需带 Trigger Collider2D。
+    /// 玩家交互：E = 有持有物则放下，否则拾取范围内最近可拾取物。
     /// </summary>
     public sealed class PlayerInteractor : MonoBehaviour
     {
@@ -20,6 +19,7 @@ namespace BokeGameJam.Gameplay
 
         private readonly HashSet<PickableObject> inRange = new();
         private readonly List<PickableObject> removeBuffer = new();
+        private PlayerHeldItem heldItem;
 
         public IReadOnlyCollection<PickableObject> InRange => inRange;
 
@@ -27,6 +27,10 @@ namespace BokeGameJam.Gameplay
         {
             if (interactTrigger == null)
                 interactTrigger = GetComponent<Collider2D>();
+
+            heldItem = GetComponent<PlayerHeldItem>() ?? GetComponentInParent<PlayerHeldItem>();
+            if (heldItem == null)
+                heldItem = gameObject.AddComponent<PlayerHeldItem>();
         }
 
         private void OnEnable()
@@ -37,6 +41,13 @@ namespace BokeGameJam.Gameplay
         private void OnDisable()
         {
             EventManager.Off(InputEvents.PlayerInteractPressed, OnInteractPressed);
+
+            foreach (PickableObject pickable in inRange)
+            {
+                if (pickable != null)
+                    pickable.SetInInteractRange(false);
+            }
+
             inRange.Clear();
         }
 
@@ -44,16 +55,22 @@ namespace BokeGameJam.Gameplay
         {
             PickableObject pickable = other.GetComponent<PickableObject>()
                 ?? other.GetComponentInParent<PickableObject>();
-            if (pickable != null && pickable.IsAvailable)
-                inRange.Add(pickable);
+            if (pickable == null || !pickable.IsAvailable)
+                return;
+
+            if (inRange.Add(pickable))
+                pickable.SetInInteractRange(true);
         }
 
         private void OnTriggerExit2D(Collider2D other)
         {
             PickableObject pickable = other.GetComponent<PickableObject>()
                 ?? other.GetComponentInParent<PickableObject>();
-            if (pickable != null)
-                inRange.Remove(pickable);
+            if (pickable == null)
+                return;
+
+            if (inRange.Remove(pickable))
+                pickable.SetInInteractRange(false);
         }
 
         private void OnInteractPressed()
@@ -61,12 +78,23 @@ namespace BokeGameJam.Gameplay
             if (!isActiveAndEnabled)
                 return;
 
+            // 手上有东西：E 放下
+            if (heldItem != null && heldItem.HasItem)
+            {
+                heldItem.TryDrop();
+                return;
+            }
+
+            // 手上空：尝试拾取
             PickableObject target = FindBestTarget();
             if (target == null)
                 return;
 
             if (target.TryPickup(this))
+            {
+                target.SetInInteractRange(false);
                 inRange.Remove(target);
+            }
         }
 
         private PickableObject FindBestTarget()
@@ -79,6 +107,8 @@ namespace BokeGameJam.Gameplay
             {
                 if (pickable == null || !pickable.IsAvailable)
                 {
+                    if (pickable != null)
+                        pickable.SetInInteractRange(false);
                     removeBuffer.Add(pickable);
                     continue;
                 }
