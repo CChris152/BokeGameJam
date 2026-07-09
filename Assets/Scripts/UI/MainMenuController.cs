@@ -9,15 +9,25 @@ using UnityEditor;
 namespace BokeGameJam.UI
 {
     /// <summary>
-    /// 处理 StartScene 主菜单按钮事件。
+    /// StartScene 主菜单控制器：开始游戏、打开设置、退出游戏。
     /// </summary>
     public class MainMenuController : MonoBehaviour
     {
+        /// <summary>点击「开始游戏」后加载的场景资源 id。</summary>
         private const string SelectSceneId = "Level1";
 
+        [Header("主菜单按钮")]
+        [Tooltip("开始游戏按钮")]
         [SerializeField] private Button startButton;
+
+        [Tooltip("打开设置弹窗按钮")]
         [SerializeField] private Button settingsButton;
+
+        [Tooltip("退出游戏按钮")]
         [SerializeField] private Button quitButton;
+
+        [Header("设置弹窗资源（可选）")]
+        [Tooltip("若填写了有效 id，则优先用该资源打开设置；否则回退到 SettingsPanelController.UiId")]
         [SerializeField] private ResourceDefinitionDatabase.UIResource settingsPanelResource;
 
         private void Awake()
@@ -27,6 +37,7 @@ namespace BokeGameJam.UI
             BindButton(quitButton, OnQuitGameClicked);
         }
 
+        /// <summary>为按钮绑定点击回调（先移除再添加，避免重复订阅）。</summary>
         private void BindButton(Button button, UnityAction callback)
         {
             if (button == null)
@@ -39,6 +50,7 @@ namespace BokeGameJam.UI
             button.onClick.AddListener(callback);
         }
 
+        /// <summary>开始游戏：切换到关卡场景。</summary>
         public void OnStartGameClicked()
         {
             if (GameSceneManager.Instance == null)
@@ -50,6 +62,7 @@ namespace BokeGameJam.UI
             GameSceneManager.Instance.LoadSceneById(SelectSceneId);
         }
 
+        /// <summary>打开设置弹窗。</summary>
         public void OnSettingsClicked()
         {
             if (UIManager.Instance == null)
@@ -58,6 +71,7 @@ namespace BokeGameJam.UI
                 return;
             }
 
+            // 优先使用 Inspector 指定的资源条目，否则按固定 id 加载
             if (settingsPanelResource != null && !string.IsNullOrWhiteSpace(settingsPanelResource.Id))
             {
                 UIManager.Instance.LoadUI(settingsPanelResource);
@@ -67,6 +81,7 @@ namespace BokeGameJam.UI
             UIManager.Instance.LoadUIById(SettingsPanelController.UiId);
         }
 
+        /// <summary>退出游戏：编辑器中停止 Play，真机中退出应用。</summary>
         public void OnQuitGameClicked()
         {
 #if UNITY_EDITOR
