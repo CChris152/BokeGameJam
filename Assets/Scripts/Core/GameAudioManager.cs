@@ -53,6 +53,24 @@ namespace BokeGameJam.Core
             ApplyVolumes();
         }
 
+        private void Start()
+        {
+            LoadVolumesFromDataManager();
+        }
+
+        /// <summary>
+        /// Loads the shared master volume from DataManager and applies it to BGM and SFX.
+        /// </summary>
+        public void LoadVolumesFromDataManager()
+        {
+            if (DataManager.Instance == null)
+                return;
+
+            float masterVolume = Mathf.Clamp01(DataManager.Instance.GetFloat(DataManager.Keys.MasterVolume));
+            SetBGMVolume(masterVolume);
+            SetSFXVolume(masterVolume);
+        }
+
         #region BGM
 
         public void PlayBGM(ResourceDefinitionDatabase.SoundResource music, float fadeDuration = -1f)

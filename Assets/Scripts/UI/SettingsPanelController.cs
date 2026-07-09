@@ -52,7 +52,7 @@ namespace BokeGameJam.UI
 
         private void OnEnable()
         {
-            SyncVolumeFromAudioManager();
+            SyncVolumeFromSavedData();
         }
 
         private void OnDestroy()
@@ -67,25 +67,56 @@ namespace BokeGameJam.UI
                 volumeSlider.onValueChanged.RemoveListener(OnVolumeChanged);
         }
 
-        private void SyncVolumeFromAudioManager()
+        private void SyncVolumeFromSavedData()
         {
-            if (volumeSlider == null || GameAudioManager.Instance == null)
+            if (volumeSlider == null)
                 return;
 
-            volumeSlider.SetValueWithoutNotify(GameAudioManager.Instance.BgmVolume);
+            float volume = ResolveSavedMasterVolume();
+            volumeSlider.SetValueWithoutNotify(volume);
+            ApplyMasterVolume(volume);
+        }
+
+        private float ResolveSavedMasterVolume()
+        {
+            if (DataManager.Instance != null)
+                return Mathf.Clamp01(DataManager.Instance.GetFloat(DataManager.Keys.MasterVolume));
+
+            if (GameAudioManager.Instance != null)
+                return GameAudioManager.Instance.BgmVolume;
+
+            return 0.6f;
         }
 
         private void OnVolumeChanged(float value)
         {
+            float volume = Mathf.Clamp01(value);
+            ApplyMasterVolume(volume);
+            PersistMasterVolume(volume);
+        }
+
+        private static void ApplyMasterVolume(float volume)
+        {
             if (GameAudioManager.Instance == null)
             {
-                Debug.LogWarning("[SettingsPanelController] GameAudioManager instance is missing.", this);
+                Debug.LogWarning("[SettingsPanelController] GameAudioManager instance is missing.");
                 return;
             }
 
-            // Runtime only; do not persist to PlayerPrefs yet.
-            GameAudioManager.Instance.SetBGMVolume(value);
-            GameAudioManager.Instance.SetSFXVolume(value);
+            // BGM and SFX share one master volume for now.
+            GameAudioManager.Instance.SetBGMVolume(volume);
+            GameAudioManager.Instance.SetSFXVolume(volume);
+        }
+
+        private static void PersistMasterVolume(float volume)
+        {
+            if (DataManager.Instance == null)
+            {
+                Debug.LogWarning("[SettingsPanelController] DataManager instance is missing. Volume was not saved.");
+                return;
+            }
+
+            DataManager.Instance.SetFloat(DataManager.Keys.MasterVolume, volume);
         }
 
         private void OnClearDataClicked()
