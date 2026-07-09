@@ -35,10 +35,8 @@ namespace BokeGameJam.CameraSystem
         [SerializeField] private Rect worldBounds = new(-50f, -20f, 100f, 40f);
 
         [Header("Editor Camera")]
-        [Tooltip("编辑模式下 WASD 相机基础速度（单位/秒）")]
+        [Tooltip("编辑模式下 WASD 相机速度（单位/秒）")]
         [SerializeField] private float editorMoveSpeed = 8f;
-        [Tooltip("Shift 加速倍率")]
-        [SerializeField] private float editorBoostMultiplier = 3f;
 
         [Header("Editor Zoom")]
         [Tooltip("滚轮一格改变的正交尺寸（正交相机）")]
@@ -55,7 +53,6 @@ namespace BokeGameJam.CameraSystem
         private Vector3 followVelocity;
         private InputContext currentContext = InputContext.Gameplay;
         private Vector2 editorInputDir;
-        private bool editorBoost;
 
         // 记录进入编辑模式前的相机尺寸/FOV，退出时恢复
         private float savedOrthoSize;
@@ -86,7 +83,6 @@ namespace BokeGameJam.CameraSystem
         {
             EventManager.On<InputContext>(InputEvents.ContextChanged, OnContextChanged);
             EventManager.On<Vector2>(InputEvents.CameraMove, OnCameraMove);
-            EventManager.On<bool>(InputEvents.CameraBoost, OnCameraBoost);
             EventManager.On<float>(InputEvents.CameraZoom, OnCameraZoom);
         }
 
@@ -94,7 +90,6 @@ namespace BokeGameJam.CameraSystem
         {
             EventManager.Off<InputContext>(InputEvents.ContextChanged, OnContextChanged);
             EventManager.Off<Vector2>(InputEvents.CameraMove, OnCameraMove);
-            EventManager.Off<bool>(InputEvents.CameraBoost, OnCameraBoost);
             EventManager.Off<float>(InputEvents.CameraZoom, OnCameraZoom);
         }
 
@@ -176,8 +171,7 @@ namespace BokeGameJam.CameraSystem
             if (editorInputDir.sqrMagnitude < 0.0001f)
                 return;
 
-            float speed = editorMoveSpeed * (editorBoost ? editorBoostMultiplier : 1f);
-            Vector3 delta = new Vector3(editorInputDir.x, editorInputDir.y, 0f) * (speed * Time.unscaledDeltaTime);
+            Vector3 delta = new Vector3(editorInputDir.x, editorInputDir.y, 0f) * (editorMoveSpeed * Time.unscaledDeltaTime);
             targetCamera.transform.position += delta;
         }
 
@@ -213,7 +207,6 @@ namespace BokeGameJam.CameraSystem
                     targetCamera.fieldOfView = savedFov;
                 }
                 editorInputDir = Vector2.zero;
-                editorBoost = false;
             }
 
             followVelocity = Vector3.zero;
@@ -222,11 +215,6 @@ namespace BokeGameJam.CameraSystem
         private void OnCameraMove(Vector2 dir)
         {
             editorInputDir = dir;
-        }
-
-        private void OnCameraBoost(bool boost)
-        {
-            editorBoost = boost;
         }
 
         private void OnCameraZoom(float scroll)

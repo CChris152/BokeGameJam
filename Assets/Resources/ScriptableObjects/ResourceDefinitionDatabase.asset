@@ -16,6 +16,8 @@ MonoBehaviour:
   - id: SettingsPanel
     prefab: {fileID: 2786470126588296549, guid: 511fc8a750819684c9d0b7a2417b3f49, type: 3}
   playerPrefabs:
+  uiPrefabs: []
+  prefabs:
   - id: Player
     prefab: {fileID: 4094095531222265388, guid: 25d3d4678dec73b469ab53ea4996aaf9, type: 3}
   sprites: []

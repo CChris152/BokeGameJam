@@ -13,6 +13,9 @@ namespace BokeGameJam.Core
 
         /// <summary>玩家通关，payload = string levelId</summary>
         public const string LevelCompleted = "Game.LevelCompleted";
+
+        /// <summary>当前活跃世界切换，payload = WorldId（Gameplay）</summary>
+        public const string ActiveWorldChanged = "Game.ActiveWorldChanged";
     }
 
     /// <summary>关卡选择事件 payload。</summary>
