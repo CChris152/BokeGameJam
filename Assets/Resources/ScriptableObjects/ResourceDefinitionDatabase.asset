@@ -25,7 +25,37 @@ MonoBehaviour:
   - id: PickableObject
     prefab: {fileID: 5733472278246412508, guid: 4783b77d3f5745347a0da7ae1440e90f, type: 3}
   sprites: []
-  sounds: []
+  sounds:
+  - id: scene1_background
+    category: 0
+    clip: {fileID: 8300000, guid: db513dd036584aa40ae77e829ae1b58b, type: 3}
+    loop: 1
+    volumeScale: 1
+  - id: li-bgm-v1
+    category: 0
+    clip: {fileID: 8300000, guid: a7b78c2df5878b44c8a410d0d7f5a935, type: 3}
+    loop: 1
+    volumeScale: 1
+  - id: li-bgm-v2
+    category: 0
+    clip: {fileID: 8300000, guid: 1d6715a7f986c3744a48effbeff28c49, type: 3}
+    loop: 1
+    volumeScale: 1
+  - id: li-bgm-v3
+    category: 0
+    clip: {fileID: 8300000, guid: 02b83dde1ae480e4ea7a0c673623f33c, type: 3}
+    loop: 1
+    volumeScale: 1
+  - id: li-bgm-v4-memory
+    category: 0
+    clip: {fileID: 8300000, guid: 793b5720f52c5ee4585d69114e2cb5a8, type: 3}
+    loop: 1
+    volumeScale: 1
+  - id: biao-bgm-Whispered Ruins
+    category: 0
+    clip: {fileID: 8300000, guid: 201996baff9afd241a5cef98eef73752, type: 3}
+    loop: 1
+    volumeScale: 1
   scenes:
   - id: StartScene
     sceneAsset: {fileID: 102900000, guid: 8c9cfa26abfee488c85f1582747f6a02, type: 3}

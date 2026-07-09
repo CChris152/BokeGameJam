@@ -18,8 +18,11 @@ namespace BokeGameJam.Core
         [Range(0f, 1f)] [SerializeField] private float sfxVolume = 1f;
 
         [Header("BGM 切换")]
-        [Tooltip("切换 BGM 时的默认淡入淡出时长（秒）")]
-        [SerializeField] private float defaultBgmFadeDuration = 0.5f;
+        [Tooltip("切换 BGM 时旧曲淡出时长（秒）")]
+        [SerializeField] private float defaultBgmFadeOutDuration = 1.5f;
+
+        [Tooltip("切换 BGM 时新曲淡入时长（秒）")]
+        [SerializeField] private float defaultBgmFadeInDuration = 1.5f;
 
         private AudioSource bgmSourceA;
         private AudioSource bgmSourceB;
@@ -77,6 +80,10 @@ namespace BokeGameJam.Core
 
         #region 背景音乐
 
+        /// <summary>
+        /// 播放 BGM。已有曲目时默认先淡出再淡入；
+        /// <paramref name="fadeDuration"/> &lt; 0 用默认 1.5s/1.5s，=0 立即切换，&gt;0 时淡出与淡入都用该时长。
+        /// </summary>
         public void PlayBGM(ResourceDefinitionDatabase.SoundResource music, float fadeDuration = -1f)
         {
             if (!TryLoadSound(music, ResourceDefinitionDatabase.SoundCategory.Music, out AudioClip clip))
@@ -86,16 +93,16 @@ namespace BokeGameJam.Core
             if (currentBgmId == musicId && bgmActiveSource.isPlaying)
                 return;
 
-            float fade = fadeDuration < 0f ? defaultBgmFadeDuration : fadeDuration;
+            ResolveFadeDurations(fadeDuration, out float fadeOut, out float fadeIn);
 
-            if (string.IsNullOrEmpty(currentBgmId) || fade <= 0f)
+            if (string.IsNullOrEmpty(currentBgmId) || (fadeOut <= 0f && fadeIn <= 0f))
             {
                 StopBgmFade();
                 PlayBgmImmediate(clip, music, musicId);
                 return;
             }
 
-            SwitchBGM(music, fade);
+            SwitchBGM(music, fadeOut, fadeIn);
         }
 
         public void PlayBGMById(string musicId, float fadeDuration = -1f)
@@ -109,7 +116,15 @@ namespace BokeGameJam.Core
             PlayBGM(music, fadeDuration);
         }
 
+        /// <summary>切换 BGM：先淡出旧曲，再淡入新曲，并广播 <see cref="GameEvents.BgmSwitchProcess"/>。</summary>
         public void SwitchBGM(ResourceDefinitionDatabase.SoundResource music, float fadeDuration = -1f)
+        {
+            ResolveFadeDurations(fadeDuration, out float fadeOut, out float fadeIn);
+            SwitchBGM(music, fadeOut, fadeIn);
+        }
+
+        /// <summary>切换 BGM（可分别指定淡出 / 淡入时长）。</summary>
+        public void SwitchBGM(ResourceDefinitionDatabase.SoundResource music, float fadeOutDuration, float fadeInDuration)
         {
             if (!TryLoadSound(music, ResourceDefinitionDatabase.SoundCategory.Music, out AudioClip clip))
                 return;
@@ -118,9 +133,8 @@ namespace BokeGameJam.Core
             if (currentBgmId == musicId && bgmActiveSource.isPlaying)
                 return;
 
-            float fade = fadeDuration < 0f ? defaultBgmFadeDuration : fadeDuration;
             StopBgmFade();
-            bgmFadeCoroutine = StartCoroutine(CrossfadeBgmRoutine(clip, music, musicId, fade));
+            bgmFadeCoroutine = StartCoroutine(SwitchBgmRoutine(clip, music, musicId, fadeOutDuration, fadeInDuration));
         }
 
         public void SwitchBGMById(string musicId, float fadeDuration = -1f)
@@ -132,6 +146,17 @@ namespace BokeGameJam.Core
             }
 
             SwitchBGM(music, fadeDuration);
+        }
+
+        public void SwitchBGMById(string musicId, float fadeOutDuration, float fadeInDuration)
+        {
+            if (!ResourcesManager.TryGetSound(musicId, out ResourceDefinitionDatabase.SoundResource music))
+            {
+                Debug.LogError($"[GameAudioManager] Cannot find music id: {musicId}");
+                return;
+            }
+
+            SwitchBGM(music, fadeOutDuration, fadeInDuration);
         }
 
         public void StopBGM(float fadeDuration = 0f)
@@ -311,39 +336,84 @@ namespace BokeGameJam.Core
             }
         }
 
-        private IEnumerator CrossfadeBgmRoutine(AudioClip nextClip, ResourceDefinitionDatabase.SoundResource music, string musicId, float duration)
+        /// <summary>解析切换时长：&lt;0 用默认 1.5/1.5，=0 立即，&gt;0 淡出与淡入同值。</summary>
+        private void ResolveFadeDurations(float fadeDuration, out float fadeOut, out float fadeIn)
         {
+            if (fadeDuration < 0f)
+            {
+                fadeOut = Mathf.Max(0f, defaultBgmFadeOutDuration);
+                fadeIn = Mathf.Max(0f, defaultBgmFadeInDuration);
+                return;
+            }
+
+            fadeOut = Mathf.Max(0f, fadeDuration);
+            fadeIn = Mathf.Max(0f, fadeDuration);
+        }
+
+        /// <summary>先淡出旧曲，再淡入新曲；过程中广播 BgmSwitchProcess。</summary>
+        private IEnumerator SwitchBgmRoutine(
+            AudioClip nextClip,
+            ResourceDefinitionDatabase.SoundResource music,
+            string musicId,
+            float fadeOutDuration,
+            float fadeInDuration)
+        {
+            string fromId = currentBgmId ?? string.Empty;
+            EmitBgmSwitch(fromId, musicId, BgmSwitchPhase.Started);
+
             AudioSource from = bgmActiveSource;
             AudioSource to = from == bgmSourceA ? bgmSourceB : bgmSourceA;
             float nextVolumeScale = music.VolumeScale;
             float nextVolume = bgmVolume * nextVolumeScale;
 
+            // 1) 旧曲淡出
+            fadeOutDuration = Mathf.Max(0f, fadeOutDuration);
+            if (from.isPlaying && fadeOutDuration > 0f)
+            {
+                float startVolume = from.volume;
+                float elapsed = 0f;
+                while (elapsed < fadeOutDuration)
+                {
+                    elapsed += Time.unscaledDeltaTime;
+                    from.volume = Mathf.Lerp(startVolume, 0f, elapsed / fadeOutDuration);
+                    yield return null;
+                }
+            }
+
+            from.Stop();
+            from.volume = 0f;
+            EmitBgmSwitch(fromId, musicId, BgmSwitchPhase.FadeOutCompleted);
+
+            // 2) 新曲淡入
             to.clip = nextClip;
             to.loop = music.Loop;
             to.volume = 0f;
             to.Play();
 
-            float elapsed = 0f;
-            float fromStartVolume = from.volume;
-
-            while (elapsed < duration)
+            fadeInDuration = Mathf.Max(0f, fadeInDuration);
+            if (fadeInDuration > 0f)
             {
-                elapsed += Time.unscaledDeltaTime;
-                float t = elapsed / duration;
-
-                from.volume = Mathf.Lerp(fromStartVolume, 0f, t);
-                to.volume = Mathf.Lerp(0f, nextVolume, t);
-                yield return null;
+                float elapsed = 0f;
+                while (elapsed < fadeInDuration)
+                {
+                    elapsed += Time.unscaledDeltaTime;
+                    to.volume = Mathf.Lerp(0f, nextVolume, elapsed / fadeInDuration);
+                    yield return null;
+                }
             }
 
-            from.Stop();
-            from.volume = nextVolume;
             to.volume = nextVolume;
-
             bgmActiveSource = to;
             currentBgmId = musicId;
             currentBgmVolumeScale = nextVolumeScale;
             bgmFadeCoroutine = null;
+
+            EmitBgmSwitch(fromId, musicId, BgmSwitchPhase.Completed);
+        }
+
+        private static void EmitBgmSwitch(string fromId, string toId, BgmSwitchPhase phase)
+        {
+            EventManager.Emit(GameEvents.BgmSwitchProcess, new BgmSwitchInfo(fromId, toId, phase));
         }
 
         private IEnumerator FadeOutAndStopBgmRoutine(float duration)

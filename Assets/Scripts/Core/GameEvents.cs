@@ -31,6 +31,35 @@ namespace BokeGameJam.Core
 
         /// <summary>全局游戏状态切换，payload = GameState</summary>
         public const string GameStateChanged = "Game.GameStateChanged";
+
+        /// <summary>BGM 切换过程，payload = <see cref="BgmSwitchInfo"/></summary>
+        public const string BgmSwitchProcess = "Audio.BgmSwitchProcess";
+    }
+
+    /// <summary>BGM 切换过程阶段。</summary>
+    public enum BgmSwitchPhase
+    {
+        /// <summary>开始切换：即将淡出旧曲。</summary>
+        Started,
+        /// <summary>旧曲淡出结束，即将淡入新曲。</summary>
+        FadeOutCompleted,
+        /// <summary>新曲淡入结束，切换完成。</summary>
+        Completed
+    }
+
+    /// <summary>BGM 切换过程事件 payload。</summary>
+    public readonly struct BgmSwitchInfo
+    {
+        public readonly string FromId;
+        public readonly string ToId;
+        public readonly BgmSwitchPhase Phase;
+
+        public BgmSwitchInfo(string fromId, string toId, BgmSwitchPhase phase)
+        {
+            FromId = fromId ?? string.Empty;
+            ToId = toId ?? string.Empty;
+            Phase = phase;
+        }
     }
 
     /// <summary>双世界：A = 阳间，B = 阴间。</summary>
