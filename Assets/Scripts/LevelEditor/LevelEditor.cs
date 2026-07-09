@@ -102,6 +102,7 @@ namespace BokeGameJam.LevelEditor
         private string paintSequenceGroupId = string.Empty;
         private string paintSequenceIndexText = "0";
         private string paintDialogueText = string.Empty;
+        private string paintRoomId = string.Empty;
 
         // 光标预览
         private GameObject cursorPreview;
@@ -162,7 +163,7 @@ namespace BokeGameJam.LevelEditor
 
             RebuildPaletteFromFolder();
             EnsureTileRoots();
-            WorldManager.EnsureExists();
+            GameManager.EnsureExists();
         }
 
         /// <summary>
@@ -279,8 +280,8 @@ namespace BokeGameJam.LevelEditor
             string scene = SceneManager.GetActiveScene().name;
             Debug.Log($"[LevelEditor] 场景 '{scene}' → 地图文件 '{Path.GetFileName(SaveFilePath)}'");
 
-            if (WorldManager.Instance != null)
-                activeWorld = WorldManager.Instance.ActiveWorld;
+            if (GameManager.Instance != null)
+                activeWorld = GameManager.Instance.ActiveWorld;
 
             if (autoLoadOnStart && File.Exists(SaveFilePath))
                 LoadSilent();
@@ -731,8 +732,14 @@ namespace BokeGameJam.LevelEditor
         private bool CurrentBrushHasSequenceFields()
         {
             TilePaletteEntry entry = GetCurrentEntry();
-            return entry != null && entry.prefab != null
-                && entry.prefab.GetComponent<InteractableObjectB>() != null;
+            if (entry == null || entry.prefab == null)
+                return false;
+
+            // 灯开关也继承 B，但不走序列组配置。
+            if (entry.prefab.GetComponent<InteractableObjectLightSwitch>() != null)
+                return false;
+
+            return entry.prefab.GetComponent<InteractableObjectB>() != null;
         }
 
         private bool CurrentBrushIsGhost()
@@ -740,6 +747,13 @@ namespace BokeGameJam.LevelEditor
             TilePaletteEntry entry = GetCurrentEntry();
             return entry != null && entry.prefab != null
                 && entry.prefab.GetComponent<InteractableObjectD>() != null;
+        }
+
+        private bool CurrentBrushIsLightSwitch()
+        {
+            TilePaletteEntry entry = GetCurrentEntry();
+            return entry != null && entry.prefab != null
+                && entry.prefab.GetComponent<InteractableObjectLightSwitch>() != null;
         }
 
         private LevelLayer ResolvePaintLayer(TilePaletteEntry entry)
@@ -804,6 +818,10 @@ namespace BokeGameJam.LevelEditor
             InteractableObjectD ghost = instance.GetComponent<InteractableObjectD>();
             if (ghost != null)
                 ghost.ApplyDialogueText(paintDialogueText);
+
+            InteractableObjectLightSwitch lightSwitch = instance.GetComponent<InteractableObjectLightSwitch>();
+            if (lightSwitch != null)
+                lightSwitch.ApplyRoomId(paintRoomId);
         }
 
         private static void ApplyTileEntryConfig(GameObject instance, LevelData.TileEntry entry, LevelLayer layer)
@@ -827,6 +845,10 @@ namespace BokeGameJam.LevelEditor
             InteractableObjectD ghost = instance.GetComponent<InteractableObjectD>();
             if (ghost != null)
                 ghost.ApplyDialogueText(entry.dialogueText);
+
+            InteractableObjectLightSwitch lightSwitch = instance.GetComponent<InteractableObjectLightSwitch>();
+            if (lightSwitch != null)
+                lightSwitch.ApplyRoomId(entry.roomId);
         }
 
         private static LevelData.TileEntry CaptureTileEntry(Vector2Int cell, PlacedTile tile)
@@ -835,6 +857,7 @@ namespace BokeGameJam.LevelEditor
             string sequenceGroupId = null;
             int sequenceIndex = 0;
             string dialogueText = null;
+            string roomId = null;
 
             if (tile.instance != null)
             {
@@ -846,18 +869,28 @@ namespace BokeGameJam.LevelEditor
                 }
                 else
                 {
-                    InteractableObjectB b = tile.instance.GetComponent<InteractableObjectB>();
-                    if (b != null)
+                    InteractableObjectLightSwitch lightSwitch =
+                        tile.instance.GetComponent<InteractableObjectLightSwitch>();
+                    if (lightSwitch != null)
                     {
-                        mechanismId = b.MechanismId;
-                        sequenceGroupId = b.SequenceGroupId;
-                        sequenceIndex = b.SequenceIndex;
+                        mechanismId = lightSwitch.MechanismId;
+                        roomId = lightSwitch.RoomId;
                     }
                     else
                     {
-                        InteractableObject interactable = tile.instance.GetComponent<InteractableObject>();
-                        if (interactable != null)
-                            mechanismId = interactable.MechanismId;
+                        InteractableObjectB b = tile.instance.GetComponent<InteractableObjectB>();
+                        if (b != null)
+                        {
+                            mechanismId = b.MechanismId;
+                            sequenceGroupId = b.SequenceGroupId;
+                            sequenceIndex = b.SequenceIndex;
+                        }
+                        else
+                        {
+                            InteractableObject interactable = tile.instance.GetComponent<InteractableObject>();
+                            if (interactable != null)
+                                mechanismId = interactable.MechanismId;
+                        }
                     }
                 }
             }
@@ -869,7 +902,8 @@ namespace BokeGameJam.LevelEditor
                 mechanismId,
                 sequenceGroupId,
                 sequenceIndex,
-                dialogueText);
+                dialogueText,
+                roomId);
         }
 
         public void RemoveTile(Vector2Int cell)
@@ -1195,7 +1229,15 @@ namespace BokeGameJam.LevelEditor
                 paintMechanismId = GUILayout.TextField(paintMechanismId ?? string.Empty);
                 GUILayout.EndHorizontal();
 
-                if (CurrentBrushHasSequenceFields())
+                if (CurrentBrushIsLightSwitch())
+                {
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Label("roomId", GUILayout.Width(110));
+                    paintRoomId = GUILayout.TextField(paintRoomId ?? string.Empty);
+                    GUILayout.EndHorizontal();
+                    GUILayout.Label("灯开关：与同房间背景 roomId 一致；再刷可更新", mutedStyle);
+                }
+                else if (CurrentBrushHasSequenceFields())
                 {
                     GUILayout.BeginHorizontal();
                     GUILayout.Label("sequenceGroupId", GUILayout.Width(110));

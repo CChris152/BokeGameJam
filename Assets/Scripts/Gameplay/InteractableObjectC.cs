@@ -15,7 +15,7 @@ namespace BokeGameJam.Gameplay
         [SerializeField] private Color openColor = new(0.35f, 0.85f, 0.45f, 1f);
         [SerializeField] private Color completedColor = new(0.25f, 0.45f, 0.9f, 1f);
 
-        private bool completed;
+        protected bool completed;
         private bool holdingMatchingA;
 
         public override InteractMode Mode => InteractMode.Trigger;
@@ -27,7 +27,7 @@ namespace BokeGameJam.Gameplay
             ApplyVisual(false);
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             EventManager.On<HeldItemInfo>(GameEvents.HeldItemChanged, OnHeldItemChanged);
             EventManager.On<string>(GameEvents.MechanismSatisfied, OnMechanismSatisfied);
@@ -38,7 +38,7 @@ namespace BokeGameJam.Gameplay
             RefreshVisual();
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             EventManager.Off<HeldItemInfo>(GameEvents.HeldItemChanged, OnHeldItemChanged);
             EventManager.Off<string>(GameEvents.MechanismSatisfied, OnMechanismSatisfied);
@@ -64,7 +64,7 @@ namespace BokeGameJam.Gameplay
             ApplyVisual(false);
         }
 
-        private void OnHeldItemChanged(HeldItemInfo info)
+        protected virtual void OnHeldItemChanged(HeldItemInfo info)
         {
             holdingMatchingA = info.HasItem
                 && !string.IsNullOrEmpty(MechanismId)
@@ -73,7 +73,7 @@ namespace BokeGameJam.Gameplay
             RefreshVisual();
         }
 
-        private void OnMechanismSatisfied(string mechanismId)
+        protected virtual void OnMechanismSatisfied(string mechanismId)
         {
             if (string.IsNullOrEmpty(MechanismId))
                 return;
@@ -84,7 +84,7 @@ namespace BokeGameJam.Gameplay
             RefreshVisual();
         }
 
-        private void RefreshVisual()
+        protected virtual void RefreshVisual()
         {
             if (completed)
             {
@@ -96,7 +96,7 @@ namespace BokeGameJam.Gameplay
             ApplyVisual(open);
         }
 
-        private bool IsRequirementMet(PlayerInteractor interactor)
+        protected virtual bool IsRequirementMet(PlayerInteractor interactor)
         {
             if (HasMatchingHeldItemA(interactor))
                 return true;
@@ -104,7 +104,7 @@ namespace BokeGameJam.Gameplay
             return InteractableObjectB.IsMechanismSatisfied(MechanismId);
         }
 
-        private bool HasMatchingHeldItemA(PlayerInteractor interactor)
+        protected bool HasMatchingHeldItemA(PlayerInteractor interactor)
         {
             if (interactor == null || !interactor.HasHeldItem)
                 return false;
@@ -116,7 +116,7 @@ namespace BokeGameJam.Gameplay
             return MatchesMechanism(held);
         }
 
-        private void ApplyVisual(bool isOpen)
+        protected void ApplyVisual(bool isOpen)
         {
             if (SpriteRenderer == null)
                 return;

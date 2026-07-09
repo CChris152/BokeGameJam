@@ -17,8 +17,11 @@ namespace BokeGameJam.Core
         /// <summary>玩家通关，payload = string levelId</summary>
         public const string LevelCompleted = "Game.LevelCompleted";
 
-        /// <summary>当前活跃世界切换，payload = WorldId（Gameplay）</summary>
+        /// <summary>当前活跃世界切换，payload = <see cref="WorldId"/></summary>
         public const string ActiveWorldChanged = "Game.ActiveWorldChanged";
+
+        /// <summary>房间关灯状态切换，payload = <see cref="RoomLightsInfo"/></summary>
+        public const string LightsOffChanged = "Game.LightsOffChanged";
 
         /// <summary>玩家持有物变化，payload = HeldItemInfo（可能为空）</summary>
         public const string HeldItemChanged = "Game.HeldItemChanged";
@@ -28,6 +31,26 @@ namespace BokeGameJam.Core
 
         /// <summary>全局游戏状态切换，payload = GameState</summary>
         public const string GameStateChanged = "Game.GameStateChanged";
+    }
+
+    /// <summary>双世界：A = 阳间，B = 阴间。</summary>
+    public enum WorldId
+    {
+        A = 0,
+        B = 1
+    }
+
+    /// <summary>某房间的关灯状态。</summary>
+    public readonly struct RoomLightsInfo
+    {
+        public readonly string RoomId;
+        public readonly bool LightsOff;
+
+        public RoomLightsInfo(string roomId, bool lightsOff)
+        {
+            RoomId = roomId ?? string.Empty;
+            LightsOff = lightsOff;
+        }
     }
 
     /// <summary>全局游戏流程阶段。GameManager 单例广播 <see cref="GameEvents.GameStateChanged"/>。</summary>
