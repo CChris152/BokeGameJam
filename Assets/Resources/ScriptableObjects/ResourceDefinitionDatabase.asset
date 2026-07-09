@@ -16,6 +16,8 @@ MonoBehaviour:
   prefabs:
   - id: Player
     prefab: {fileID: 4094095531222265388, guid: 25d3d4678dec73b469ab53ea4996aaf9, type: 3}
+  - id: PickableObject
+    prefab: {fileID: 5733472278246412508, guid: 4783b77d3f5745347a0da7ae1440e90f, type: 3}
   sprites: []
   sounds: []
   scenes:
