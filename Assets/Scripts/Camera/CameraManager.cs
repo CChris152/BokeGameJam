@@ -235,7 +235,7 @@ namespace BokeGameJam.CameraSystem
             }
         }
 
-        // ---------- API ----------
+        // ---------- 公开接口 ----------
 
         /// <summary>把相机对准目标位置（不受死区约束）。</summary>
         public void SnapTo(Vector3 worldPos)

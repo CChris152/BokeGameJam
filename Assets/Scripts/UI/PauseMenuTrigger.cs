@@ -3,19 +3,19 @@ using UnityEngine;
 namespace BokeGameJam.UI
 {
     /// <summary>
-    /// Opens/closes the pause menu with Escape when enabled.
-    /// Toggle <see cref="EscEnabled"/> from other systems to turn this feature on/off.
+    /// 启用时按 Escape 打开/关闭暂停菜单。
+    /// 其他系统可通过切换 <see cref="EscEnabled"/> 开关此功能。
     /// </summary>
     public class PauseMenuTrigger : MonoBehaviour
     {
         [Header("Escape Trigger")]
-        [Tooltip("When false, Escape will not open or close the pause menu.")]
+        [Tooltip("为 false 时，Escape 不会打开或关闭暂停菜单。")]
         [SerializeField] private bool escEnabled;
 
         [SerializeField] private KeyCode toggleKey = KeyCode.Escape;
 
         /// <summary>
-        /// External systems can enable/disable Escape pause menu behavior.
+        /// 外部系统可启用/禁用 Escape 暂停菜单行为。
         /// </summary>
         public bool EscEnabled
         {

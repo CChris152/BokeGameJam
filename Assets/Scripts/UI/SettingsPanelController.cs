@@ -5,7 +5,7 @@ using UnityEngine.UI;
 namespace BokeGameJam.UI
 {
     /// <summary>
-    /// Controls the settings popup: clear data, volume, and close.
+    /// 控制设置弹窗：清除数据、音量调节与关闭。
     /// </summary>
     public class SettingsPanelController : MonoBehaviour
     {
@@ -103,7 +103,7 @@ namespace BokeGameJam.UI
                 return;
             }
 
-            // BGM and SFX share one master volume for now.
+            // 目前 BGM 与 SFX 共用同一主音量。
             GameAudioManager.Instance.SetBGMVolume(volume);
             GameAudioManager.Instance.SetSFXVolume(volume);
         }
@@ -121,7 +121,7 @@ namespace BokeGameJam.UI
 
         private void OnClearDataClicked()
         {
-            // TODO: clear save data
+            // TODO: 清除存档数据
         }
 
         private void OnCloseClicked()

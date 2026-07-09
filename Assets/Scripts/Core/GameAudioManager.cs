@@ -5,7 +5,7 @@ using UnityEngine;
 namespace BokeGameJam.Core
 {
     /// <summary>
-    /// Global audio manager. Audio assets are resolved through ResourcesManager.
+    /// 全局音频管理器。音频资源通过 ResourcesManager 解析。
     /// </summary>
     public class GameAudioManager : MonoBehaviour
     {
@@ -59,7 +59,7 @@ namespace BokeGameJam.Core
         }
 
         /// <summary>
-        /// Loads the shared master volume from DataManager and applies it to BGM and SFX.
+        /// 从 DataManager 加载共用主音量，并应用到 BGM 与 SFX。
         /// </summary>
         public void LoadVolumesFromDataManager()
         {
@@ -71,7 +71,7 @@ namespace BokeGameJam.Core
             SetSFXVolume(masterVolume);
         }
 
-        #region BGM
+        #region 背景音乐
 
         public void PlayBGM(ResourceDefinitionDatabase.SoundResource music, float fadeDuration = -1f)
         {
@@ -152,7 +152,7 @@ namespace BokeGameJam.Core
 
         #endregion
 
-        #region SFX
+        #region 音效
 
         public void PlaySFX(ResourceDefinitionDatabase.SoundResource sfx, float volumeScale = 1f)
         {
@@ -243,7 +243,7 @@ namespace BokeGameJam.Core
 
         #endregion
 
-        #region Volume
+        #region 音量
 
         public void SetBGMVolume(float volume)
         {
@@ -259,7 +259,7 @@ namespace BokeGameJam.Core
 
         #endregion
 
-        #region Internal
+        #region 内部
 
         private AudioSource CreateChildSource(string sourceName, bool loop)
         {

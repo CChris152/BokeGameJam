@@ -5,7 +5,7 @@ using UnityEngine.UI;
 namespace BokeGameJam.UI
 {
     /// <summary>
-    /// Controls the pause popup: return to main menu, volume, and close.
+    /// 控制暂停弹窗：返回主菜单、音量调节与关闭。
     /// </summary>
     public class PauseMenuController : MonoBehaviour
     {

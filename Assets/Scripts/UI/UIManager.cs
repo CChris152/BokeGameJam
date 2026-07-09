@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace BokeGameJam.UI
 {
     /// <summary>
-    /// Runtime UI manager. UI prefab references are resolved through ResourcesManager.
+    /// 运行时 UI 管理器。UI 预制体引用通过 ResourcesManager 解析。
     /// </summary>
     public class UIManager : MonoBehaviour
     {
@@ -44,7 +44,7 @@ namespace BokeGameJam.UI
         }
 
         /// <summary>
-        /// Loads a UI prefab if needed, then shows it.
+        /// 按需加载 UI 预制体并显示。
         /// </summary>
         public GameObject LoadUI(ResourceDefinitionDatabase.UIResource uiResource)
         {
@@ -52,7 +52,7 @@ namespace BokeGameJam.UI
         }
 
         /// <summary>
-        /// Loads a UI prefab under the given parent if needed, then shows it.
+        /// 按需在给定父节点下加载 UI 预制体并显示。
         /// </summary>
         public GameObject LoadUI(ResourceDefinitionDatabase.UIResource uiResource, Transform parent)
         {

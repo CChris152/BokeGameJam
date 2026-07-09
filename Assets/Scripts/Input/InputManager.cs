@@ -98,7 +98,7 @@ namespace BokeGameJam.Input
             }
         }
 
-        // ---------- Gameplay ----------
+        // ---------- 游玩 ----------
 
         private void PollGameplay()
         {
@@ -119,7 +119,7 @@ namespace BokeGameJam.Input
             PollWorldToggle();
         }
 
-        // ---------- LevelEditor ----------
+        // ---------- 关卡编辑器 ----------
 
         private void PollLevelEditor()
         {

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace BokeGameJam.Core
 {
     /// <summary>
-    /// Bottom-level access point for resources defined in ResourceDefinitionDatabase.
+    /// ResourceDefinitionDatabase 所定义资源的底层访问入口。
     /// </summary>
     public static class ResourcesManager
     {

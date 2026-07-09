@@ -121,7 +121,7 @@ namespace BokeGameJam.Core
                 yield return null;
             }
 
-            // progress 到 0.9 后需手动激活场景
+            // 加载进度到 0.9 后需手动激活场景
             operation.allowSceneActivation = true;
 
             while (!operation.isDone)

@@ -5,8 +5,8 @@ using UnityEngine;
 namespace BokeGameJam.Core
 {
     /// <summary>
-    /// Lightweight global event hub for decoupling simple gameplay/UI messages.
-    /// Usage: EventManager.On("EventName", Handler), EventManager.Emit("EventName"), EventManager.Off("EventName", Handler).
+    /// 轻量级全局事件中心，用于解耦简单的玩法/UI 消息。
+    /// 用法：EventManager.On("EventName", Handler)、EventManager.Emit("EventName")、EventManager.Off("EventName", Handler)。
     /// </summary>
     public static class EventManager
     {

@@ -151,21 +151,46 @@ namespace BokeGameJam.Core
 
         private void HandleStateTransition(GameState prev, GameState next)
         {
-            // 离开 LevelPlaying：关闭 HUD
+            // 离开 LevelPlaying：关闭 HUD、禁用 ESC 暂停
             if (prev == GameState.LevelPlaying && next != GameState.LevelPlaying)
+            {
                 CloseUIList(uiToCloseOnLevelExit);
+                SetEscPauseEnabled(false);
+            }
 
             switch (next)
             {
                 case GameState.MainMenu:
-                    // 回主菜单：确保 HUD 关掉
+                    // 回主菜单：确保 HUD 关掉、ESC 暂停关闭
                     CloseUIList(uiToCloseOnLevelExit);
+                    SetEscPauseEnabled(false);
                     break;
 
                 case GameState.LevelPlaying:
                     LoadUIList(levelPlayingUiIds);
+                    // 关卡进行中允许玩家按 ESC 打开暂停菜单
+                    SetEscPauseEnabled(true);
                     break;
             }
+        }
+
+        /// <summary>切换挂在 UIManager 上的 <see cref="PauseMenuTrigger"/> 的 ESC 触发开关。</summary>
+        private static void SetEscPauseEnabled(bool enabled)
+        {
+            if (UIManager.Instance == null)
+                return;
+
+            PauseMenuTrigger trigger = UIManager.Instance.GetComponent<PauseMenuTrigger>();
+            if (trigger == null)
+                trigger = UIManager.Instance.GetComponentInChildren<PauseMenuTrigger>(true);
+
+            if (trigger == null)
+            {
+                Debug.LogWarning("[GameManager] 没找到 PauseMenuTrigger，无法切换 EscEnabled。请把它挂到 UIManager 预制体上。");
+                return;
+            }
+
+            trigger.EscEnabled = enabled;
         }
 
         // ---------- 工具方法 ----------

@@ -595,7 +595,7 @@ namespace BokeGameJam.LevelEditor
 
         private static string WorldLabel(WorldId world) => world == WorldId.A ? "A" : "B";
 
-        // ---------- GUI ----------
+        // ---------- 图形界面 ----------
 
         private void SetStatus(string message, float duration = 3f)
         {

@@ -8,9 +8,9 @@ namespace BokeGameJam.Levels
     /// 关卡目录（ScriptableObject）。所有关卡"一处配置，处处可用"。
     ///
     /// 使用步骤：
-    ///   1. Project 面板右键 → Create → BokeGameJam → Level Catalog，得到一个 asset
-    ///   2. 展开 Levels 列表，每条填 LevelId / DisplayName / SceneName / LevelFile / Thumbnail
-    ///   3. 把这个 asset 拖到 LevelSelectController.Catalog 字段（或放 Resources/Levels/ 下按名字加载）
+    ///   1. 项目面板右键 → Create → BokeGameJam → Level Catalog，得到一个资源文件
+    ///   2. 展开 Levels 列表，每条填写 LevelId / DisplayName / SceneName / LevelFile / Thumbnail
+    ///   3. 将该资源拖到 LevelSelectController.Catalog 字段（或放到 Resources/Levels/ 下按名称加载）
     ///
     /// 关卡进度会以 <see cref="progressKeyPrefix"/> + levelId 存到 PlayerPrefs。
     /// </summary>

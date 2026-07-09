@@ -5,19 +5,19 @@ using UnityEngine;
 namespace BokeGameJam.Core
 {
     /// <summary>
-    /// Global PlayerPrefs manager. Registered keys live in this script / Inspector list
-    /// so the project can see which prefs exist.
+    /// 全局 PlayerPrefs 管理器。已注册的键维护在本脚本 / Inspector 列表中，
+    /// 便于项目查看当前使用了哪些 prefs。
     /// </summary>
     public class DataManager : MonoBehaviour
     {
         public static DataManager Instance { get; private set; }
 
         /// <summary>
-        /// Well-known PlayerPrefs key ids. Add new constants here when introducing prefs.
+        /// 常用 PlayerPrefs 键 id。新增 prefs 时请在此添加常量。
         /// </summary>
         public static class Keys
         {
-            /// <summary>Shared master volume for BGM and SFX (0-1).</summary>
+            /// <summary>BGM 与 SFX 共用的主音量（0-1）。</summary>
             public const string MasterVolume = "MasterVolume";
 
             public const string BgmVolume = "BgmVolume";
@@ -34,10 +34,10 @@ namespace BokeGameJam.Core
         [Serializable]
         public sealed class PrefEntry
         {
-            [Tooltip("Logical id used by code (prefer DataManager.Keys constants).")]
+            [Tooltip("代码使用的逻辑 id（优先使用 DataManager.Keys 常量）。")]
             [SerializeField] private string id;
 
-            [Tooltip("Actual PlayerPrefs key. Leave empty to use id.")]
+            [Tooltip("实际的 PlayerPrefs 键名。留空则使用 id。")]
             [SerializeField] private string key;
 
             [SerializeField] private PrefValueType valueType = PrefValueType.Int;
@@ -110,7 +110,7 @@ namespace BokeGameJam.Core
         }
 
         [Header("Registered PlayerPrefs")]
-        [Tooltip("Register every PlayerPrefs key used by the project here.")]
+        [Tooltip("在此登记项目中使用的所有 PlayerPrefs 键。")]
         [SerializeField] private List<PrefEntry> registeredPrefs = new();
 
         [Header("Options")]
@@ -140,10 +140,10 @@ namespace BokeGameJam.Core
             RebuildLookup();
         }
 
-        #region Registration
+        #region 注册
 
         /// <summary>
-        /// Rebuilds id/key lookup from the Inspector list.
+        /// 根据 Inspector 列表重建 id/键 查找表。
         /// </summary>
         public void RebuildLookup()
         {
@@ -180,7 +180,7 @@ namespace BokeGameJam.Core
         }
 
         /// <summary>
-        /// Registers or updates a pref entry at runtime and keeps it in the list.
+        /// 在运行时注册或更新 pref 条目，并同步到列表。
         /// </summary>
         public PrefEntry Register(
             string id,
@@ -259,7 +259,7 @@ namespace BokeGameJam.Core
 
         #endregion
 
-        #region Read / Write
+        #region 读写
 
         public bool HasKey(string idOrKey)
         {
@@ -343,7 +343,7 @@ namespace BokeGameJam.Core
         }
 
         /// <summary>
-        /// Deletes only keys listed in the registered prefs table.
+        /// 仅删除已注册 prefs 表中的键。
         /// </summary>
         public void DeleteAllRegistered()
         {
@@ -359,7 +359,7 @@ namespace BokeGameJam.Core
         }
 
         /// <summary>
-        /// Deletes every PlayerPrefs key on this device. Prefer DeleteAllRegistered for game data.
+        /// 删除本设备上的所有 PlayerPrefs 键。游戏数据清理请优先使用 DeleteAllRegistered。
         /// </summary>
         public void DeleteAll()
         {
@@ -374,7 +374,7 @@ namespace BokeGameJam.Core
 
         #endregion
 
-        #region Internal
+        #region 内部
 
         private PrefEntry FindEntryById(string id)
         {

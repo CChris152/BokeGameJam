@@ -9,7 +9,7 @@ using UnityEditor;
 namespace BokeGameJam.UI
 {
     /// <summary>
-    /// Handles the StartScene main menu button events.
+    /// 处理 StartScene 主菜单按钮事件。
     /// </summary>
     public class MainMenuController : MonoBehaviour
     {
