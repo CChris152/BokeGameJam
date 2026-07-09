@@ -13,7 +13,7 @@ namespace BokeGameJam.Gameplay
     /// mechanismId 用于把同一机制下的 A/B/C 绑在一起，避免多机制交叉。
     /// </summary>
     [RequireComponent(typeof(Collider2D))]
-    public class InteractableObject : MonoBehaviour
+    public class InteractableObject : MonoBehaviour, IInteractable
     {
         [SerializeField] private string mechanismId;
         [SerializeField] private string displayName;
@@ -27,6 +27,7 @@ namespace BokeGameJam.Gameplay
 
         public bool IsHeld => isHeld;
         public virtual InteractMode Mode => InteractMode.PickUp;
+        public Vector3 InteractionPosition => transform.position;
         public string MechanismId => mechanismId != null ? mechanismId.Trim() : string.Empty;
         public string DisplayName => string.IsNullOrWhiteSpace(displayName) ? name : displayName;
         public Sprite Icon => iconOverride != null
@@ -46,6 +47,24 @@ namespace BokeGameJam.Gameplay
         public virtual bool CanInteract(PlayerInteractor interactor)
         {
             return !isHeld;
+        }
+
+        public virtual void SetInInteractRange(bool inRange)
+        {
+        }
+
+        public virtual bool Interact(PlayerInteractor interactor)
+        {
+            if (!CanInteract(interactor))
+                return false;
+
+            if (Mode == InteractMode.Trigger)
+            {
+                OnInteract(interactor);
+                return true;
+            }
+
+            return interactor != null && interactor.TryPickUp(this);
         }
 
         /// <summary>Trigger 模式由子类实现；PickUp 模式由 PlayerInteractor 处理。</summary>

@@ -6,15 +6,16 @@ using BokeGameJam.Input;
 namespace BokeGameJam.Gameplay
 {
     /// <summary>
-    /// 玩家交互：范围内按 E 对最近可交互物执行捡起或触发；
-    /// 持有物品时优先对附近交付处 C 交付，否则丢弃。
+    /// 玩家交互：范围内按 E 对最近可交互物执行捡起或触发。
+    /// 持有物品时优先交付 C 或触发非拾取谜题，否则丢弃。
     /// </summary>
     public sealed class PlayerInteractor : MonoBehaviour
     {
         [SerializeField] private Vector2 dropOffset = new(0.6f, 0f);
         [SerializeField] private bool faceAwareDrop = true;
 
-        private readonly HashSet<InteractableObject> nearby = new();
+        private readonly HashSet<IInteractable> nearby = new();
+        private readonly List<IInteractable> removeBuffer = new();
         private InteractableObject held;
 
         public bool HasHeldItem => held != null;
@@ -28,21 +29,34 @@ namespace BokeGameJam.Gameplay
         private void OnDisable()
         {
             EventManager.Off(InputEvents.PlayerInteractPressed, OnInteractPressed);
+
+            foreach (IInteractable interactable in nearby)
+            {
+                if (IsUnityObjectAlive(interactable))
+                    interactable.SetInInteractRange(false);
+            }
+
             nearby.Clear();
         }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            InteractableObject item = other.GetComponentInParent<InteractableObject>();
-            if (item != null)
-                nearby.Add(item);
+            IInteractable interactable = FindInteractable(other);
+            if (!IsValidInteractable(interactable))
+                return;
+
+            if (nearby.Add(interactable))
+                interactable.SetInInteractRange(true);
         }
 
         private void OnTriggerExit2D(Collider2D other)
         {
-            InteractableObject item = other.GetComponentInParent<InteractableObject>();
-            if (item != null)
-                nearby.Remove(item);
+            IInteractable interactable = FindInteractable(other);
+            if (interactable == null)
+                return;
+
+            if (nearby.Remove(interactable))
+                interactable.SetInInteractRange(false);
         }
 
         private void OnInteractPressed()
@@ -56,29 +70,28 @@ namespace BokeGameJam.Gameplay
                     return;
                 }
 
+                IInteractable target = FindNearestTarget(allowPickups: false);
+                if (TryInteractWith(target))
+                    return;
+
                 DropHeld();
                 return;
             }
 
-            InteractableObject target = FindNearestNearby();
-            if (target == null)
-                return;
-
-            if (target.Mode == InteractMode.Trigger)
-            {
-                target.OnInteract(this);
-                return;
-            }
-
-            PickUp(target);
+            TryInteractWith(FindNearestTarget());
         }
 
-        private void PickUp(InteractableObject item)
+        public bool TryPickUp(InteractableObject item)
         {
+            if (item == null || held != null || item.Mode != InteractMode.PickUp || !item.CanInteract(this))
+                return false;
+
             nearby.Remove(item);
             held = item;
+            item.SetInInteractRange(false);
             item.PickUp(transform);
             EmitHeldChanged();
+            return true;
         }
 
         private void DropHeld()
@@ -104,44 +117,62 @@ namespace BokeGameJam.Gameplay
             EmitHeldChanged();
         }
 
-        private InteractableObject FindNearestNearby()
+        private IInteractable FindNearestTarget(bool allowPickups = true)
         {
-            InteractableObject best = null;
+            removeBuffer.Clear();
+            IInteractable best = null;
             float bestDist = float.MaxValue;
             Vector2 origin = transform.position;
 
-            nearby.RemoveWhere(item => item == null || !item.CanInteract(this));
-
-            foreach (InteractableObject item in nearby)
+            foreach (IInteractable interactable in nearby)
             {
-                float dist = ((Vector2)item.transform.position - origin).sqrMagnitude;
+                if (!IsValidInteractable(interactable))
+                {
+                    if (IsUnityObjectAlive(interactable))
+                        interactable.SetInInteractRange(false);
+                    removeBuffer.Add(interactable);
+                    continue;
+                }
+
+                if (!allowPickups && interactable is InteractableObject { Mode: InteractMode.PickUp })
+                    continue;
+
+                float dist = ((Vector2)interactable.InteractionPosition - origin).sqrMagnitude;
                 if (dist < bestDist)
                 {
                     bestDist = dist;
-                    best = item;
+                    best = interactable;
                 }
             }
+
+            for (int i = 0; i < removeBuffer.Count; i++)
+                nearby.Remove(removeBuffer[i]);
 
             return best;
         }
 
         private InteractableObjectC FindNearestDelivery()
         {
+            removeBuffer.Clear();
             InteractableObjectC best = null;
             float bestDist = float.MaxValue;
             Vector2 origin = transform.position;
 
-            nearby.RemoveWhere(item => item == null);
-
-            foreach (InteractableObject item in nearby)
+            foreach (IInteractable interactable in nearby)
             {
-                if (item is not InteractableObjectC delivery)
+                if (!IsUnityObjectAlive(interactable))
+                {
+                    removeBuffer.Add(interactable);
+                    continue;
+                }
+
+                if (interactable is not InteractableObjectC delivery)
                     continue;
 
                 if (!delivery.CanInteract(this))
                     continue;
 
-                float dist = ((Vector2)delivery.transform.position - origin).sqrMagnitude;
+                float dist = ((Vector2)delivery.InteractionPosition - origin).sqrMagnitude;
                 if (dist < bestDist)
                 {
                     bestDist = dist;
@@ -149,7 +180,63 @@ namespace BokeGameJam.Gameplay
                 }
             }
 
+            for (int i = 0; i < removeBuffer.Count; i++)
+                nearby.Remove(removeBuffer[i]);
+
             return best;
+        }
+
+        private bool TryInteractWith(IInteractable interactable)
+        {
+            if (!IsValidInteractable(interactable))
+                return false;
+
+            bool interacted = interactable.Interact(this);
+            if (!interacted)
+                return false;
+
+            if (!IsValidInteractable(interactable))
+            {
+                if (IsUnityObjectAlive(interactable))
+                    interactable.SetInInteractRange(false);
+                nearby.Remove(interactable);
+            }
+
+            return true;
+        }
+
+        private static IInteractable FindInteractable(Collider2D other)
+        {
+            if (other == null)
+                return null;
+
+            MonoBehaviour[] behaviours = other.GetComponentsInParent<MonoBehaviour>();
+            IInteractable fallback = null;
+            for (int i = 0; i < behaviours.Length; i++)
+            {
+                if (behaviours[i] is not IInteractable interactable)
+                    continue;
+
+                if (interactable is not InteractableObject)
+                    return interactable;
+
+                fallback ??= interactable;
+            }
+
+            return fallback;
+        }
+
+        private bool IsValidInteractable(IInteractable interactable)
+        {
+            return IsUnityObjectAlive(interactable) && interactable.CanInteract(this);
+        }
+
+        private static bool IsUnityObjectAlive(IInteractable interactable)
+        {
+            if (interactable == null)
+                return false;
+
+            return interactable is not Object unityObject || unityObject != null;
         }
 
         private Vector2 GetDropOffset()
