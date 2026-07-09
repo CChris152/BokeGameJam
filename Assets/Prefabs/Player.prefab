@@ -138,7 +138,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1.8
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 4273fddf8a205944ab69da82c0a43979, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -161,11 +161,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0d26a38e5d3400db8c31a7f35fb6945, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 7
+  moveSpeed: 5
   airControlMultiplier: 1
   faceMoveDirection: 1
   freezeRotation: 1
-  jumpForce: 6
+  jumpForce: 9
   coyoteTime: 0.08
   jumpBufferTime: 0.1
   maxFallSpeed: 18
