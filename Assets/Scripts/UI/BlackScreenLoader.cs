@@ -33,7 +33,7 @@ namespace BokeGameJam.UI
 
         [Header("启动淡出动画（不透明→透明）")]
         [Tooltip("开始淡出前，先保持全黑的时长（秒）")]
-        [SerializeField] private float fadeOutHoldDuration = 1f;
+        [SerializeField] private float fadeOutHoldDuration = 2f;
 
         [Tooltip("全黑到透明的淡出时长（秒）")]
         [SerializeField] private float fadeOutDuration = 1.5f;
@@ -98,7 +98,7 @@ namespace BokeGameJam.UI
 
         /// <summary>
         /// 播放启动淡出：先保持全黑，再从不透明变为透明。
-        /// 默认：黑屏停留 1s + 淡出 1.5s（全程 2.5s）。
+        /// 默认：黑屏停留 2s + 淡出 1.5s（全程 3.5s）。
         /// </summary>
         public void PlayFadeOut()
         {
@@ -179,7 +179,7 @@ namespace BokeGameJam.UI
 
         /// <summary>
         /// 淡出协程：先保持全黑，再从不透明到透明。
-        /// 默认：停留 1s + 淡出 1.5s = 全程 2.5s。
+        /// 默认：停留 2s + 淡出 1.5s = 全程 3.5s。
         /// </summary>
         private IEnumerator FadeOutRoutine(float holdDuration, float duration)
         {

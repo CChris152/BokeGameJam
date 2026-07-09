@@ -16,6 +16,12 @@ namespace BokeGameJam.UI
         /// <summary>点击「开始游戏」后加载的场景资源 id。</summary>
         private const string SelectSceneId = "Level1";
 
+        /// <summary>
+        /// 启动淡出（全黑停留再透明）只在整局第一次进入主菜单时播放；
+        /// 之后从暂停等流程回到主菜单时，由加载过渡动画负责揭幕。
+        /// </summary>
+        private static bool hasPlayedStartupFadeOut;
+
         [Header("主菜单按钮")]
         [Tooltip("开始游戏按钮")]
         [SerializeField] private Button startButton;
@@ -35,7 +41,11 @@ namespace BokeGameJam.UI
 
         private void Start()
         {
-            // 启动时从黑屏淡出到主菜单（先黑屏停留，再透明）
+            // 仅首次启动播放「黑屏停留 → 淡出」；回主菜单时跳过，避免打断加载过渡动画
+            if (hasPlayedStartupFadeOut)
+                return;
+
+            hasPlayedStartupFadeOut = true;
             if (BlackScreenLoader.Instance != null)
                 BlackScreenLoader.Instance.PlayFadeOut();
         }

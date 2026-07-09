@@ -141,7 +141,8 @@ namespace BokeGameJam.UI
         }
 
         /// <summary>
-        /// 退回主菜单：先关闭本弹窗，再切换到 StartScene。
+        /// 退回主菜单：先关闭本弹窗，再播加载过渡（透明→全黑→透明），
+        /// 在全黑时切换到 StartScene。
         /// </summary>
         private void OnReturnToMainMenuClicked()
         {
@@ -153,7 +154,23 @@ namespace BokeGameJam.UI
                 return;
             }
 
-            GameSceneManager.Instance.LoadSceneById(StartSceneId);
+            if (BlackScreenLoader.Instance == null)
+            {
+                Debug.LogWarning("[PauseMenuController] BlackScreenLoader missing, return to main menu immediately.", this);
+                GameSceneManager.Instance.LoadSceneById(StartSceneId);
+                return;
+            }
+
+            BlackScreenLoader.Instance.PlayLoadingAnimation(() =>
+            {
+                if (GameSceneManager.Instance == null)
+                {
+                    Debug.LogError("[PauseMenuController] GameSceneManager instance is missing during return.", this);
+                    return;
+                }
+
+                GameSceneManager.Instance.LoadSceneById(StartSceneId);
+            });
         }
 
         /// <summary>关闭按钮回调。</summary>
