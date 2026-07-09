@@ -84,3 +84,11 @@ Desktop.ini
 .idea/
 *.swp
 *~
+
+# Local agent skills
+/.claude/skills/
+/.codex/skills/
+/.copilot/skills/
+/.cursor/skills/
+
+开发指导.md
