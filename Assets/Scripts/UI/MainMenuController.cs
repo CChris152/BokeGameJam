@@ -13,7 +13,7 @@ namespace BokeGameJam.UI
     /// </summary>
     public class MainMenuController : MonoBehaviour
     {
-        private const string SelectSceneId = "SelectScene";
+        private const string SelectSceneId = "Level1";
 
         [SerializeField] private Button startButton;
         [SerializeField] private Button settingsButton;

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: ResourceDefinitionDatabase
   m_EditorClassIdentifier: 
   uiPrefabs: []
+  playerPrefabs: []
   sprites: []
   sounds: []
   scenes:
@@ -22,3 +23,6 @@ MonoBehaviour:
   - id: SelectScene
     sceneAsset: {fileID: 102900000, guid: a7d9870980654cd4dbbc240ad1d45680, type: 3}
     sceneName: SelectScene
+  - id: Level1
+    sceneAsset: {fileID: 102900000, guid: 26a0a8c6f00614a4db8228df6dd4e2be, type: 3}
+    sceneName: Level1

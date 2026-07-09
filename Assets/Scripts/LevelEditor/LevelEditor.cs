@@ -51,7 +51,8 @@ namespace BokeGameJam.LevelEditor
         [SerializeField] private PlayerController playerToDisable;
 
         [Header("Editor State")]
-        [SerializeField] private bool startInEditMode;
+        [Tooltip("勾选后进入场景直接是编辑模式；默认为游玩模式")]
+        [SerializeField] private bool startInEditMode = false;
         [SerializeField] private bool showGridGizmos = true;
 
         [Header("Save / Load")]

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a724e1a17a31e646941f29d43fee647, type: 3}
+  m_Name: LevelCatalog
+  m_EditorClassIdentifier: 
+  levels:
+  - levelId: level_1
+    displayName: 
+    sceneName: Level1
+    levelFile: 
+    thumbnail: {fileID: 0}
+    unlockedByDefault: 1
+  useProgressPersistence: 1
+  progressKeyPrefix: LevelUnlocked_
