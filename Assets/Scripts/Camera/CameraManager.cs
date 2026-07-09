@@ -40,10 +40,27 @@ namespace BokeGameJam.CameraSystem
         [Tooltip("Shift 加速倍率")]
         [SerializeField] private float editorBoostMultiplier = 3f;
 
+        [Header("Editor Zoom")]
+        [Tooltip("滚轮一格改变的正交尺寸（正交相机）")]
+        [SerializeField] private float zoomStepOrtho = 1.0f;
+        [Tooltip("滚轮一格改变的视野角度（透视相机）")]
+        [SerializeField] private float zoomStepPerspective = 3.0f;
+        [SerializeField] private float minOrthoSize = 2f;
+        [SerializeField] private float maxOrthoSize = 40f;
+        [SerializeField] private float minFov = 20f;
+        [SerializeField] private float maxFov = 90f;
+        [Tooltip("离开编辑模式时恢复到进入前的相机尺寸")]
+        [SerializeField] private bool restoreZoomOnExit = true;
+
         private Vector3 followVelocity;
         private InputContext currentContext = InputContext.Gameplay;
         private Vector2 editorInputDir;
         private bool editorBoost;
+
+        // 记录进入编辑模式前的相机尺寸/FOV，退出时恢复
+        private float savedOrthoSize;
+        private float savedFov;
+        private bool hasSavedZoom;
 
         public Camera Camera => targetCamera;
         public Transform FollowTarget
@@ -70,6 +87,7 @@ namespace BokeGameJam.CameraSystem
             EventManager.On<InputContext>(InputEvents.ContextChanged, OnContextChanged);
             EventManager.On<Vector2>(InputEvents.CameraMove, OnCameraMove);
             EventManager.On<bool>(InputEvents.CameraBoost, OnCameraBoost);
+            EventManager.On<float>(InputEvents.CameraZoom, OnCameraZoom);
         }
 
         private void OnDisable()
@@ -77,6 +95,7 @@ namespace BokeGameJam.CameraSystem
             EventManager.Off<InputContext>(InputEvents.ContextChanged, OnContextChanged);
             EventManager.Off<Vector2>(InputEvents.CameraMove, OnCameraMove);
             EventManager.Off<bool>(InputEvents.CameraBoost, OnCameraBoost);
+            EventManager.Off<float>(InputEvents.CameraZoom, OnCameraZoom);
         }
 
         private void OnDestroy()
@@ -174,13 +193,29 @@ namespace BokeGameJam.CameraSystem
 
         private void OnContextChanged(InputContext context)
         {
+            InputContext prev = currentContext;
             currentContext = context;
-            // 切换到编辑模式时清零残留输入，避免持续滑动
-            if (context != InputContext.LevelEditor)
+
+            // 进入编辑模式：记录当前尺寸，稍后可以恢复
+            if (prev != InputContext.LevelEditor && context == InputContext.LevelEditor && targetCamera != null)
             {
+                savedOrthoSize = targetCamera.orthographicSize;
+                savedFov = targetCamera.fieldOfView;
+                hasSavedZoom = true;
+            }
+
+            // 离开编辑模式：可选恢复原缩放
+            if (prev == InputContext.LevelEditor && context != InputContext.LevelEditor)
+            {
+                if (restoreZoomOnExit && hasSavedZoom && targetCamera != null)
+                {
+                    targetCamera.orthographicSize = savedOrthoSize;
+                    targetCamera.fieldOfView = savedFov;
+                }
                 editorInputDir = Vector2.zero;
                 editorBoost = false;
             }
+
             followVelocity = Vector3.zero;
         }
 
@@ -192,6 +227,24 @@ namespace BokeGameJam.CameraSystem
         private void OnCameraBoost(bool boost)
         {
             editorBoost = boost;
+        }
+
+        private void OnCameraZoom(float scroll)
+        {
+            // 只在编辑模式下响应；游玩时滚轮留给别的用途（比如 UI）
+            if (currentContext != InputContext.LevelEditor || targetCamera == null)
+                return;
+
+            if (targetCamera.orthographic)
+            {
+                float next = targetCamera.orthographicSize - scroll * zoomStepOrtho;
+                targetCamera.orthographicSize = Mathf.Clamp(next, minOrthoSize, maxOrthoSize);
+            }
+            else
+            {
+                float next = targetCamera.fieldOfView - scroll * zoomStepPerspective;
+                targetCamera.fieldOfView = Mathf.Clamp(next, minFov, maxFov);
+            }
         }
 
         // ---------- API ----------

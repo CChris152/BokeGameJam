@@ -40,6 +40,8 @@ namespace BokeGameJam.Input
         public const string CameraMove = "Input.Camera.Move";
         /// <summary>相机加速开关：payload=bool（Shift 状态）</summary>
         public const string CameraBoost = "Input.Camera.Boost";
+        /// <summary>相机缩放：payload=float（滚轮 delta，正=拉近，负=拉远）</summary>
+        public const string CameraZoom = "Input.Camera.Zoom";
     }
 
     /// <summary>

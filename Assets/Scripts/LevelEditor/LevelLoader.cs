@@ -4,22 +4,20 @@ using UnityEngine;
 namespace BokeGameJam.LevelEditor
 {
     /// <summary>
-    /// 启动时自动加载关卡文件。可挂在与 LevelEditor 相同的对象上。
-    /// 加载顺序：
-    ///   1) 若 externalPath（persistentDataPath 下）存在，优先加载
-    ///   2) 否则加载 Resources 下的默认关卡 TextAsset
+    /// 关卡"默认地图"回退加载器（可选）。
+    ///
+    /// 命名规范：<see cref="LevelEditor"/> 会按【场景名】自动读取 persistentDataPath 中的地图。
+    /// 因此本组件只在【场景中还没有存档】时兜底一次，从 Resources 里拖出一份默认地图。
+    ///
+    /// 用法：
+    ///   • 一个场景一张地图：无需挂载 LevelLoader，LevelEditor 自动读同名文件
+    ///   • 想在没有存档时提供一个初始地图：挂 LevelLoader + 拖 TextAsset 进 defaultLevel
     /// </summary>
     [RequireComponent(typeof(LevelEditor))]
     public sealed class LevelLoader : MonoBehaviour
     {
-        [Tooltip("从 Resources 加载的默认关卡 JSON（无扩展名路径）")]
+        [Tooltip("兜底用：如果 persistentDataPath 中不存在同名地图，就加载这份 Resources 里的 JSON")]
         [SerializeField] private TextAsset defaultLevel;
-
-        [Tooltip("启动时是否加载 persistentDataPath 中的存档")]
-        [SerializeField] private bool loadPersistentOnStart = true;
-
-        [Tooltip("启动时是否退出编辑模式")]
-        [SerializeField] private bool disableEditModeOnLoad;
 
         private LevelEditor editor;
 
@@ -30,29 +28,23 @@ namespace BokeGameJam.LevelEditor
 
         private void Start()
         {
-            LevelData data = null;
+            // 存档已存在 → LevelEditor.Start() 里的 LoadSilent() 已经处理，不再重复
+            if (File.Exists(editor.SaveFilePath))
+                return;
 
-            if (loadPersistentOnStart && File.Exists(editor.SaveFilePath))
+            if (defaultLevel == null)
+                return;
+
+            try
             {
-                try
-                {
-                    data = LevelData.FromJson(File.ReadAllText(editor.SaveFilePath));
-                    Debug.Log($"[LevelLoader] 已从存档加载: {editor.SaveFilePath}");
-                }
-                catch (System.Exception ex)
-                {
-                    Debug.LogError($"[LevelLoader] 读取存档失败: {ex.Message}");
-                }
-            }
-
-            if ((data == null || data.tiles.Count == 0) && defaultLevel != null)
-            {
-                data = LevelData.FromJson(defaultLevel.text);
-                Debug.Log($"[LevelLoader] 已加载默认关卡: {defaultLevel.name}");
-            }
-
-            if (data != null)
+                LevelData data = LevelData.FromJson(defaultLevel.text);
                 editor.ApplyLevelData(data);
+                Debug.Log($"[LevelLoader] 已从 Resources 加载默认地图: {defaultLevel.name}");
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError($"[LevelLoader] 默认关卡解析失败: {ex.Message}");
+            }
         }
     }
 }

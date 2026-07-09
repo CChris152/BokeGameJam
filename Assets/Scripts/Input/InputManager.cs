@@ -134,6 +134,11 @@ namespace BokeGameJam.Input
                 EventManager.Emit(InputEvents.CameraBoost, boost);
             }
 
+            // 滚轮缩放（仅编辑模式），unity 滚轮 delta.y：向上滚 = 正数（拉近）
+            float scroll = UnityEngine.Input.mouseScrollDelta.y;
+            if (Mathf.Abs(scroll) > 0.0001f)
+                EventManager.Emit(InputEvents.CameraZoom, scroll);
+
             // 鼠标绘制（每帧广播一次，订阅方自行决定是否在 UI 遮挡下忽略）
             if (UnityEngine.Input.GetMouseButton(0))
                 EventManager.Emit(InputEvents.EditorPaintHeld);
