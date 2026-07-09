@@ -205,6 +205,7 @@ namespace BokeGameJam.UI
 
             Canvas canvas = root.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvas.sortingOrder = 100;
 
             CanvasScaler canvasScaler = root.AddComponent<CanvasScaler>();
             canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
