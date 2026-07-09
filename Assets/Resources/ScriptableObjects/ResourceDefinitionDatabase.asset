@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b19d033173074c5fbff5f397186bfad3, type: 3}
   m_Name: ResourceDefinitionDatabase
   m_EditorClassIdentifier: 
-  uiPrefabs: []
+  uiPrefabs:
+  - id: SettingsPanel
+    prefab: {fileID: 2786470126588296549, guid: 511fc8a750819684c9d0b7a2417b3f49, type: 3}
   playerPrefabs:
   - id: Player
     prefab: {fileID: 4094095531222265388, guid: 25d3d4678dec73b469ab53ea4996aaf9, type: 3}
