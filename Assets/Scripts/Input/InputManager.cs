@@ -23,6 +23,7 @@ namespace BokeGameJam.Input
         [SerializeField] private KeyCode leftKey = KeyCode.A;
         [SerializeField] private KeyCode rightKey = KeyCode.D;
         [SerializeField] private KeyCode jumpKey = KeyCode.Space;
+        [SerializeField] private KeyCode interactKey = KeyCode.E;
 
         [Header("Keys - Editor")]
         [SerializeField] private KeyCode toggleEditorKey = KeyCode.M;
@@ -37,10 +38,12 @@ namespace BokeGameJam.Input
         [SerializeField] private KeyCode camRightKey = KeyCode.D;
         [SerializeField] private KeyCode camUpKey = KeyCode.W;
         [SerializeField] private KeyCode camDownKey = KeyCode.S;
-        [SerializeField] private KeyCode camBoostKey = KeyCode.LeftShift;
+
+        [Header("Keys - World")]
+        [SerializeField] private KeyCode worldToggleKey = KeyCode.LeftShift;
+        [SerializeField] private KeyCode worldToggleAltKey = KeyCode.RightShift;
 
         private InputContext currentContext;
-        private bool lastBoost;
 
         public InputContext CurrentContext => currentContext;
 
@@ -109,6 +112,11 @@ namespace BokeGameJam.Input
 
             if (UnityEngine.Input.GetKeyDown(jumpKey))
                 EventManager.Emit(InputEvents.PlayerJumpPressed);
+
+            if (UnityEngine.Input.GetKeyDown(interactKey))
+                EventManager.Emit(InputEvents.PlayerInteractPressed);
+
+            PollWorldToggle();
         }
 
         // ---------- LevelEditor ----------
@@ -127,12 +135,7 @@ namespace BokeGameJam.Input
             Vector2 dir = raw.sqrMagnitude > 1f ? raw.normalized : raw;
             EventManager.Emit(InputEvents.CameraMove, dir);
 
-            bool boost = UnityEngine.Input.GetKey(camBoostKey);
-            if (boost != lastBoost)
-            {
-                lastBoost = boost;
-                EventManager.Emit(InputEvents.CameraBoost, boost);
-            }
+            PollWorldToggle();
 
             // 滚轮缩放（仅编辑模式），unity 滚轮 delta.y：向上滚 = 正数（拉近）
             float scroll = UnityEngine.Input.mouseScrollDelta.y;
@@ -162,6 +165,12 @@ namespace BokeGameJam.Input
                 else if (UnityEngine.Input.GetKeyDown(clearKey))
                     EventManager.Emit(InputEvents.EditorClear);
             }
+        }
+
+        private void PollWorldToggle()
+        {
+            if (UnityEngine.Input.GetKeyDown(worldToggleKey) || UnityEngine.Input.GetKeyDown(worldToggleAltKey))
+                EventManager.Emit(InputEvents.WorldToggle);
         }
 
         // ---------- 便捷方法 ----------

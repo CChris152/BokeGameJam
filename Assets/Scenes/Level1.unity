@@ -291,7 +291,13 @@ MonoBehaviour:
     width: 100
     height: 40
   editorMoveSpeed: 8
-  editorBoostMultiplier: 3
+  zoomStepOrtho: 1
+  zoomStepPerspective: 3
+  minOrthoSize: 2
+  maxOrthoSize: 40
+  minFov: 20
+  maxFov: 90
+  restoreZoomOnExit: 1
 --- !u!114 &729320518 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2150483963280043063, guid: 25d3d4678dec73b469ab53ea4996aaf9, type: 3}
@@ -527,9 +533,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 729320518}
     - target: {fileID: 7238361285618510478, guid: 81703f12931d6b84cb1fdc33eb0ab9b0, type: 3}
+      propertyPath: tilePalette.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7238361285618510478, guid: 81703f12931d6b84cb1fdc33eb0ab9b0, type: 3}
       propertyPath: tilePalette.Array.data[0].prefab
       value: 
       objectReference: {fileID: 399578756}
+    - target: {fileID: 7238361285618510478, guid: 81703f12931d6b84cb1fdc33eb0ab9b0, type: 3}
+      propertyPath: tilePalette.Array.data[1].prefab
+      value: 
+      objectReference: {fileID: 2677718309944526903, guid: 1499b383135375f4c8675c27404cfbf2, type: 3}
+    - target: {fileID: 7238361285618510478, guid: 81703f12931d6b84cb1fdc33eb0ab9b0, type: 3}
+      propertyPath: tilePalette.Array.data[1].tileId
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7990891658030600389, guid: 81703f12931d6b84cb1fdc33eb0ab9b0, type: 3}
       propertyPath: m_Name
       value: LevelEditor

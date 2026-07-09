@@ -17,6 +17,12 @@ namespace BokeGameJam.Input
         public const string PlayerMove = "Input.Player.Move";
         /// <summary>玩家跳跃按下</summary>
         public const string PlayerJumpPressed = "Input.Player.JumpPressed";
+        /// <summary>玩家交互按下（E 键）</summary>
+        public const string PlayerInteractPressed = "Input.Player.InteractPressed";
+
+        // ---------- 双世界 ----------
+        /// <summary>切换世界 A/B（Shift）</summary>
+        public const string WorldToggle = "Input.World.Toggle";
 
         // ---------- 关卡编辑器 ----------
         /// <summary>切换编辑模式（M 键）</summary>
@@ -38,8 +44,6 @@ namespace BokeGameJam.Input
         // ---------- 相机 ----------
         /// <summary>相机移动方向：payload=已归一化的 Vector2（编辑模式下 WASD/方向键）</summary>
         public const string CameraMove = "Input.Camera.Move";
-        /// <summary>相机加速开关：payload=bool（Shift 状态）</summary>
-        public const string CameraBoost = "Input.Camera.Boost";
         /// <summary>相机缩放：payload=float（滚轮 delta，正=拉近，负=拉远）</summary>
         public const string CameraZoom = "Input.Camera.Zoom";
     }

@@ -10,20 +10,19 @@ namespace BokeGameJam.LevelEditor
 {
     /// <summary>
     /// 运行时关卡编辑器：完全事件驱动，不直接读 Unity Input。
-    ///
-    /// 依赖：
-    ///   • InputManager 广播输入事件（M 切换、鼠标绘制、Ctrl+S/L/N、数字键选调色板等）
-    ///   • CameraManager 处理相机跟随与编辑模式下的自由移动
+    /// 支持双世界（A/B）：Shift 切换，单文件双层存档。
     ///
     /// 交互：
     ///   M 键                — 切换 编辑 / 游玩 模式
+    ///   Shift               — 切换世界 A / B
     ///   编辑模式下：
     ///     WASD/方向键       — 移动相机（由 CameraManager 处理）
-    ///     鼠标左键 / 右键   — 放置 / 删除地块
-    ///   其余操作通过 GUI 面板按钮完成（保存/加载/清空/切换地块）。
+    ///     鼠标左键 / 右键   — 放置 / 删除地块（仅当前世界）
     /// </summary>
     public sealed class LevelEditor : MonoBehaviour
     {
+        private const float InactiveEditAlpha = 0.35f;
+
         [System.Serializable]
         public class TilePaletteEntry
         {
@@ -45,8 +44,12 @@ namespace BokeGameJam.LevelEditor
 
         [Header("References")]
         [SerializeField] private Camera mainCamera;
-        [Tooltip("放置的地块会作为此 Transform 的子物体，方便清理")]
+
+        [Tooltip("旧版单 root；若 tilesRootA 为空则回退使用此字段")]
         [SerializeField] private Transform tilesRoot;
+
+        [SerializeField] private Transform tilesRootA;
+        [SerializeField] private Transform tilesRootB;
 
         [Tooltip("进入编辑模式时会禁用该玩家脚本，避免残留物理速度；留空则由 InputContext 自动屏蔽输入")]
         [SerializeField] private PlayerController playerToDisable;
@@ -65,9 +68,11 @@ namespace BokeGameJam.LevelEditor
         [Tooltip("进入场景时若存在同名地图则自动加载")]
         [SerializeField] private bool autoLoadOnStart = true;
 
-        private readonly Dictionary<Vector2Int, PlacedTile> placedTiles = new();
+        private readonly Dictionary<Vector2Int, PlacedTile> placedTilesA = new();
+        private readonly Dictionary<Vector2Int, PlacedTile> placedTilesB = new();
         private bool isEditMode;
-        private Rect guiPanelRect = new(12, 48, 300, 420);
+        private WorldId activeWorld = WorldId.A;
+        private Rect guiPanelRect = new(12, 48, 300, 440);
         private Vector2 paletteScroll;
         private bool showHelp = true;
 
@@ -86,6 +91,7 @@ namespace BokeGameJam.LevelEditor
         }
 
         public bool IsEditMode => isEditMode;
+        public WorldId ActiveWorld => activeWorld;
 
         /// <summary>当前生效的文件基础名（不含扩展名）：优先 override，否则当前场景名。</summary>
         public string CurrentLevelName
@@ -103,15 +109,36 @@ namespace BokeGameJam.LevelEditor
         public string SaveFilePath =>
             Path.Combine(Application.persistentDataPath, CurrentLevelName + fileExtension);
 
+        private Dictionary<Vector2Int, PlacedTile> CurrentPlacedTiles =>
+            activeWorld == WorldId.A ? placedTilesA : placedTilesB;
+
+        private Transform CurrentTilesRoot =>
+            activeWorld == WorldId.A ? tilesRootA : tilesRootB;
+
         private void Awake()
         {
             if (mainCamera == null)
                 mainCamera = Camera.main;
 
-            if (tilesRoot == null)
+            EnsureTileRoots();
+            WorldManager.EnsureExists();
+        }
+
+        private void EnsureTileRoots()
+        {
+            if (tilesRootA == null && tilesRoot != null)
+                tilesRootA = tilesRoot;
+
+            if (tilesRootA == null)
             {
-                GameObject root = new("_TilesRoot");
-                tilesRoot = root.transform;
+                GameObject rootA = new("_TilesRoot_A");
+                tilesRootA = rootA.transform;
+            }
+
+            if (tilesRootB == null)
+            {
+                GameObject rootB = new("_TilesRoot_B");
+                tilesRootB = rootB.transform;
             }
         }
 
@@ -124,6 +151,7 @@ namespace BokeGameJam.LevelEditor
             EventManager.On(InputEvents.EditorPaintHeld, OnPaintHeld);
             EventManager.On(InputEvents.EditorEraseHeld, OnEraseHeld);
             EventManager.On<int>(InputEvents.EditorSelectPalette, OnSelectPalette);
+            EventManager.On<WorldId>(GameEvents.ActiveWorldChanged, OnActiveWorldChanged);
         }
 
         private void OnDisable()
@@ -135,22 +163,22 @@ namespace BokeGameJam.LevelEditor
             EventManager.Off(InputEvents.EditorPaintHeld, OnPaintHeld);
             EventManager.Off(InputEvents.EditorEraseHeld, OnEraseHeld);
             EventManager.Off<int>(InputEvents.EditorSelectPalette, OnSelectPalette);
+            EventManager.Off<WorldId>(GameEvents.ActiveWorldChanged, OnActiveWorldChanged);
         }
 
         private void Start()
         {
-            // 命名规范日志：让策划一眼看到当前场景对应哪张地图
             string scene = SceneManager.GetActiveScene().name;
             Debug.Log($"[LevelEditor] 场景 '{scene}' → 地图文件 '{Path.GetFileName(SaveFilePath)}'");
 
-            // 若存在同名地图，进入场景时自动加载
-            if (autoLoadOnStart && File.Exists(SaveFilePath))
-            {
-                LoadSilent();
-            }
+            if (WorldManager.Instance != null)
+                activeWorld = WorldManager.Instance.ActiveWorld;
 
-            // 进入场景一律默认游玩模式；按 M 才切到编辑模式
+            if (autoLoadOnStart && File.Exists(SaveFilePath))
+                LoadSilent();
+
             SetEditMode(false);
+            RefreshWorldVisibility();
         }
 
         private void Update()
@@ -167,6 +195,14 @@ namespace BokeGameJam.LevelEditor
         // ---------- 事件回调 ----------
 
         private void OnToggleRequest() => SetEditMode(!isEditMode);
+
+        private void OnActiveWorldChanged(WorldId world)
+        {
+            activeWorld = world;
+            DestroyCursorPreview();
+            RefreshWorldVisibility();
+            SetStatus($"切换到世界 {WorldLabel(world)}");
+        }
 
         private void OnPaintHeld()
         {
@@ -202,19 +238,74 @@ namespace BokeGameJam.LevelEditor
             if (playerToDisable != null)
                 playerToDisable.enabled = !value;
 
-            // 切换输入上下文（若 InputManager 存在）
             if (InputManager.Instance != null)
                 InputManager.Instance.SetContext(value ? InputContext.LevelEditor : InputContext.Gameplay);
 
+            RefreshWorldVisibility();
             SetStatus(value ? "已进入编辑模式" : "已退出编辑模式");
         }
 
         private bool IsMouseOverGuiPanel()
         {
             Vector2 pos = UnityEngine.Input.mousePosition;
-            // GUI 使用左上原点，Input.mousePosition 是左下原点 → 需翻转
             pos.y = Screen.height - pos.y;
             return guiPanelRect.Contains(pos);
+        }
+
+        // ---------- 世界可见性 ----------
+
+        private void RefreshWorldVisibility()
+        {
+            if (tilesRootA == null || tilesRootB == null)
+                return;
+
+            if (isEditMode)
+            {
+                tilesRootA.gameObject.SetActive(true);
+                tilesRootB.gameObject.SetActive(true);
+                ApplyLayerPresentation(tilesRootA, isActiveLayer: activeWorld == WorldId.A);
+                ApplyLayerPresentation(tilesRootB, isActiveLayer: activeWorld == WorldId.B);
+            }
+            else
+            {
+                bool showA = activeWorld == WorldId.A;
+                tilesRootA.gameObject.SetActive(showA);
+                tilesRootB.gameObject.SetActive(!showA);
+
+                if (showA)
+                    ApplyLayerPresentation(tilesRootA, isActiveLayer: true);
+                else
+                    ApplyLayerPresentation(tilesRootB, isActiveLayer: true);
+            }
+        }
+
+        private static void ApplyLayerPresentation(Transform root, bool isActiveLayer)
+        {
+            if (root == null)
+                return;
+
+            float alpha = isActiveLayer ? 1f : InactiveEditAlpha;
+            SetRootTransparency(root, alpha);
+            SetRootCollidersEnabled(root, isActiveLayer);
+        }
+
+        private static void SetRootTransparency(Transform root, float alpha)
+        {
+            foreach (SpriteRenderer sr in root.GetComponentsInChildren<SpriteRenderer>(true))
+            {
+                Color c = sr.color;
+                c.a = alpha;
+                sr.color = c;
+            }
+        }
+
+        private static void SetRootCollidersEnabled(Transform root, bool enabled)
+        {
+            foreach (Collider2D c in root.GetComponentsInChildren<Collider2D>(true))
+                c.enabled = enabled;
+
+            foreach (Rigidbody2D rb in root.GetComponentsInChildren<Rigidbody2D>(true))
+                rb.simulated = enabled;
         }
 
         // ---------- 网格 & 光标 ----------
@@ -313,8 +404,10 @@ namespace BokeGameJam.LevelEditor
             if (entry == null || entry.prefab == null)
                 return;
 
-            // 同格且同类型时跳过
-            if (placedTiles.TryGetValue(cell, out PlacedTile existing))
+            Dictionary<Vector2Int, PlacedTile> map = CurrentPlacedTiles;
+            Transform root = CurrentTilesRoot;
+
+            if (map.TryGetValue(cell, out PlacedTile existing))
             {
                 if (existing.tileId == entry.tileId)
                     return;
@@ -323,55 +416,84 @@ namespace BokeGameJam.LevelEditor
                     Destroy(existing.instance);
             }
 
-            GameObject instance = Instantiate(entry.prefab, CellToWorld(cell), Quaternion.identity, tilesRoot);
-            instance.name = $"Tile_{entry.tileId}_{cell.x}_{cell.y}";
-            placedTiles[cell] = new PlacedTile { tileId = entry.tileId, instance = instance };
+            GameObject instance = Instantiate(entry.prefab, CellToWorld(cell), Quaternion.identity, root);
+            instance.name = $"Tile_{WorldLabel(activeWorld)}_{entry.tileId}_{cell.x}_{cell.y}";
+            map[cell] = new PlacedTile { tileId = entry.tileId, instance = instance };
+
+            // 新放置的地块在编辑对照层时需立刻套用当前层表现
+            if (isEditMode)
+                ApplyLayerPresentation(root, isActiveLayer: true);
         }
 
         public void RemoveTile(Vector2Int cell)
         {
-            if (!placedTiles.TryGetValue(cell, out PlacedTile tile))
+            Dictionary<Vector2Int, PlacedTile> map = CurrentPlacedTiles;
+            if (!map.TryGetValue(cell, out PlacedTile tile))
                 return;
 
             if (tile.instance != null)
                 Destroy(tile.instance);
 
-            placedTiles.Remove(cell);
+            map.Remove(cell);
         }
 
+        /// <summary>清空当前世界的地块。</summary>
         public void ClearAllTiles()
         {
-            foreach (PlacedTile t in placedTiles.Values)
+            ClearWorldTiles(activeWorld);
+            SetStatus($"已清空世界 {WorldLabel(activeWorld)}");
+        }
+
+        private void ClearWorldTiles(WorldId world)
+        {
+            Dictionary<Vector2Int, PlacedTile> map = world == WorldId.A ? placedTilesA : placedTilesB;
+            foreach (PlacedTile t in map.Values)
             {
                 if (t.instance != null)
                     Destroy(t.instance);
             }
 
-            placedTiles.Clear();
-            SetStatus("已清空地图");
+            map.Clear();
+        }
+
+        private void ClearBothWorlds()
+        {
+            ClearWorldTiles(WorldId.A);
+            ClearWorldTiles(WorldId.B);
         }
 
         // ---------- 保存 / 加载 ----------
 
         public void Save()
         {
-            LevelData data = new() { levelName = CurrentLevelName };
-            foreach (KeyValuePair<Vector2Int, PlacedTile> kv in placedTiles)
-                data.tiles.Add(new LevelData.TileEntry(kv.Key.x, kv.Key.y, kv.Value.tileId));
+            LevelData data = new()
+            {
+                version = 2,
+                levelName = CurrentLevelName,
+            };
+
+            AppendTiles(data.tilesA, placedTilesA);
+            AppendTiles(data.tilesB, placedTilesB);
 
             try
             {
                 string path = SaveFilePath;
                 Directory.CreateDirectory(Path.GetDirectoryName(path) ?? Application.persistentDataPath);
                 File.WriteAllText(path, LevelData.ToJson(data));
-                SetStatus($"已保存 {data.tiles.Count} 块 → {Path.GetFileName(path)}");
-                Debug.Log($"[LevelEditor] 已保存 {data.tiles.Count} 个地块 → {path}");
+                SetStatus($"已保存 A:{data.tilesA.Count} B:{data.tilesB.Count} → {Path.GetFileName(path)}");
+                Debug.Log($"[LevelEditor] 已保存 A={data.tilesA.Count} B={data.tilesB.Count} → {path}");
             }
             catch (System.Exception ex)
             {
                 SetStatus($"保存失败: {ex.Message}");
                 Debug.LogError($"[LevelEditor] 保存失败: {ex.Message}");
             }
+        }
+
+        private static void AppendTiles(List<LevelData.TileEntry> list, Dictionary<Vector2Int, PlacedTile> map)
+        {
+            foreach (KeyValuePair<Vector2Int, PlacedTile> kv in map)
+                list.Add(new LevelData.TileEntry(kv.Key.x, kv.Key.y, kv.Value.tileId));
         }
 
         /// <summary>手动加载：找不到文件会弹警告。</summary>
@@ -403,8 +525,8 @@ namespace BokeGameJam.LevelEditor
                 string json = File.ReadAllText(path);
                 LevelData data = LevelData.FromJson(json);
                 ApplyLevelData(data);
-                SetStatus($"已加载 {data.tiles.Count} 块 ← {Path.GetFileName(path)}");
-                Debug.Log($"[LevelEditor] 已加载 {data.tiles.Count} 个地块 ← {path}");
+                SetStatus($"已加载 A:{data.tilesA.Count} B:{data.tilesB.Count} ← {Path.GetFileName(path)}");
+                Debug.Log($"[LevelEditor] 已加载 A={data.tilesA.Count} B={data.tilesB.Count} ← {path}");
             }
             catch (System.Exception ex)
             {
@@ -413,15 +535,32 @@ namespace BokeGameJam.LevelEditor
             }
         }
 
-        /// <summary>把 LevelData 应用到场景（会先清空当前地块）。</summary>
+        /// <summary>把 LevelData 应用到场景（会先清空双世界地块）。</summary>
         public void ApplyLevelData(LevelData data)
         {
-            ClearAllTiles();
-            if (data == null || data.tiles == null)
+            ClearBothWorlds();
+            if (data == null)
                 return;
 
+            LevelData.Normalize(data);
+
             int savedIndex = currentPaletteIndex;
-            foreach (LevelData.TileEntry entry in data.tiles)
+            SpawnTiles(data.tilesA, WorldId.A);
+            SpawnTiles(data.tilesB, WorldId.B);
+            currentPaletteIndex = Mathf.Clamp(savedIndex, 0, Mathf.Max(0, tilePalette.Count - 1));
+
+            RefreshWorldVisibility();
+        }
+
+        private void SpawnTiles(List<LevelData.TileEntry> entries, WorldId world)
+        {
+            if (entries == null)
+                return;
+
+            Dictionary<Vector2Int, PlacedTile> map = world == WorldId.A ? placedTilesA : placedTilesB;
+            Transform root = world == WorldId.A ? tilesRootA : tilesRootB;
+
+            foreach (LevelData.TileEntry entry in entries)
             {
                 int idx = FindPaletteIndex(entry.tileId);
                 if (idx < 0)
@@ -430,11 +569,18 @@ namespace BokeGameJam.LevelEditor
                     continue;
                 }
 
-                currentPaletteIndex = idx;
-                PlaceTile(new Vector2Int(entry.x, entry.y));
-            }
+                TilePaletteEntry palette = tilePalette[idx];
+                if (palette == null || palette.prefab == null)
+                    continue;
 
-            currentPaletteIndex = Mathf.Clamp(savedIndex, 0, Mathf.Max(0, tilePalette.Count - 1));
+                Vector2Int cell = new(entry.x, entry.y);
+                if (map.TryGetValue(cell, out PlacedTile existing) && existing.instance != null)
+                    Destroy(existing.instance);
+
+                GameObject instance = Instantiate(palette.prefab, CellToWorld(cell), Quaternion.identity, root);
+                instance.name = $"Tile_{WorldLabel(world)}_{entry.tileId}_{cell.x}_{cell.y}";
+                map[cell] = new PlacedTile { tileId = entry.tileId, instance = instance };
+            }
         }
 
         private int FindPaletteIndex(string tileId)
@@ -446,6 +592,8 @@ namespace BokeGameJam.LevelEditor
             }
             return -1;
         }
+
+        private static string WorldLabel(WorldId world) => world == WorldId.A ? "A" : "B";
 
         // ---------- GUI ----------
 
@@ -468,7 +616,7 @@ namespace BokeGameJam.LevelEditor
 
         private void DrawModeBadge()
         {
-            const float w = 260f;
+            const float w = 300f;
             const float h = 30f;
             Rect r = new(Screen.width - w - 12f, 12f, w, h);
 
@@ -478,9 +626,10 @@ namespace BokeGameJam.LevelEditor
             GUI.color = prev;
 
             string sceneName = SceneManager.GetActiveScene().name;
+            string world = WorldLabel(activeWorld);
             string text = isEditMode
-                ? $"● 编辑中 · {sceneName}   [M 退出]"
-                : $"● 游玩中 · {sceneName}   [M 编辑]";
+                ? $"● 编辑 · 世界{world} · {sceneName}  [M/Shift]"
+                : $"● 游玩 · 世界{world} · {sceneName}  [M/Shift]";
             GUI.Label(new Rect(r.x, r.y, r.width, r.height), text, badgeLabelStyle);
         }
 
@@ -488,7 +637,6 @@ namespace BokeGameJam.LevelEditor
         {
             GUILayout.Space(6);
 
-            // -------- 状态条（有消息才显示，避免空占位）--------
             if (!string.IsNullOrEmpty(statusMessage) && Time.unscaledTime < statusMessageExpireTime)
             {
                 GUILayout.BeginHorizontal(boxStyle);
@@ -497,7 +645,9 @@ namespace BokeGameJam.LevelEditor
                 GUILayout.Space(4);
             }
 
-            // -------- 地块面板 --------
+            GUILayout.Label($"当前世界: {WorldLabel(activeWorld)}  （Shift 切换）", headerStyle);
+            GUILayout.Space(4);
+
             GUILayout.Label("地块", headerStyle);
             paletteScroll = GUILayout.BeginScrollView(paletteScroll, boxStyle, GUILayout.Height(140));
             if (tilePalette.Count == 0)
@@ -526,17 +676,15 @@ namespace BokeGameJam.LevelEditor
 
             GUILayout.Space(8);
 
-            // -------- 文件操作 --------
             GUILayout.Label("文件", headerStyle);
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("保存", GUILayout.Height(26))) Save();
             if (GUILayout.Button("加载", GUILayout.Height(26))) Load();
             GUILayout.EndHorizontal();
-            if (GUILayout.Button("清空地图", GUILayout.Height(24))) ClearAllTiles();
+            if (GUILayout.Button($"清空世界 {WorldLabel(activeWorld)}", GUILayout.Height(24))) ClearAllTiles();
 
             GUILayout.Space(6);
 
-            // -------- 帮助（可折叠）--------
             showHelp = GUILayout.Toggle(showHelp, showHelp ? "▼ 操作提示" : "▶ 操作提示", foldoutStyle);
             if (showHelp)
             {
@@ -545,7 +693,7 @@ namespace BokeGameJam.LevelEditor
                 GUILayout.Label("鼠标右键 · 删除地块", mutedStyle);
                 GUILayout.Label("鼠标滚轮 · 缩放视野", mutedStyle);
                 GUILayout.Label("WASD / 方向键 · 移动相机", mutedStyle);
-                GUILayout.Label("Shift · 相机加速", mutedStyle);
+                GUILayout.Label("Shift · 切换世界 A/B", mutedStyle);
                 GUILayout.Label("数字键 1-9 · 选择地块", mutedStyle);
                 GUILayout.EndVertical();
             }
@@ -554,6 +702,7 @@ namespace BokeGameJam.LevelEditor
             GUILayout.BeginVertical(boxStyle);
             GUILayout.Label($"场景: {SceneManager.GetActiveScene().name}", mutedStyle);
             GUILayout.Label($"地图: {Path.GetFileName(SaveFilePath)}", mutedStyle);
+            GUILayout.Label($"地块: A={placedTilesA.Count}  B={placedTilesB.Count}", mutedStyle);
             if (!string.IsNullOrWhiteSpace(overrideFileName))
                 GUILayout.Label("（已用 overrideFileName 覆盖场景名）", mutedStyle);
             GUILayout.EndVertical();

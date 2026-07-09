@@ -11,7 +11,7 @@ namespace BokeGameJam.Core
         private const string DatabaseResourcePath = "ScriptableObjects/ResourceDefinitionDatabase";
 
         private static readonly Dictionary<string, GameObject> uiPrefabs = new();
-        private static readonly Dictionary<string, GameObject> playerPrefabs = new();
+        private static readonly Dictionary<string, GameObject> prefabs = new();
         private static readonly Dictionary<string, Sprite> sprites = new();
         private static readonly Dictionary<string, AudioClip> sounds = new();
 
@@ -38,10 +38,10 @@ namespace BokeGameJam.Core
             return EnsureDatabase() && database.TryGetUI(id, out resource);
         }
 
-        public static bool TryGetPlayer(string id, out ResourceDefinitionDatabase.PlayerResource resource)
+        public static bool TryGetPrefab(string id, out ResourceDefinitionDatabase.PrefabResource resource)
         {
             resource = null;
-            return EnsureDatabase() && database.TryGetPlayer(id, out resource);
+            return EnsureDatabase() && database.TryGetPrefab(id, out resource);
         }
 
         public static bool TryGetSprite(string id, out ResourceDefinitionDatabase.SpriteResource resource)
@@ -74,16 +74,16 @@ namespace BokeGameJam.Core
             return LoadAsset(resource.Id, resource.Prefab, uiPrefabs, "UI prefab");
         }
 
-        public static GameObject LoadPlayer(ResourceDefinitionDatabase.PlayerResource resource)
+        public static GameObject LoadPrefab(ResourceDefinitionDatabase.PrefabResource resource)
         {
-            resource = Database?.ResolvePlayer(resource);
+            resource = Database?.ResolvePrefab(resource);
             if (resource == null)
             {
-                Debug.LogWarning("[ResourcesManager] Player resource is null.");
+                Debug.LogWarning("[ResourcesManager] Prefab resource is null.");
                 return null;
             }
 
-            return LoadAsset(resource.Id, resource.Prefab, playerPrefabs, "Player prefab");
+            return LoadAsset(resource.Id, resource.Prefab, prefabs, "Prefab");
         }
 
         public static GameObject LoadUIById(string id)
@@ -97,15 +97,15 @@ namespace BokeGameJam.Core
             return LoadUI(resource);
         }
 
-        public static GameObject LoadPlayerById(string id)
+        public static GameObject LoadPrefabById(string id)
         {
-            if (!TryGetPlayer(id, out ResourceDefinitionDatabase.PlayerResource resource))
+            if (!TryGetPrefab(id, out ResourceDefinitionDatabase.PrefabResource resource))
             {
-                Debug.LogError($"[ResourcesManager] Cannot find player resource id: {id}");
+                Debug.LogError($"[ResourcesManager] Cannot find prefab resource id: {id}");
                 return null;
             }
 
-            return LoadPlayer(resource);
+            return LoadPrefab(resource);
         }
 
         public static GameObject SpawnUI(ResourceDefinitionDatabase.UIResource resource, Transform parent = null)
@@ -114,9 +114,9 @@ namespace BokeGameJam.Core
             return prefab != null ? Object.Instantiate(prefab, parent) : null;
         }
 
-        public static GameObject SpawnPlayer(ResourceDefinitionDatabase.PlayerResource resource, Transform parent = null)
+        public static GameObject SpawnPrefab(ResourceDefinitionDatabase.PrefabResource resource, Transform parent = null)
         {
-            GameObject prefab = LoadPlayer(resource);
+            GameObject prefab = LoadPrefab(resource);
             return prefab != null ? Object.Instantiate(prefab, parent) : null;
         }
 
@@ -126,9 +126,9 @@ namespace BokeGameJam.Core
             return prefab != null ? Object.Instantiate(prefab, parent) : null;
         }
 
-        public static GameObject SpawnPlayerById(string id, Transform parent = null)
+        public static GameObject SpawnPrefabById(string id, Transform parent = null)
         {
-            GameObject prefab = LoadPlayerById(id);
+            GameObject prefab = LoadPrefabById(id);
             return prefab != null ? Object.Instantiate(prefab, parent) : null;
         }
 
@@ -212,9 +212,9 @@ namespace BokeGameJam.Core
             ClearCache(resource?.Id, uiPrefabs);
         }
 
-        public static void ClearPlayer(ResourceDefinitionDatabase.PlayerResource resource)
+        public static void ClearPrefab(ResourceDefinitionDatabase.PrefabResource resource)
         {
-            ClearCache(resource?.Id, playerPrefabs);
+            ClearCache(resource?.Id, prefabs);
         }
 
         public static void ClearSprite(ResourceDefinitionDatabase.SpriteResource resource)
@@ -230,7 +230,7 @@ namespace BokeGameJam.Core
         public static void ClearAll()
         {
             uiPrefabs.Clear();
-            playerPrefabs.Clear();
+            prefabs.Clear();
             sprites.Clear();
             sounds.Clear();
         }
