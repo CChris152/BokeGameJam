@@ -33,6 +33,13 @@ namespace BokeGameJam.UI
             BindButton(quitButton, OnQuitGameClicked);
         }
 
+        private void Start()
+        {
+            // 启动时从黑屏淡出到主菜单（先黑屏停留，再透明）
+            if (BlackScreenLoader.Instance != null)
+                BlackScreenLoader.Instance.PlayFadeOut();
+        }
+
         /// <summary>为按钮绑定点击回调（先移除再添加，避免重复订阅）。</summary>
         private void BindButton(Button button, UnityAction callback)
         {
@@ -46,10 +53,22 @@ namespace BokeGameJam.UI
             button.onClick.AddListener(callback);
         }
 
-        /// <summary>开始游戏：切换到关卡场景。</summary>
+        /// <summary>
+        /// 开始游戏：先播黑屏加载动画，淡入到全黑后再广播开局事件。
+        /// </summary>
         public void OnStartGameClicked()
         {
-            EventManager.Emit(GameEvents.GameStartRequested);
+            if (BlackScreenLoader.Instance == null)
+            {
+                Debug.LogWarning("[MainMenuController] BlackScreenLoader missing, start game immediately.", this);
+                EventManager.Emit(GameEvents.GameStartRequested);
+                return;
+            }
+
+            BlackScreenLoader.Instance.PlayLoadingAnimation(() =>
+            {
+                EventManager.Emit(GameEvents.GameStartRequested);
+            });
         }
 
         /// <summary>打开设置弹窗。</summary>
