@@ -23,6 +23,12 @@ namespace BokeGameJam.LevelEditor
     {
         private const float InactiveEditAlpha = 0.35f;
 
+        /// <summary>仓库内地图目录（相对 Application.dataPath）。</summary>
+        private const string LevelsFolderRelative = "Resources/Levels";
+
+        /// <summary>Resources.Load 用的子路径（不含扩展名）。</summary>
+        private const string LevelsResourcesPath = "Levels";
+
         [System.Serializable]
         public class TilePaletteEntry
         {
@@ -105,9 +111,16 @@ namespace BokeGameJam.LevelEditor
             }
         }
 
-        /// <summary>完整保存路径 = persistentDataPath / {CurrentLevelName}{fileExtension}</summary>
+        /// <summary>
+        /// 完整保存路径 = Assets/Resources/Levels/{CurrentLevelName}{fileExtension}。
+        /// 放在仓库内，便于 Git 同步；编辑器下可直接读写。
+        /// </summary>
         public string SaveFilePath =>
-            Path.Combine(Application.persistentDataPath, CurrentLevelName + fileExtension);
+            Path.Combine(Application.dataPath, LevelsFolderRelative, CurrentLevelName + fileExtension);
+
+        /// <summary>Resources.Load 路径（不含扩展名），例如 Levels/Level1。</summary>
+        public string ResourcesLoadPath =>
+            LevelsResourcesPath + "/" + CurrentLevelName;
 
         private Dictionary<Vector2Int, PlacedTile> CurrentPlacedTiles =>
             activeWorld == WorldId.A ? placedTilesA : placedTilesB;
@@ -478,7 +491,10 @@ namespace BokeGameJam.LevelEditor
             try
             {
                 string path = SaveFilePath;
-                Directory.CreateDirectory(Path.GetDirectoryName(path) ?? Application.persistentDataPath);
+                string directory = Path.GetDirectoryName(path);
+                if (!string.IsNullOrEmpty(directory))
+                    Directory.CreateDirectory(directory);
+
                 File.WriteAllText(path, LevelData.ToJson(data));
                 SetStatus($"已保存 A:{data.tilesA.Count} B:{data.tilesB.Count} → {Path.GetFileName(path)}");
                 Debug.Log($"[LevelEditor] 已保存 A={data.tilesA.Count} B={data.tilesB.Count} → {path}");
@@ -499,39 +515,55 @@ namespace BokeGameJam.LevelEditor
         /// <summary>手动加载：找不到文件会弹警告。</summary>
         public void Load()
         {
-            string path = SaveFilePath;
-            if (!File.Exists(path))
+            if (!TryLoadLevel())
             {
-                SetStatus($"未找到地图: {Path.GetFileName(path)}");
-                Debug.LogWarning($"[LevelEditor] 未找到关卡文件: {path}");
-                return;
+                SetStatus($"未找到地图: {CurrentLevelName}{fileExtension}");
+                Debug.LogWarning(
+                    $"[LevelEditor] 未找到关卡文件: {SaveFilePath} 或 Resources/{ResourcesLoadPath}");
             }
-
-            LoadFromPath(path);
         }
 
         /// <summary>自动加载：找不到文件静默返回，用于场景启动时。</summary>
         public void LoadSilent()
         {
-            string path = SaveFilePath;
-            if (!File.Exists(path)) return;
-            LoadFromPath(path);
+            TryLoadLevel();
         }
 
-        private void LoadFromPath(string path)
+        /// <summary>
+        /// 优先读仓库内 JSON 文件；打包后文件可能不在磁盘上，再回退 Resources.Load。
+        /// </summary>
+        private bool TryLoadLevel()
+        {
+            string path = SaveFilePath;
+            if (File.Exists(path))
+            {
+                LoadFromJson(File.ReadAllText(path), path);
+                return true;
+            }
+
+            TextAsset asset = Resources.Load<TextAsset>(ResourcesLoadPath);
+            if (asset != null)
+            {
+                LoadFromJson(asset.text, $"Resources/{ResourcesLoadPath}");
+                return true;
+            }
+
+            return false;
+        }
+
+        private void LoadFromJson(string json, string sourceLabel)
         {
             try
             {
-                string json = File.ReadAllText(path);
                 LevelData data = LevelData.FromJson(json);
                 ApplyLevelData(data);
-                SetStatus($"已加载 A:{data.tilesA.Count} B:{data.tilesB.Count} ← {Path.GetFileName(path)}");
-                Debug.Log($"[LevelEditor] 已加载 A={data.tilesA.Count} B={data.tilesB.Count} ← {path}");
+                SetStatus($"已加载 A:{data.tilesA.Count} B:{data.tilesB.Count} ← {Path.GetFileName(sourceLabel)}");
+                Debug.Log($"[LevelEditor] 已加载 A={data.tilesA.Count} B={data.tilesB.Count} ← {sourceLabel}");
             }
             catch (System.Exception ex)
             {
                 SetStatus($"加载失败: {ex.Message}");
-                Debug.LogError($"[LevelEditor] 加载失败: {ex.Message}");
+                Debug.LogError($"[LevelEditor] 加载失败 ({sourceLabel}): {ex.Message}");
             }
         }
 

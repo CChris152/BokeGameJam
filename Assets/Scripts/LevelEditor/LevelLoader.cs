@@ -6,8 +6,9 @@ namespace BokeGameJam.LevelEditor
     /// <summary>
     /// 关卡"默认地图"回退加载器（可选）。
     ///
-    /// 命名规范：<see cref="LevelEditor"/> 会按【场景名】自动读取 persistentDataPath 中的地图。
-    /// 因此本组件只在【场景中还没有存档】时兜底一次，从 Resources 里拖出一份默认地图。
+    /// 命名规范：<see cref="LevelEditor"/> 会按【场景名】自动读写
+    /// <c>Assets/Resources/Levels/{场景名}.json</c>。
+    /// 因此本组件只在【仓库地图与 Resources 都没有】时兜底一次，从手动指定的 TextAsset 加载。
     ///
     /// 用法：
     ///   • 一个场景一张地图：无需挂载 LevelLoader，LevelEditor 自动读同名文件
@@ -16,7 +17,7 @@ namespace BokeGameJam.LevelEditor
     [RequireComponent(typeof(LevelEditor))]
     public sealed class LevelLoader : MonoBehaviour
     {
-        [Tooltip("兜底用：如果 persistentDataPath 中不存在同名地图，就加载这份 Resources 里的 JSON")]
+        [Tooltip("兜底用：如果 Resources/Levels 中不存在同名地图，就加载这份 JSON TextAsset")]
         [SerializeField] private TextAsset defaultLevel;
 
         private LevelEditor editor;
@@ -28,8 +29,11 @@ namespace BokeGameJam.LevelEditor
 
         private void Start()
         {
-            // 存档已存在 → LevelEditor.Start() 里的 LoadSilent() 已经处理，不再重复
+            // 仓库文件或 Resources 已存在 → LevelEditor.Start() 里的 LoadSilent() 已经处理
             if (File.Exists(editor.SaveFilePath))
+                return;
+
+            if (Resources.Load<TextAsset>(editor.ResourcesLoadPath) != null)
                 return;
 
             if (defaultLevel == null)
@@ -39,7 +43,7 @@ namespace BokeGameJam.LevelEditor
             {
                 LevelData data = LevelData.FromJson(defaultLevel.text);
                 editor.ApplyLevelData(data);
-                Debug.Log($"[LevelLoader] 已从 Resources 加载默认地图: {defaultLevel.name}");
+                Debug.Log($"[LevelLoader] 已从默认 TextAsset 加载地图: {defaultLevel.name}");
             }
             catch (System.Exception ex)
             {
