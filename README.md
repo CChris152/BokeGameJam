@@ -68,7 +68,7 @@ ResourcesManager.GetSceneName(sceneResource);
 ResourcesManager.LoadUIById("PausePanel");
 ResourcesManager.LoadSpriteById("PlayerIcon");
 ResourcesManager.LoadSoundById("Click");
-ResourcesManager.GetSceneNameById("NewScene");
+ResourcesManager.GetSceneNameById("SelectScene");
 ```
 
 `ById` 只查 `ResourceDefinitionDatabase.asset`，不会按旧的 `Resources` 路径兜底。
@@ -86,7 +86,7 @@ using BokeGameJam.Core;
 
 GameSceneManager.Instance.LoadScene(sceneResource);
 GameSceneManager.Instance.LoadSceneAsync(sceneResource);
-GameSceneManager.Instance.LoadSceneById("NewScene");
+GameSceneManager.Instance.LoadSceneById("SelectScene");
 GameSceneManager.Instance.ReloadCurrentScene();
 ```
 

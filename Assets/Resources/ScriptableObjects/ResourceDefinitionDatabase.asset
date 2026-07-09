@@ -16,9 +16,9 @@ MonoBehaviour:
   sprites: []
   sounds: []
   scenes:
-  - id: SampleScene
+  - id: StartScene
     sceneAsset: {fileID: 102900000, guid: 8c9cfa26abfee488c85f1582747f6a02, type: 3}
-    sceneName: SampleScene
-  - id: NewScene
+    sceneName: StartScene
+  - id: SelectScene
     sceneAsset: {fileID: 102900000, guid: a7d9870980654cd4dbbc240ad1d45680, type: 3}
-    sceneName: NewScene
+    sceneName: SelectScene
