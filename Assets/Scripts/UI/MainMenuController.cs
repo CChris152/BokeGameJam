@@ -1,14 +1,20 @@
+using BokeGameJam.Core;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace BokeGameJam.UI
 {
     /// <summary>
-    /// Handles the SampleScene main menu button events.
+    /// Handles the StartScene main menu button events.
     /// </summary>
     public class MainMenuController : MonoBehaviour
     {
+        private const string SelectSceneId = "SelectScene";
+
         [SerializeField] private Button startButton;
         [SerializeField] private Button settingsButton;
         [SerializeField] private Button quitButton;
@@ -34,6 +40,13 @@ namespace BokeGameJam.UI
 
         public void OnStartGameClicked()
         {
+            if (GameSceneManager.Instance == null)
+            {
+                Debug.LogError("[MainMenuController] GameSceneManager instance is missing.", this);
+                return;
+            }
+
+            GameSceneManager.Instance.LoadSceneById(SelectSceneId);
         }
 
         public void OnSettingsClicked()
@@ -42,6 +55,11 @@ namespace BokeGameJam.UI
 
         public void OnQuitGameClicked()
         {
+#if UNITY_EDITOR
+            EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
         }
     }
 }
