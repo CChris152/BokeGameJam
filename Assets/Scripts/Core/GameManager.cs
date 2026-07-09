@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using BokeGameJam.Input;
 using BokeGameJam.Levels;
 using BokeGameJam.UI;
 
@@ -13,7 +14,8 @@ namespace BokeGameJam.Core
     /// - 不负责 <b>场景切换</b>（那是 <see cref="GameSceneManager"/>）。
     /// - 不负责 <b>关卡数据</b>（那是 <c>LevelManager</c>）。
     /// - 不负责 <b>UI 预制体实例化</b>（那是 <see cref="UIManager"/>）。
-    /// - 只负责：维护当前 <see cref="GameState"/>，并在状态迁移时决定 <i>加载/隐藏/关闭哪些 UI</i>。
+    /// - 负责：维护当前 <see cref="GameState"/>，并在状态迁移时决定 <i>加载/隐藏/关闭哪些 UI</i>。
+    /// - 负责：维护当前 <see cref="WorldId"/>（阳间/阴间），订阅 Shift 并广播 <see cref="GameEvents.ActiveWorldChanged"/>。
     ///
     /// 状态迁移（由 <see cref="EventManager"/> 事件驱动）：
     /// <code>
@@ -49,6 +51,10 @@ namespace BokeGameJam.Core
         [Tooltip("离开关卡（回主菜单等）时关闭的 UI resourceId 列表。")]
         [SerializeField] private List<string> uiToCloseOnLevelExit = new() { "InventorySlot" };
 
+        [Header("World")]
+        [Tooltip("开局默认世界：A = 阳间，B = 阴间。")]
+        [SerializeField] private WorldId startWorld = WorldId.A;
+
         [Header("Options")]
         [SerializeField] private bool dontDestroyOnLoad = true;
         [SerializeField] private bool logStateChanges = true;
@@ -57,7 +63,10 @@ namespace BokeGameJam.Core
         [Tooltip("当前游戏流程状态，运行时由事件驱动更新。")]
         [SerializeField] private GameState state = GameState.Boot;
 
+        private WorldId activeWorld;
+
         public GameState State => state;
+        public WorldId ActiveWorld => activeWorld;
 
         /// <summary>确保单例存在（若场景中没有则新建一个）。</summary>
         public static GameManager EnsureExists()
@@ -80,6 +89,8 @@ namespace BokeGameJam.Core
             Instance = this;
             if (dontDestroyOnLoad)
                 DontDestroyOnLoad(gameObject);
+
+            activeWorld = startWorld;
         }
 
         private void OnEnable()
@@ -88,6 +99,7 @@ namespace BokeGameJam.Core
             EventManager.On<LevelSelection>(GameEvents.LevelSelected, OnLevelSelected);
             EventManager.On<string>(GameEvents.LevelStarted, OnLevelStarted);
             EventManager.On<string>(GameEvents.LevelCompleted, OnLevelCompleted);
+            EventManager.On(InputEvents.WorldToggle, OnWorldToggle);
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
@@ -97,6 +109,7 @@ namespace BokeGameJam.Core
             EventManager.Off<LevelSelection>(GameEvents.LevelSelected, OnLevelSelected);
             EventManager.Off<string>(GameEvents.LevelStarted, OnLevelStarted);
             EventManager.Off<string>(GameEvents.LevelCompleted, OnLevelCompleted);
+            EventManager.Off(InputEvents.WorldToggle, OnWorldToggle);
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
@@ -110,9 +123,28 @@ namespace BokeGameJam.Core
         {
             // 首次启动：按当前活动场景判断初始状态
             EvaluateInitialState(SceneManager.GetActiveScene());
+            // 确保订阅方在 Start 后能收到初始世界
+            EventManager.Emit(GameEvents.ActiveWorldChanged, activeWorld);
         }
 
         // ---------- 事件处理 ----------
+
+        private void OnWorldToggle() => ToggleWorld();
+
+        /// <summary>切换阳间 / 阴间。</summary>
+        public void ToggleWorld()
+        {
+            SetWorld(activeWorld == WorldId.A ? WorldId.B : WorldId.A);
+        }
+
+        public void SetWorld(WorldId world)
+        {
+            if (activeWorld == world)
+                return;
+
+            activeWorld = world;
+            EventManager.Emit(GameEvents.ActiveWorldChanged, activeWorld);
+        }
 
         /// <summary>主菜单点开始：确保 LevelManager 在场，再广播 LevelSelected 进入正式开局流。</summary>
         private void OnGameStartRequested()

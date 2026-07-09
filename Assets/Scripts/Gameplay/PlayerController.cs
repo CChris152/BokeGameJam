@@ -166,7 +166,7 @@ namespace BokeGameJam.Gameplay
                 return;
 
             Vector3 scale = transform.localScale;
-            scale.x = Mathf.Abs(initialScaleX) * Mathf.Sign(moveInput);
+            scale.x = Mathf.Abs(initialScaleX) * -Mathf.Sign(moveInput);
             transform.localScale = scale;
         }
 

@@ -284,9 +284,9 @@ namespace BokeGameJam.Gameplay
             if (!faceAwareDrop)
                 return dropOffset;
 
-            float facing = Mathf.Sign(transform.localScale.x);
+            float facing = -Mathf.Sign(transform.localScale.x);
             if (Mathf.Approximately(facing, 0f))
-                facing = 1f;
+                facing = -1f;
 
             return new Vector2(Mathf.Abs(dropOffset.x) * facing, dropOffset.y);
         }
