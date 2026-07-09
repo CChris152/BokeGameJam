@@ -6,11 +6,16 @@ using BokeGameJam.Core;
 using BokeGameJam.Gameplay;
 using BokeGameJam.Input;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace BokeGameJam.LevelEditor
 {
     /// <summary>
     /// 运行时关卡编辑器：完全事件驱动，不直接读 Unity Input。
     /// 支持双世界（A/B）：Shift 切换，单文件双层存档。
+    /// 画笔自动扫描 Assets/Prefabs/Terrians（tileId = 相对路径，如 Ground/BGround）。
     ///
     /// 交互：
     ///   M 键                — 切换 编辑 / 游玩 模式
@@ -29,13 +34,13 @@ namespace BokeGameJam.LevelEditor
         /// <summary>Resources.Load 用的子路径（不含扩展名）。</summary>
         private const string LevelsResourcesPath = "Levels";
 
+        /// <summary>地块画笔目录（相对项目根）。</summary>
+        private const string TerrainPrefabsFolder = "Assets/Prefabs/Terrians";
+
         [System.Serializable]
         public class TilePaletteEntry
         {
-            [Tooltip("地块唯一标识，用于保存/加载时匹配预制体")]
-            public string tileId = "ground";
-
-            [Tooltip("对应的地块预制体")]
+            public string tileId;
             public GameObject prefab;
         }
 
@@ -133,8 +138,69 @@ namespace BokeGameJam.LevelEditor
             if (mainCamera == null)
                 mainCamera = Camera.main;
 
+            RebuildPaletteFromFolder();
             EnsureTileRoots();
             WorldManager.EnsureExists();
+        }
+
+        /// <summary>
+        /// 扫描 Terrians 目录下所有 prefab 作为画笔。
+        /// tileId = 相对路径（不含扩展名），例如 Ground/BGround、Interactable/PickableObject。
+        /// 仅 Editor 可用（关卡编辑器本身也只在 Editor 里用）。
+        /// </summary>
+        private void RebuildPaletteFromFolder()
+        {
+#if UNITY_EDITOR
+            tilePalette.Clear();
+
+            string folderPrefix = TerrainPrefabsFolder.Replace('\\', '/') + "/";
+            string[] guids = AssetDatabase.FindAssets("t:Prefab", new[] { TerrainPrefabsFolder });
+            for (int i = 0; i < guids.Length; i++)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guids[i]).Replace('\\', '/');
+                GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+                if (prefab == null)
+                    continue;
+
+                string relative = path.StartsWith(folderPrefix)
+                    ? path.Substring(folderPrefix.Length)
+                    : Path.GetFileName(path);
+                if (relative.EndsWith(".prefab", System.StringComparison.OrdinalIgnoreCase))
+                    relative = relative.Substring(0, relative.Length - ".prefab".Length);
+
+                tilePalette.Add(new TilePaletteEntry
+                {
+                    tileId = relative,
+                    prefab = prefab,
+                });
+            }
+
+            tilePalette.Sort((a, b) => string.CompareOrdinal(a.tileId, b.tileId));
+            currentPaletteIndex = 0;
+            Debug.Log($"[LevelEditor] 已从 {TerrainPrefabsFolder} 加载 {tilePalette.Count} 个画笔");
+#else
+            Debug.LogWarning("[LevelEditor] 画笔扫描仅在 Unity Editor 下可用");
+#endif
+        }
+
+        /// <summary>从 tileId（相对路径）取出文件夹部分；根目录返回空串。</summary>
+        private static string GetTileFolder(string tileId)
+        {
+            if (string.IsNullOrEmpty(tileId))
+                return string.Empty;
+
+            int slash = tileId.LastIndexOf('/');
+            return slash >= 0 ? tileId.Substring(0, slash) : string.Empty;
+        }
+
+        /// <summary>从 tileId（相对路径）取出文件名部分。</summary>
+        private static string GetTileDisplayName(string tileId)
+        {
+            if (string.IsNullOrEmpty(tileId))
+                return string.Empty;
+
+            int slash = tileId.LastIndexOf('/');
+            return slash >= 0 ? tileId.Substring(slash + 1) : tileId;
         }
 
         private void EnsureTileRoots()
@@ -681,23 +747,34 @@ namespace BokeGameJam.LevelEditor
             GUILayout.Space(4);
 
             GUILayout.Label("地块", headerStyle);
-            paletteScroll = GUILayout.BeginScrollView(paletteScroll, boxStyle, GUILayout.Height(140));
+            paletteScroll = GUILayout.BeginScrollView(paletteScroll, boxStyle, GUILayout.Height(180));
             if (tilePalette.Count == 0)
             {
-                GUILayout.Label("（未配置任何地块）", mutedStyle);
+                GUILayout.Label("（未找到任何地块）", mutedStyle);
             }
             else
             {
+                string lastFolder = null;
                 for (int i = 0; i < tilePalette.Count; i++)
                 {
                     TilePaletteEntry entry = tilePalette[i];
                     if (entry == null) continue;
 
+                    string folder = GetTileFolder(entry.tileId);
+                    if (folder != lastFolder)
+                    {
+                        lastFolder = folder;
+                        string folderLabel = string.IsNullOrEmpty(folder) ? "（根目录）" : folder;
+                        GUILayout.Space(2);
+                        GUILayout.Label($"▸ {folderLabel}", headerStyle);
+                    }
+
                     bool selected = i == currentPaletteIndex;
                     GUIStyle style = selected ? paletteSelectedStyle : paletteButtonStyle;
                     string prefix = selected ? "▶ " : "    ";
                     string hotkey = i < 9 ? $"[{i + 1}] " : "     ";
-                    if (GUILayout.Button($"{prefix}{hotkey}{entry.tileId}", style))
+                    string displayName = GetTileDisplayName(entry.tileId);
+                    if (GUILayout.Button($"{prefix}{hotkey}{displayName}", style))
                     {
                         currentPaletteIndex = i;
                         DestroyCursorPreview();
