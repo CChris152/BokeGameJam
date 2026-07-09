@@ -11,6 +11,7 @@ namespace BokeGameJam.Core
         private const string DatabaseResourcePath = "ScriptableObjects/ResourceDefinitionDatabase";
 
         private static readonly Dictionary<string, GameObject> uiPrefabs = new();
+        private static readonly Dictionary<string, GameObject> playerPrefabs = new();
         private static readonly Dictionary<string, Sprite> sprites = new();
         private static readonly Dictionary<string, AudioClip> sounds = new();
 
@@ -35,6 +36,12 @@ namespace BokeGameJam.Core
         {
             resource = null;
             return EnsureDatabase() && database.TryGetUI(id, out resource);
+        }
+
+        public static bool TryGetPlayer(string id, out ResourceDefinitionDatabase.PlayerResource resource)
+        {
+            resource = null;
+            return EnsureDatabase() && database.TryGetPlayer(id, out resource);
         }
 
         public static bool TryGetSprite(string id, out ResourceDefinitionDatabase.SpriteResource resource)
@@ -67,6 +74,18 @@ namespace BokeGameJam.Core
             return LoadAsset(resource.Id, resource.Prefab, uiPrefabs, "UI prefab");
         }
 
+        public static GameObject LoadPlayer(ResourceDefinitionDatabase.PlayerResource resource)
+        {
+            resource = Database?.ResolvePlayer(resource);
+            if (resource == null)
+            {
+                Debug.LogWarning("[ResourcesManager] Player resource is null.");
+                return null;
+            }
+
+            return LoadAsset(resource.Id, resource.Prefab, playerPrefabs, "Player prefab");
+        }
+
         public static GameObject LoadUIById(string id)
         {
             if (!TryGetUI(id, out ResourceDefinitionDatabase.UIResource resource))
@@ -78,15 +97,38 @@ namespace BokeGameJam.Core
             return LoadUI(resource);
         }
 
+        public static GameObject LoadPlayerById(string id)
+        {
+            if (!TryGetPlayer(id, out ResourceDefinitionDatabase.PlayerResource resource))
+            {
+                Debug.LogError($"[ResourcesManager] Cannot find player resource id: {id}");
+                return null;
+            }
+
+            return LoadPlayer(resource);
+        }
+
         public static GameObject SpawnUI(ResourceDefinitionDatabase.UIResource resource, Transform parent = null)
         {
             GameObject prefab = LoadUI(resource);
             return prefab != null ? Object.Instantiate(prefab, parent) : null;
         }
 
+        public static GameObject SpawnPlayer(ResourceDefinitionDatabase.PlayerResource resource, Transform parent = null)
+        {
+            GameObject prefab = LoadPlayer(resource);
+            return prefab != null ? Object.Instantiate(prefab, parent) : null;
+        }
+
         public static GameObject SpawnUIById(string id, Transform parent = null)
         {
             GameObject prefab = LoadUIById(id);
+            return prefab != null ? Object.Instantiate(prefab, parent) : null;
+        }
+
+        public static GameObject SpawnPlayerById(string id, Transform parent = null)
+        {
+            GameObject prefab = LoadPlayerById(id);
             return prefab != null ? Object.Instantiate(prefab, parent) : null;
         }
 
@@ -170,6 +212,11 @@ namespace BokeGameJam.Core
             ClearCache(resource?.Id, uiPrefabs);
         }
 
+        public static void ClearPlayer(ResourceDefinitionDatabase.PlayerResource resource)
+        {
+            ClearCache(resource?.Id, playerPrefabs);
+        }
+
         public static void ClearSprite(ResourceDefinitionDatabase.SpriteResource resource)
         {
             ClearCache(resource?.Id, sprites);
@@ -183,6 +230,7 @@ namespace BokeGameJam.Core
         public static void ClearAll()
         {
             uiPrefabs.Clear();
+            playerPrefabs.Clear();
             sprites.Clear();
             sounds.Clear();
         }

@@ -8,11 +8,13 @@ namespace BokeGameJam.Core
     public class ResourceDefinitionDatabase : ScriptableObject
     {
         [SerializeField] private List<UIResource> uiPrefabs = new();
+        [SerializeField] private List<PlayerResource> playerPrefabs = new();
         [SerializeField] private List<SpriteResource> sprites = new();
         [SerializeField] private List<SoundResource> sounds = new();
         [SerializeField] private List<SceneResource> scenes = new();
 
         public IReadOnlyList<UIResource> UIPrefabs => uiPrefabs;
+        public IReadOnlyList<PlayerResource> PlayerPrefabs => playerPrefabs;
         public IReadOnlyList<SpriteResource> Sprites => sprites;
         public IReadOnlyList<SoundResource> Sounds => sounds;
         public IReadOnlyList<SceneResource> Scenes => scenes;
@@ -20,6 +22,11 @@ namespace BokeGameJam.Core
         public bool TryGetUI(string id, out UIResource resource)
         {
             return TryGetByIdOrFirst(uiPrefabs, id, out resource);
+        }
+
+        public bool TryGetPlayer(string id, out PlayerResource resource)
+        {
+            return TryGetByIdOrFirst(playerPrefabs, id, out resource);
         }
 
         public bool TryGetSprite(string id, out SpriteResource resource)
@@ -40,6 +47,11 @@ namespace BokeGameJam.Core
         public UIResource ResolveUI(UIResource resource)
         {
             return ResolveResource(resource, uiPrefabs, IsUIConfigured);
+        }
+
+        public PlayerResource ResolvePlayer(PlayerResource resource)
+        {
+            return ResolveResource(resource, playerPrefabs, IsPlayerConfigured);
         }
 
         public SpriteResource ResolveSprite(SpriteResource resource)
@@ -140,6 +152,11 @@ namespace BokeGameJam.Core
             return resource != null && resource.Prefab != null;
         }
 
+        private static bool IsPlayerConfigured(PlayerResource resource)
+        {
+            return resource != null && resource.Prefab != null;
+        }
+
         private static bool IsSpriteConfigured(SpriteResource resource)
         {
             return resource != null && resource.Sprite != null;
@@ -175,6 +192,14 @@ namespace BokeGameJam.Core
 
         [Serializable]
         public sealed class UIResource : ResourceEntry
+        {
+            [SerializeField] private GameObject prefab;
+
+            public GameObject Prefab => prefab;
+        }
+
+        [Serializable]
+        public sealed class PlayerResource : ResourceEntry
         {
             [SerializeField] private GameObject prefab;
 
