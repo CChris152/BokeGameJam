@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BokeGameJam.Core;
 using BokeGameJam.Input;
+using BokeGameJam.UI;
 
 namespace BokeGameJam.Gameplay
 {
@@ -47,6 +48,18 @@ namespace BokeGameJam.Gameplay
 
         private void OnInteractPressed()
         {
+            // 对话框打开/刚关闭：由 DialoguePopup 处理关闭，避免同帧误交互
+            if (DialoguePopup.BlocksInteract)
+                return;
+
+            // 鬼魂 D：空手或持物都可对话（优先于丢弃）
+            InteractableObjectD ghost = FindNearestGhost();
+            if (ghost != null)
+            {
+                ghost.OnInteract(this);
+                return;
+            }
+
             if (held != null)
             {
                 InteractableObjectC delivery = FindNearestDelivery();
@@ -146,6 +159,33 @@ namespace BokeGameJam.Gameplay
                 {
                     bestDist = dist;
                     best = delivery;
+                }
+            }
+
+            return best;
+        }
+
+        private InteractableObjectD FindNearestGhost()
+        {
+            InteractableObjectD best = null;
+            float bestDist = float.MaxValue;
+            Vector2 origin = transform.position;
+
+            nearby.RemoveWhere(item => item == null);
+
+            foreach (InteractableObject item in nearby)
+            {
+                if (item is not InteractableObjectD ghost)
+                    continue;
+
+                if (!ghost.CanInteract(this))
+                    continue;
+
+                float dist = ((Vector2)ghost.transform.position - origin).sqrMagnitude;
+                if (dist < bestDist)
+                {
+                    bestDist = dist;
+                    best = ghost;
                 }
             }
 

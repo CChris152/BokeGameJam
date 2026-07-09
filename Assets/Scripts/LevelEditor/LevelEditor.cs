@@ -14,7 +14,8 @@ namespace BokeGameJam.LevelEditor
 {
     /// <summary>
     /// 运行时关卡编辑器：完全事件驱动，不直接读 Unity Input。
-    /// 支持双世界（A/B）：Shift 切换，单文件双层存档。
+    /// 支持双世界（A/B）+ 共享层：Shift 切换 A/B。
+    /// 放置目标由 prefab 上 LevelObject.LevelLayer 决定（可在面板覆盖）。
     /// 画笔自动扫描 Assets/Prefabs/Terrians（tileId = 相对路径，如 Ground/BGround）。
     ///
     /// 交互：
@@ -22,7 +23,8 @@ namespace BokeGameJam.LevelEditor
     ///   Shift               — 切换世界 A / B
     ///   编辑模式下：
     ///     WASD/方向键       — 移动相机（由 CameraManager 处理）
-    ///     鼠标左键 / 右键   — 放置 / 删除地块（仅当前世界）
+    ///     鼠标左键 / 右键   — 放置 / 删除（按 LevelLayer 进 A / B / Shared）
+    ///     Alt + 左键拖拽    — 移动共享层物体
     /// </summary>
     public sealed class LevelEditor : MonoBehaviour
     {
@@ -36,6 +38,9 @@ namespace BokeGameJam.LevelEditor
 
         /// <summary>地块画笔目录（相对项目根）。</summary>
         private const string TerrainPrefabsFolder = "Assets/Prefabs/Terrians";
+
+        /// <summary>可交互物体相对路径前缀（tileId 以该前缀开头时显示机制配置）。</summary>
+        private const string InteractableFolderPrefix = "Interactable/";
 
         [System.Serializable]
         public class TilePaletteEntry
@@ -62,6 +67,9 @@ namespace BokeGameJam.LevelEditor
         [SerializeField] private Transform tilesRootA;
         [SerializeField] private Transform tilesRootB;
 
+        [Tooltip("共享层：Interactable 等不随 A/B 切换的物体")]
+        [SerializeField] private Transform tilesRootShared;
+
         [Tooltip("进入编辑模式时会禁用该玩家脚本，避免残留物理速度；留空则由 InputContext 自动屏蔽输入")]
         [SerializeField] private PlayerController playerToDisable;
 
@@ -81,15 +89,29 @@ namespace BokeGameJam.LevelEditor
 
         private readonly Dictionary<Vector2Int, PlacedTile> placedTilesA = new();
         private readonly Dictionary<Vector2Int, PlacedTile> placedTilesB = new();
+        private readonly Dictionary<Vector2Int, PlacedTile> placedTilesShared = new();
         private bool isEditMode;
         private WorldId activeWorld = WorldId.A;
-        private Rect guiPanelRect = new(12, 48, 300, 440);
+        private Rect guiPanelRect = new(12, 48, 300, 520);
         private Vector2 paletteScroll;
         private bool showHelp = true;
+
+        // 放置参数
+        private LevelLayer paintLevelLayer = LevelLayer.Shared;
+        private string paintMechanismId = string.Empty;
+        private string paintSequenceGroupId = string.Empty;
+        private string paintSequenceIndexText = "0";
+        private string paintDialogueText = string.Empty;
 
         // 光标预览
         private GameObject cursorPreview;
         private string cursorPreviewTileId;
+
+        // 共享层拖拽移动
+        private bool isDraggingShared;
+        private Vector2Int dragSourceCell;
+        private Vector2Int dragHoverCell;
+        private PlacedTile dragTile;
 
         // 状态提示
         private string statusMessage;
@@ -127,10 +149,10 @@ namespace BokeGameJam.LevelEditor
         public string ResourcesLoadPath =>
             LevelsResourcesPath + "/" + CurrentLevelName;
 
-        private Dictionary<Vector2Int, PlacedTile> CurrentPlacedTiles =>
+        private Dictionary<Vector2Int, PlacedTile> CurrentWorldPlacedTiles =>
             activeWorld == WorldId.A ? placedTilesA : placedTilesB;
 
-        private Transform CurrentTilesRoot =>
+        private Transform CurrentWorldTilesRoot =>
             activeWorld == WorldId.A ? tilesRootA : tilesRootB;
 
         private void Awake()
@@ -177,6 +199,7 @@ namespace BokeGameJam.LevelEditor
 
             tilePalette.Sort((a, b) => string.CompareOrdinal(a.tileId, b.tileId));
             currentPaletteIndex = 0;
+            SyncPaintLayerFromBrush();
             Debug.Log($"[LevelEditor] 已从 {TerrainPrefabsFolder} 加载 {tilePalette.Count} 个画笔");
 #else
             Debug.LogWarning("[LevelEditor] 画笔扫描仅在 Unity Editor 下可用");
@@ -218,6 +241,12 @@ namespace BokeGameJam.LevelEditor
             {
                 GameObject rootB = new("_TilesRoot_B");
                 tilesRootB = rootB.transform;
+            }
+
+            if (tilesRootShared == null)
+            {
+                GameObject rootShared = new("_TilesRoot_Shared");
+                tilesRootShared = rootShared.transform;
             }
         }
 
@@ -264,10 +293,12 @@ namespace BokeGameJam.LevelEditor
         {
             if (!isEditMode)
             {
+                CancelSharedDrag(restore: true);
                 DestroyCursorPreview();
                 return;
             }
 
+            UpdateSharedDrag();
             UpdateCursorPreview();
         }
 
@@ -285,7 +316,7 @@ namespace BokeGameJam.LevelEditor
 
         private void OnPaintHeld()
         {
-            if (!isEditMode || IsMouseOverGuiPanel())
+            if (!isEditMode || IsMouseOverGuiPanel() || isDraggingShared || IsAltHeld())
                 return;
             if (TryGetCursorCell(out Vector2Int cell))
                 PlaceTile(cell);
@@ -293,10 +324,104 @@ namespace BokeGameJam.LevelEditor
 
         private void OnEraseHeld()
         {
-            if (!isEditMode || IsMouseOverGuiPanel())
+            if (!isEditMode || IsMouseOverGuiPanel() || isDraggingShared)
                 return;
             if (TryGetCursorCell(out Vector2Int cell))
                 RemoveTile(cell);
+        }
+
+        private static bool IsAltHeld()
+        {
+            return UnityEngine.Input.GetKey(KeyCode.LeftAlt)
+                || UnityEngine.Input.GetKey(KeyCode.RightAlt);
+        }
+
+        // ---------- 共享层拖拽 ----------
+
+        private void UpdateSharedDrag()
+        {
+            if (isDraggingShared)
+            {
+                if (!UnityEngine.Input.GetMouseButton(0) || IsMouseOverGuiPanel())
+                {
+                    CommitSharedDrag();
+                    return;
+                }
+
+                if (!TryGetCursorCell(out Vector2Int cell))
+                    return;
+
+                dragHoverCell = cell;
+                if (dragTile.instance != null)
+                    dragTile.instance.transform.position = CellToWorld(cell);
+                return;
+            }
+
+            if (!IsAltHeld() || !UnityEngine.Input.GetMouseButtonDown(0) || IsMouseOverGuiPanel())
+                return;
+
+            if (!TryGetCursorCell(out Vector2Int source) || !placedTilesShared.TryGetValue(source, out PlacedTile tile))
+                return;
+
+            if (tile.instance == null)
+                return;
+
+            isDraggingShared = true;
+            dragSourceCell = source;
+            dragHoverCell = source;
+            dragTile = tile;
+            placedTilesShared.Remove(source);
+            DestroyCursorPreview();
+            SetStatus($"移动共享层: {GetTileDisplayName(tile.tileId)}");
+        }
+
+        private void CommitSharedDrag()
+        {
+            if (!isDraggingShared)
+                return;
+
+            Vector2Int target = dragHoverCell;
+            PlacedTile moving = dragTile;
+            isDraggingShared = false;
+            dragTile = default;
+
+            if (moving.instance == null)
+                return;
+
+            // 目标格已有共享物体：互换
+            if (placedTilesShared.TryGetValue(target, out PlacedTile occupant) && target != dragSourceCell)
+            {
+                if (occupant.instance != null)
+                    occupant.instance.transform.position = CellToWorld(dragSourceCell);
+                placedTilesShared[dragSourceCell] = occupant;
+            }
+
+            // 目标格世界层清掉，保持互斥
+            RemoveFromMap(placedTilesA, target);
+            RemoveFromMap(placedTilesB, target);
+
+            moving.instance.transform.position = CellToWorld(target);
+            moving.instance.name = $"Tile_Shared_{moving.tileId}_{target.x}_{target.y}";
+            placedTilesShared[target] = moving;
+
+            if (target != dragSourceCell)
+                SetStatus($"已移动到 ({target.x}, {target.y})");
+        }
+
+        private void CancelSharedDrag(bool restore)
+        {
+            if (!isDraggingShared)
+                return;
+
+            PlacedTile moving = dragTile;
+            isDraggingShared = false;
+            dragTile = default;
+
+            if (!restore || moving.instance == null)
+                return;
+
+            moving.instance.transform.position = CellToWorld(dragSourceCell);
+            placedTilesShared[dragSourceCell] = moving;
         }
 
         private void OnSelectPalette(int index)
@@ -305,6 +430,7 @@ namespace BokeGameJam.LevelEditor
                 return;
 
             currentPaletteIndex = index;
+            SyncPaintLayerFromBrush();
             DestroyCursorPreview();
         }
 
@@ -312,6 +438,9 @@ namespace BokeGameJam.LevelEditor
 
         public void SetEditMode(bool value)
         {
+            if (!value)
+                CancelSharedDrag(restore: true);
+
             isEditMode = value;
 
             if (playerToDisable != null)
@@ -337,6 +466,13 @@ namespace BokeGameJam.LevelEditor
         {
             if (tilesRootA == null || tilesRootB == null)
                 return;
+
+            // 共享层始终可见、始终可碰撞
+            if (tilesRootShared != null)
+            {
+                tilesRootShared.gameObject.SetActive(true);
+                ApplyLayerPresentation(tilesRootShared, isActiveLayer: true);
+            }
 
             if (isEditMode)
             {
@@ -418,7 +554,7 @@ namespace BokeGameJam.LevelEditor
         private void UpdateCursorPreview()
         {
             TilePaletteEntry entry = GetCurrentEntry();
-            if (entry == null || entry.prefab == null || IsMouseOverGuiPanel())
+            if (isDraggingShared || entry == null || entry.prefab == null || IsMouseOverGuiPanel())
             {
                 DestroyCursorPreview();
                 return;
@@ -483,31 +619,54 @@ namespace BokeGameJam.LevelEditor
             if (entry == null || entry.prefab == null)
                 return;
 
-            Dictionary<Vector2Int, PlacedTile> map = CurrentPlacedTiles;
-            Transform root = CurrentTilesRoot;
+            LevelLayer layer = ResolvePaintLayer(entry);
+            if (!TryGetLayerContainers(layer, out Dictionary<Vector2Int, PlacedTile> map, out Transform root))
+                return;
+
+            ClearCellExcept(cell, layer);
 
             if (map.TryGetValue(cell, out PlacedTile existing))
             {
+                // 同类型再刷：更新配置（含层级相关字段）
                 if (existing.tileId == entry.tileId)
+                {
+                    if (existing.instance != null)
+                        ApplyPaintConfigToInstance(existing.instance, layer);
                     return;
+                }
 
                 if (existing.instance != null)
                     Destroy(existing.instance);
             }
 
+            string layerLabel = LayerLabel(layer);
             GameObject instance = Instantiate(entry.prefab, CellToWorld(cell), Quaternion.identity, root);
-            instance.name = $"Tile_{WorldLabel(activeWorld)}_{entry.tileId}_{cell.x}_{cell.y}";
+            instance.name = $"Tile_{layerLabel}_{entry.tileId}_{cell.x}_{cell.y}";
+            ApplyPaintConfigToInstance(instance, layer);
             map[cell] = new PlacedTile { tileId = entry.tileId, instance = instance };
 
-            // 新放置的地块在编辑对照层时需立刻套用当前层表现
             if (isEditMode)
-                ApplyLayerPresentation(root, isActiveLayer: true);
+            {
+                bool active = layer == LevelLayer.Shared
+                    || (layer == LevelLayer.A && activeWorld == WorldId.A)
+                    || (layer == LevelLayer.B && activeWorld == WorldId.B);
+                ApplyLayerPresentation(root, isActiveLayer: active);
+            }
         }
 
-        public void RemoveTile(Vector2Int cell)
+        private void ClearCellExcept(Vector2Int cell, LevelLayer keepLayer)
         {
-            Dictionary<Vector2Int, PlacedTile> map = CurrentPlacedTiles;
-            if (!map.TryGetValue(cell, out PlacedTile tile))
+            if (keepLayer != LevelLayer.A)
+                RemoveFromMap(placedTilesA, cell);
+            if (keepLayer != LevelLayer.B)
+                RemoveFromMap(placedTilesB, cell);
+            if (keepLayer != LevelLayer.Shared)
+                RemoveFromMap(placedTilesShared, cell);
+        }
+
+        private static void RemoveFromMap(Dictionary<Vector2Int, PlacedTile> map, Vector2Int cell)
+        {
+            if (map == null || !map.TryGetValue(cell, out PlacedTile tile))
                 return;
 
             if (tile.instance != null)
@@ -516,16 +675,227 @@ namespace BokeGameJam.LevelEditor
             map.Remove(cell);
         }
 
-        /// <summary>清空当前世界的地块。</summary>
+        private bool TryGetLayerContainers(
+            LevelLayer layer,
+            out Dictionary<Vector2Int, PlacedTile> map,
+            out Transform root)
+        {
+            switch (layer)
+            {
+                case LevelLayer.A:
+                    map = placedTilesA;
+                    root = tilesRootA;
+                    break;
+                case LevelLayer.B:
+                    map = placedTilesB;
+                    root = tilesRootB;
+                    break;
+                default:
+                    map = placedTilesShared;
+                    root = tilesRootShared;
+                    break;
+            }
+
+            return root != null && map != null;
+        }
+
+        private static string LayerLabel(LevelLayer layer)
+        {
+            return layer switch
+            {
+                LevelLayer.A => "A",
+                LevelLayer.B => "B",
+                _ => "Shared",
+            };
+        }
+
+        private static bool IsInteractableTileId(string tileId)
+        {
+            return !string.IsNullOrEmpty(tileId)
+                && tileId.StartsWith(InteractableFolderPrefix, System.StringComparison.Ordinal);
+        }
+
+        private bool CurrentBrushIsInteractable()
+        {
+            TilePaletteEntry entry = GetCurrentEntry();
+            return entry != null && entry.prefab != null
+                && entry.prefab.GetComponent<InteractableObject>() != null;
+        }
+
+        private bool CurrentBrushHasSequenceFields()
+        {
+            TilePaletteEntry entry = GetCurrentEntry();
+            return entry != null && entry.prefab != null
+                && entry.prefab.GetComponent<InteractableObjectB>() != null;
+        }
+
+        private bool CurrentBrushIsGhost()
+        {
+            TilePaletteEntry entry = GetCurrentEntry();
+            return entry != null && entry.prefab != null
+                && entry.prefab.GetComponent<InteractableObjectD>() != null;
+        }
+
+        private LevelLayer ResolvePaintLayer(TilePaletteEntry entry)
+        {
+            if (entry == null)
+                return paintLevelLayer;
+
+            // 面板选择优先；无 LevelObject 时按路径回退
+            LevelObject levelObject = entry.prefab != null
+                ? entry.prefab.GetComponent<LevelObject>()
+                : null;
+            if (levelObject != null)
+                return paintLevelLayer;
+
+            if (IsInteractableTileId(entry.tileId))
+                return LevelLayer.Shared;
+
+            return activeWorld == WorldId.A ? LevelLayer.A : LevelLayer.B;
+        }
+
+        private void SyncPaintLayerFromBrush()
+        {
+            TilePaletteEntry entry = GetCurrentEntry();
+            if (entry?.prefab == null)
+                return;
+
+            LevelObject levelObject = entry.prefab.GetComponent<LevelObject>();
+            if (levelObject != null)
+            {
+                paintLevelLayer = levelObject.LevelLayer;
+                return;
+            }
+
+            paintLevelLayer = IsInteractableTileId(entry.tileId)
+                ? LevelLayer.Shared
+                : (activeWorld == WorldId.A ? LevelLayer.A : LevelLayer.B);
+        }
+
+        private int GetPaintSequenceIndex()
+        {
+            return int.TryParse(paintSequenceIndexText, out int value) ? value : 0;
+        }
+
+        private void ApplyPaintConfigToInstance(GameObject instance, LevelLayer layer)
+        {
+            if (instance == null)
+                return;
+
+            LevelObject levelObject = instance.GetComponent<LevelObject>();
+            if (levelObject != null)
+                levelObject.SetLevelLayer(layer);
+
+            InteractableObject interactable = instance.GetComponent<InteractableObject>();
+            if (interactable == null)
+                return;
+
+            interactable.ApplyEditorConfig(
+                paintMechanismId,
+                paintSequenceGroupId,
+                GetPaintSequenceIndex());
+
+            InteractableObjectD ghost = instance.GetComponent<InteractableObjectD>();
+            if (ghost != null)
+                ghost.ApplyDialogueText(paintDialogueText);
+        }
+
+        private static void ApplyTileEntryConfig(GameObject instance, LevelData.TileEntry entry, LevelLayer layer)
+        {
+            if (instance == null)
+                return;
+
+            LevelObject levelObject = instance.GetComponent<LevelObject>();
+            if (levelObject != null)
+                levelObject.SetLevelLayer(layer);
+
+            InteractableObject interactable = instance.GetComponent<InteractableObject>();
+            if (interactable == null)
+                return;
+
+            interactable.ApplyEditorConfig(
+                entry.mechanismId,
+                entry.sequenceGroupId,
+                entry.sequenceIndex);
+
+            InteractableObjectD ghost = instance.GetComponent<InteractableObjectD>();
+            if (ghost != null)
+                ghost.ApplyDialogueText(entry.dialogueText);
+        }
+
+        private static LevelData.TileEntry CaptureTileEntry(Vector2Int cell, PlacedTile tile)
+        {
+            string mechanismId = null;
+            string sequenceGroupId = null;
+            int sequenceIndex = 0;
+            string dialogueText = null;
+
+            if (tile.instance != null)
+            {
+                InteractableObjectD ghost = tile.instance.GetComponent<InteractableObjectD>();
+                if (ghost != null)
+                {
+                    mechanismId = ghost.MechanismId;
+                    dialogueText = ghost.DialogueText;
+                }
+                else
+                {
+                    InteractableObjectB b = tile.instance.GetComponent<InteractableObjectB>();
+                    if (b != null)
+                    {
+                        mechanismId = b.MechanismId;
+                        sequenceGroupId = b.SequenceGroupId;
+                        sequenceIndex = b.SequenceIndex;
+                    }
+                    else
+                    {
+                        InteractableObject interactable = tile.instance.GetComponent<InteractableObject>();
+                        if (interactable != null)
+                            mechanismId = interactable.MechanismId;
+                    }
+                }
+            }
+
+            return new LevelData.TileEntry(
+                cell.x,
+                cell.y,
+                tile.tileId,
+                mechanismId,
+                sequenceGroupId,
+                sequenceIndex,
+                dialogueText);
+        }
+
+        public void RemoveTile(Vector2Int cell)
+        {
+            // 优先删共享层（Interactable 叠在上面），否则删当前世界层
+            if (placedTilesShared.ContainsKey(cell))
+                RemoveFromMap(placedTilesShared, cell);
+            else
+                RemoveFromMap(CurrentWorldPlacedTiles, cell);
+        }
+
+        /// <summary>清空当前画笔所属层级。</summary>
         public void ClearAllTiles()
         {
-            ClearWorldTiles(activeWorld);
-            SetStatus($"已清空世界 {WorldLabel(activeWorld)}");
+            LevelLayer layer = ResolvePaintLayer(GetCurrentEntry());
+            if (!TryGetLayerContainers(layer, out Dictionary<Vector2Int, PlacedTile> map, out _))
+                return;
+
+            ClearMap(map);
+            SetStatus($"已清空层级 {LayerLabel(layer)}");
         }
 
         private void ClearWorldTiles(WorldId world)
         {
-            Dictionary<Vector2Int, PlacedTile> map = world == WorldId.A ? placedTilesA : placedTilesB;
+            ClearMap(world == WorldId.A ? placedTilesA : placedTilesB);
+        }
+
+        private static void ClearMap(Dictionary<Vector2Int, PlacedTile> map)
+        {
+            if (map == null)
+                return;
+
             foreach (PlacedTile t in map.Values)
             {
                 if (t.instance != null)
@@ -535,10 +905,11 @@ namespace BokeGameJam.LevelEditor
             map.Clear();
         }
 
-        private void ClearBothWorlds()
+        private void ClearAllLayers()
         {
             ClearWorldTiles(WorldId.A);
             ClearWorldTiles(WorldId.B);
+            ClearMap(placedTilesShared);
         }
 
         // ---------- 保存 / 加载 ----------
@@ -553,6 +924,7 @@ namespace BokeGameJam.LevelEditor
 
             AppendTiles(data.tilesA, placedTilesA);
             AppendTiles(data.tilesB, placedTilesB);
+            AppendTiles(data.tilesShared, placedTilesShared);
 
             try
             {
@@ -562,8 +934,10 @@ namespace BokeGameJam.LevelEditor
                     Directory.CreateDirectory(directory);
 
                 File.WriteAllText(path, LevelData.ToJson(data));
-                SetStatus($"已保存 A:{data.tilesA.Count} B:{data.tilesB.Count} → {Path.GetFileName(path)}");
-                Debug.Log($"[LevelEditor] 已保存 A={data.tilesA.Count} B={data.tilesB.Count} → {path}");
+                SetStatus(
+                    $"已保存 A:{data.tilesA.Count} B:{data.tilesB.Count} S:{data.tilesShared.Count} → {Path.GetFileName(path)}");
+                Debug.Log(
+                    $"[LevelEditor] 已保存 A={data.tilesA.Count} B={data.tilesB.Count} Shared={data.tilesShared.Count} → {path}");
             }
             catch (System.Exception ex)
             {
@@ -575,7 +949,7 @@ namespace BokeGameJam.LevelEditor
         private static void AppendTiles(List<LevelData.TileEntry> list, Dictionary<Vector2Int, PlacedTile> map)
         {
             foreach (KeyValuePair<Vector2Int, PlacedTile> kv in map)
-                list.Add(new LevelData.TileEntry(kv.Key.x, kv.Key.y, kv.Value.tileId));
+                list.Add(CaptureTileEntry(kv.Key, kv.Value));
         }
 
         /// <summary>手动加载：找不到文件会弹警告。</summary>
@@ -623,8 +997,11 @@ namespace BokeGameJam.LevelEditor
             {
                 LevelData data = LevelData.FromJson(json);
                 ApplyLevelData(data);
-                SetStatus($"已加载 A:{data.tilesA.Count} B:{data.tilesB.Count} ← {Path.GetFileName(sourceLabel)}");
-                Debug.Log($"[LevelEditor] 已加载 A={data.tilesA.Count} B={data.tilesB.Count} ← {sourceLabel}");
+                int sharedCount = data.tilesShared?.Count ?? 0;
+                SetStatus(
+                    $"已加载 A:{data.tilesA.Count} B:{data.tilesB.Count} S:{sharedCount} ← {Path.GetFileName(sourceLabel)}");
+                Debug.Log(
+                    $"[LevelEditor] 已加载 A={data.tilesA.Count} B={data.tilesB.Count} Shared={sharedCount} ← {sourceLabel}");
             }
             catch (System.Exception ex)
             {
@@ -633,31 +1010,35 @@ namespace BokeGameJam.LevelEditor
             }
         }
 
-        /// <summary>把 LevelData 应用到场景（会先清空双世界地块）。</summary>
+        /// <summary>把 LevelData 应用到场景（会先清空全部层）。</summary>
         public void ApplyLevelData(LevelData data)
         {
-            ClearBothWorlds();
+            ClearAllLayers();
             if (data == null)
                 return;
 
             LevelData.Normalize(data);
 
             int savedIndex = currentPaletteIndex;
-            SpawnTiles(data.tilesA, WorldId.A);
-            SpawnTiles(data.tilesB, WorldId.B);
+            SpawnTiles(data.tilesA, placedTilesA, tilesRootA, LevelLayer.A);
+            SpawnTiles(data.tilesB, placedTilesB, tilesRootB, LevelLayer.B);
+            SpawnTiles(data.tilesShared, placedTilesShared, tilesRootShared, LevelLayer.Shared);
             currentPaletteIndex = Mathf.Clamp(savedIndex, 0, Mathf.Max(0, tilePalette.Count - 1));
+            SyncPaintLayerFromBrush();
 
             RefreshWorldVisibility();
         }
 
-        private void SpawnTiles(List<LevelData.TileEntry> entries, WorldId world)
+        private void SpawnTiles(
+            List<LevelData.TileEntry> entries,
+            Dictionary<Vector2Int, PlacedTile> map,
+            Transform root,
+            LevelLayer layer)
         {
-            if (entries == null)
+            if (entries == null || map == null || root == null)
                 return;
 
-            Dictionary<Vector2Int, PlacedTile> map = world == WorldId.A ? placedTilesA : placedTilesB;
-            Transform root = world == WorldId.A ? tilesRootA : tilesRootB;
-
+            string layerLabel = LayerLabel(layer);
             foreach (LevelData.TileEntry entry in entries)
             {
                 int idx = FindPaletteIndex(entry.tileId);
@@ -676,7 +1057,8 @@ namespace BokeGameJam.LevelEditor
                     Destroy(existing.instance);
 
                 GameObject instance = Instantiate(palette.prefab, CellToWorld(cell), Quaternion.identity, root);
-                instance.name = $"Tile_{WorldLabel(world)}_{entry.tileId}_{cell.x}_{cell.y}";
+                instance.name = $"Tile_{layerLabel}_{entry.tileId}_{cell.x}_{cell.y}";
+                ApplyTileEntryConfig(instance, entry, layer);
                 map[cell] = new PlacedTile { tileId = entry.tileId, instance = instance };
             }
         }
@@ -777,11 +1159,63 @@ namespace BokeGameJam.LevelEditor
                     if (GUILayout.Button($"{prefix}{hotkey}{displayName}", style))
                     {
                         currentPaletteIndex = i;
+                        SyncPaintLayerFromBrush();
                         DestroyCursorPreview();
                     }
                 }
             }
             GUILayout.EndScrollView();
+
+            GUILayout.Space(6);
+            GUILayout.Label("所属层级", headerStyle);
+            GUILayout.BeginHorizontal(boxStyle);
+            if (GUILayout.Toggle(paintLevelLayer == LevelLayer.A, "A", GUILayout.Width(50)))
+                paintLevelLayer = LevelLayer.A;
+            if (GUILayout.Toggle(paintLevelLayer == LevelLayer.B, "B", GUILayout.Width(50)))
+                paintLevelLayer = LevelLayer.B;
+            if (GUILayout.Toggle(paintLevelLayer == LevelLayer.Shared, "Shared", GUILayout.Width(70)))
+                paintLevelLayer = LevelLayer.Shared;
+            GUILayout.EndHorizontal();
+            GUILayout.Label("放置进所选层级；prefab 默认值会在切换画笔时同步", mutedStyle);
+
+            if (CurrentBrushIsInteractable())
+            {
+                GUILayout.Space(6);
+                GUILayout.Label("Interactable 配置", headerStyle);
+                GUILayout.BeginVertical(boxStyle);
+
+                GUILayout.BeginHorizontal();
+                GUILayout.Label("mechanismId", GUILayout.Width(110));
+                paintMechanismId = GUILayout.TextField(paintMechanismId ?? string.Empty);
+                GUILayout.EndHorizontal();
+
+                if (CurrentBrushHasSequenceFields())
+                {
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Label("sequenceGroupId", GUILayout.Width(110));
+                    paintSequenceGroupId = GUILayout.TextField(paintSequenceGroupId ?? string.Empty);
+                    GUILayout.EndHorizontal();
+
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Label("sequenceIndex", GUILayout.Width(110));
+                    paintSequenceIndexText = GUILayout.TextField(paintSequenceIndexText ?? "0");
+                    GUILayout.EndHorizontal();
+
+                    GUILayout.Label("同类型再刷可更新已放置物体的配置", mutedStyle);
+                }
+                else if (CurrentBrushIsGhost())
+                {
+                    GUILayout.Label("dialogueText", mutedStyle);
+                    paintDialogueText = GUILayout.TextArea(paintDialogueText ?? string.Empty, GUILayout.Height(54));
+                    GUILayout.Label("D（鬼魂）：可反复对话；每关建议只放一个", mutedStyle);
+                }
+                else
+                {
+                    GUILayout.Label("A/C：只需 mechanismId；同类型再刷可更新", mutedStyle);
+                }
+
+                GUILayout.EndVertical();
+            }
 
             GUILayout.Space(8);
 
@@ -790,7 +1224,7 @@ namespace BokeGameJam.LevelEditor
             if (GUILayout.Button("保存", GUILayout.Height(26))) Save();
             if (GUILayout.Button("加载", GUILayout.Height(26))) Load();
             GUILayout.EndHorizontal();
-            if (GUILayout.Button($"清空世界 {WorldLabel(activeWorld)}", GUILayout.Height(24))) ClearAllTiles();
+            if (GUILayout.Button($"清空层级 {LayerLabel(paintLevelLayer)}", GUILayout.Height(24))) ClearAllTiles();
 
             GUILayout.Space(6);
 
@@ -803,6 +1237,8 @@ namespace BokeGameJam.LevelEditor
                 GUILayout.Label("鼠标滚轮 · 缩放视野", mutedStyle);
                 GUILayout.Label("WASD / 方向键 · 移动相机", mutedStyle);
                 GUILayout.Label("Shift · 切换世界 A/B", mutedStyle);
+                GUILayout.Label("所属层级 · A/B/Shared（prefab 可默认）", mutedStyle);
+                GUILayout.Label("Alt + 左键拖拽 · 移动共享层物体", mutedStyle);
                 GUILayout.Label("数字键 1-9 · 选择地块", mutedStyle);
                 GUILayout.EndVertical();
             }
@@ -811,7 +1247,9 @@ namespace BokeGameJam.LevelEditor
             GUILayout.BeginVertical(boxStyle);
             GUILayout.Label($"场景: {SceneManager.GetActiveScene().name}", mutedStyle);
             GUILayout.Label($"地图: {Path.GetFileName(SaveFilePath)}", mutedStyle);
-            GUILayout.Label($"地块: A={placedTilesA.Count}  B={placedTilesB.Count}", mutedStyle);
+            GUILayout.Label(
+                $"地块: A={placedTilesA.Count}  B={placedTilesB.Count}  S={placedTilesShared.Count}",
+                mutedStyle);
             if (!string.IsNullOrWhiteSpace(overrideFileName))
                 GUILayout.Label("（已用 overrideFileName 覆盖场景名）", mutedStyle);
             GUILayout.EndVertical();

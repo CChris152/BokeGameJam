@@ -143,6 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2c3d4e5f6a74899a0b1c2d3e4f50618, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelLayer: 2
   mechanismId: 
   displayName: 
   iconOverride: {fileID: 0}

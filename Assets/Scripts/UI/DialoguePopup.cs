@@ -1,0 +1,250 @@
+using UnityEngine;
+using UnityEngine.UI;
+using BokeGameJam.Input;
+using BokeGameJam.Core;
+
+namespace BokeGameJam.UI
+{
+    /// <summary>
+    /// Screen Space 对话框：挂到 UI 层，用世界坐标转屏幕坐标跟随目标。
+    /// 按 E / 鼠标左键 / Esc 关闭。
+    /// </summary>
+    public sealed class DialoguePopup : MonoBehaviour
+    {
+        private static DialoguePopup openInstance;
+        private static int suppressInteractUntilFrame = -1;
+
+        [Header("UI")]
+        [SerializeField] private RectTransform panelRect;
+        [SerializeField] private Text speakerLabel;
+        [SerializeField] private Text bodyLabel;
+        [SerializeField] private int speakerFontSize = 22;
+        [SerializeField] private int bodyFontSize = 20;
+
+        [Header("Follow")]
+        [SerializeField] private Transform worldAnchor;
+        [SerializeField] private Vector3 worldOffset = new(0f, 1.2f, 0f);
+        [SerializeField] private Vector2 screenOffset = new(0f, 40f);
+
+        private Transform originalParent;
+        private bool isOpen;
+        private Canvas rootCanvas;
+        private Camera uiCamera;
+
+        public static bool IsOpen => openInstance != null && openInstance.isOpen;
+
+        /// <summary>打开中，或本帧刚关闭（防止 E 关掉又立刻打开）。</summary>
+        public static bool BlocksInteract =>
+            IsOpen || Time.frameCount <= suppressInteractUntilFrame;
+
+        public static void Hide()
+        {
+            if (openInstance != null)
+                openInstance.Close();
+        }
+
+        private void Awake()
+        {
+            if (panelRect == null)
+                panelRect = GetComponent<RectTransform>();
+
+            CacheLabels();
+            ApplyFontSizes();
+
+            originalParent = transform.parent;
+            // Prefab 默认 inactive；不要在 Awake 里 SetActive(false)。
+        }
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (panelRect == null)
+                panelRect = GetComponent<RectTransform>();
+            CacheLabels();
+            ApplyFontSizes();
+        }
+#endif
+
+        private void CacheLabels()
+        {
+            if (speakerLabel == null)
+            {
+                Transform t = transform.Find("Speaker");
+                if (t != null)
+                    speakerLabel = t.GetComponent<Text>();
+            }
+
+            if (bodyLabel == null)
+            {
+                Transform t = transform.Find("Body");
+                if (t != null)
+                    bodyLabel = t.GetComponent<Text>();
+            }
+        }
+
+        private void ApplyFontSizes()
+        {
+            if (speakerLabel != null)
+                speakerLabel.fontSize = Mathf.Max(1, speakerFontSize);
+
+            if (bodyLabel != null)
+                bodyLabel.fontSize = Mathf.Max(1, bodyFontSize);
+        }
+
+        private void OnEnable()
+        {
+            EventManager.On(InputEvents.PlayerInteractPressed, OnInteractOrClose);
+        }
+
+        private void OnDisable()
+        {
+            EventManager.Off(InputEvents.PlayerInteractPressed, OnInteractOrClose);
+            if (openInstance == this)
+            {
+                isOpen = false;
+                openInstance = null;
+            }
+        }
+
+        private void LateUpdate()
+        {
+            if (!isOpen)
+                return;
+
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Escape)
+                || UnityEngine.Input.GetMouseButtonDown(0))
+            {
+                Close();
+                return;
+            }
+
+            UpdateScreenPosition();
+        }
+
+        /// <summary>显示对话，并跟随世界锚点投影到 UI。</summary>
+        public void Show(string speaker, string body, Transform anchor = null)
+        {
+            if (openInstance != null && openInstance != this)
+                openInstance.Close();
+
+            if (anchor != null)
+                worldAnchor = anchor;
+            else if (worldAnchor == null && originalParent != null)
+                worldAnchor = originalParent;
+
+            CacheLabels();
+            ApplyFontSizes();
+
+            if (speakerLabel != null)
+                speakerLabel.text = string.IsNullOrWhiteSpace(speaker) ? string.Empty : speaker.Trim();
+
+            if (bodyLabel != null)
+                bodyLabel.text = body ?? string.Empty;
+
+            AttachToUiRoot();
+            isOpen = true;
+            openInstance = this;
+            gameObject.SetActive(true);
+            UpdateScreenPosition();
+        }
+
+        public void Close()
+        {
+            isOpen = false;
+            if (openInstance == this)
+                openInstance = null;
+
+            suppressInteractUntilFrame = Time.frameCount;
+            RestoreOriginalParent();
+            gameObject.SetActive(false);
+        }
+
+        private void OnInteractOrClose()
+        {
+            if (isOpen)
+                Close();
+        }
+
+        private void AttachToUiRoot()
+        {
+            Transform uiRoot = UIManager.Instance != null ? UIManager.Instance.UIRoot : null;
+            if (uiRoot == null)
+            {
+                Debug.LogWarning("[DialoguePopup] UIManager.UIRoot 未找到，对话框留在原父节点。", this);
+                rootCanvas = GetComponentInParent<Canvas>();
+                uiCamera = null;
+                return;
+            }
+
+            if (transform.parent != uiRoot)
+                transform.SetParent(uiRoot, false);
+
+            transform.SetAsLastSibling();
+            rootCanvas = uiRoot.GetComponentInParent<Canvas>();
+            uiCamera = rootCanvas != null && rootCanvas.renderMode != RenderMode.ScreenSpaceOverlay
+                ? rootCanvas.worldCamera
+                : null;
+
+            if (panelRect != null)
+            {
+                panelRect.anchorMin = new Vector2(0.5f, 0.5f);
+                panelRect.anchorMax = new Vector2(0.5f, 0.5f);
+                panelRect.pivot = new Vector2(0.5f, 0f);
+                panelRect.localScale = Vector3.one;
+                panelRect.localRotation = Quaternion.identity;
+            }
+        }
+
+        private void RestoreOriginalParent()
+        {
+            if (originalParent == null || transform.parent == originalParent)
+                return;
+
+            transform.SetParent(originalParent, false);
+            if (panelRect != null)
+            {
+                panelRect.anchoredPosition = Vector2.zero;
+                panelRect.localScale = Vector3.one;
+            }
+        }
+
+        private void UpdateScreenPosition()
+        {
+            if (panelRect == null || worldAnchor == null)
+                return;
+
+            Camera worldCam = Camera.main;
+            if (worldCam == null)
+                return;
+
+            Vector3 worldPos = worldAnchor.position + worldOffset;
+            Vector3 screenPos = worldCam.WorldToScreenPoint(worldPos);
+
+            // 在相机后方则移出屏幕
+            if (screenPos.z < 0f)
+            {
+                panelRect.anchoredPosition = new Vector2(-99999f, -99999f);
+                return;
+            }
+
+            screenPos.x += screenOffset.x;
+            screenPos.y += screenOffset.y;
+
+            RectTransform parentRect = panelRect.parent as RectTransform;
+            if (parentRect == null)
+            {
+                panelRect.position = screenPos;
+                return;
+            }
+
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                    parentRect,
+                    screenPos,
+                    uiCamera,
+                    out Vector2 localPoint))
+            {
+                panelRect.anchoredPosition = localPoint;
+            }
+        }
+    }
+}

@@ -34,6 +34,17 @@ namespace BokeGameJam.Gameplay
 
         public override InteractMode Mode => InteractMode.Trigger;
         public bool IsActivated => activated;
+        public string SequenceGroupId => sequenceGroupId != null ? sequenceGroupId.Trim() : string.Empty;
+        public int SequenceIndex => sequenceIndex;
+
+        public override void ApplyEditorConfig(string newMechanismId, string newSequenceGroupId = null, int newSequenceIndex = 0)
+        {
+            UnregisterFromGroup();
+            base.ApplyEditorConfig(newMechanismId, newSequenceGroupId, newSequenceIndex);
+            sequenceGroupId = newSequenceGroupId != null ? newSequenceGroupId.Trim() : string.Empty;
+            sequenceIndex = newSequenceIndex;
+            RegisterToGroup();
+        }
 
         /// <summary>
         /// 同 mechanismId 的 B 是否已成功触发（独立开关已激活，或序列组全部激活/等待复位中）。

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8536509480699414600}
   - component: {fileID: 3478538001813215154}
   - component: {fileID: 2830699868699341729}
+  - component: {fileID: 9100112233445566772}
   m_Layer: 3
   m_Name: BGround
   m_TagString: Untagged
@@ -130,3 +131,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &9100112233445566772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7585595358450954682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e0f3c4d5a6b6071c8d9e0f1a2b3c405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelLayer: 1

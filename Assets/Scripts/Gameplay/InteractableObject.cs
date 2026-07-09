@@ -11,9 +11,10 @@ namespace BokeGameJam.Gameplay
     /// <summary>
     /// 可交互物体基类。默认可捡起；子类可改为 Trigger 模式。
     /// mechanismId 用于把同一机制下的 A/B/C 绑在一起，避免多机制交叉。
+    /// 所属层级由 <see cref="LevelObject.LevelLayer"/> 决定（Shared / A / B）。
     /// </summary>
     [RequireComponent(typeof(Collider2D))]
-    public class InteractableObject : MonoBehaviour
+    public class InteractableObject : LevelObject
     {
         [SerializeField] private string mechanismId;
         [SerializeField] private string displayName;
@@ -35,6 +36,12 @@ namespace BokeGameJam.Gameplay
 
         protected Collider2D Col => col;
         protected SpriteRenderer SpriteRenderer => spriteRenderer;
+
+        /// <summary>关卡编辑器写入配置；子类可覆盖以处理序列字段。</summary>
+        public virtual void ApplyEditorConfig(string newMechanismId, string sequenceGroupId = null, int sequenceIndex = 0)
+        {
+            mechanismId = newMechanismId != null ? newMechanismId.Trim() : string.Empty;
+        }
 
         protected virtual void Awake()
         {
