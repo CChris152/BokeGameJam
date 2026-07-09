@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using BokeGameJam.Levels;
 using BokeGameJam.UI;
 
@@ -42,6 +41,13 @@ namespace BokeGameJam.Core
 
         [Tooltip("主菜单点开始时加载的场景名（需与 Build Settings 一致）。")]
         [SerializeField] private string startSceneName = "Level1";
+
+        [Header("Level Playing UI")]
+        [Tooltip("进入 LevelPlaying 时通过 UIManager 加载的 UI resourceId 列表。")]
+        [SerializeField] private List<string> levelPlayingUiIds = new() { "InventorySlot" };
+
+        [Tooltip("离开关卡（回主菜单等）时关闭的 UI resourceId 列表。")]
+        [SerializeField] private List<string> uiToCloseOnLevelExit = new() { "InventorySlot" };
 
         [Header("Options")]
         [SerializeField] private bool dontDestroyOnLoad = true;
@@ -171,22 +177,66 @@ namespace BokeGameJam.Core
 
         private void HandleStateTransition(GameState prev, GameState next)
         {
-            // 离开 LevelPlaying：禁用 ESC 暂停
+            // 离开 LevelPlaying：禁用 ESC 暂停，并关闭关卡 HUD
             if (prev == GameState.LevelPlaying && next != GameState.LevelPlaying)
             {
                 SetEscPauseEnabled(false);
+                CloseLevelPlayingUIs();
             }
 
             switch (next)
             {
                 case GameState.MainMenu:
                     SetEscPauseEnabled(false);
+                    CloseLevelPlayingUIs();
                     break;
 
                 case GameState.LevelPlaying:
-                    // 关卡进行中允许玩家按 ESC 打开暂停菜单
+                    // 关卡进行中允许玩家按 ESC 打开暂停菜单，并加载持有物 HUD
                     SetEscPauseEnabled(true);
+                    LoadLevelPlayingUIs();
                     break;
+            }
+        }
+
+        private static void LoadLevelPlayingUIs()
+        {
+            if (Instance == null || UIManager.Instance == null)
+            {
+                Debug.LogWarning("[GameManager] UIManager missing, cannot load level playing UIs.");
+                return;
+            }
+
+            List<string> ids = Instance.levelPlayingUiIds;
+            if (ids == null)
+                return;
+
+            for (int i = 0; i < ids.Count; i++)
+            {
+                string id = ids[i];
+                if (string.IsNullOrWhiteSpace(id))
+                    continue;
+
+                UIManager.Instance.Load(id.Trim());
+            }
+        }
+
+        private static void CloseLevelPlayingUIs()
+        {
+            if (Instance == null || UIManager.Instance == null)
+                return;
+
+            List<string> ids = Instance.uiToCloseOnLevelExit;
+            if (ids == null)
+                return;
+
+            for (int i = 0; i < ids.Count; i++)
+            {
+                string id = ids[i];
+                if (string.IsNullOrWhiteSpace(id))
+                    continue;
+
+                UIManager.Instance.Close(id.Trim());
             }
         }
 
