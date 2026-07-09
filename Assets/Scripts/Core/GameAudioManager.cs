@@ -11,11 +11,14 @@ namespace BokeGameJam.Core
     {
         public static GameAudioManager Instance { get; private set; }
 
-        [Header("Volume")]
+        [Header("音量")]
+        [Tooltip("BGM 主音量（0-1）")]
         [Range(0f, 1f)] [SerializeField] private float bgmVolume = 0.6f;
+        [Tooltip("SFX 主音量（0-1）")]
         [Range(0f, 1f)] [SerializeField] private float sfxVolume = 1f;
 
-        [Header("BGM Switch")]
+        [Header("BGM 切换")]
+        [Tooltip("切换 BGM 时的默认淡入淡出时长（秒）")]
         [SerializeField] private float defaultBgmFadeDuration = 0.5f;
 
         private AudioSource bgmSourceA;
@@ -55,11 +58,12 @@ namespace BokeGameJam.Core
 
         private void Start()
         {
+            // 启动时从 DataManager 恢复已保存的主音量
             LoadVolumesFromDataManager();
         }
 
         /// <summary>
-        /// 从 DataManager 加载共用主音量，并应用到 BGM 与 SFX。
+        /// 从 DataManager 读取共用主音量（MasterVolume），并同时应用到 BGM 与 SFX。
         /// </summary>
         public void LoadVolumesFromDataManager()
         {

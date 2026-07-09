@@ -14,8 +14,11 @@ namespace BokeGameJam.UI
         [Header("UI Root")]
         [Tooltip("在预制体上绑定 Canvas / UIRoot；未绑定则 Load 会失败。")]
         [SerializeField] private Transform uiRoot;
+
+        [Tooltip("是否跨场景保留本管理器。")]
         [SerializeField] private bool dontDestroyOnLoad = true;
 
+        /// <summary>已加载 UI 实例缓存：key 为资源 id，value 为场景中的实例。</summary>
         private readonly Dictionary<string, GameObject> loadedUIs = new();
 
         public Transform UIRoot => uiRoot;
