@@ -17,6 +17,8 @@ MonoBehaviour:
     prefab: {fileID: 2786470126588296549, guid: 511fc8a750819684c9d0b7a2417b3f49, type: 3}
   - id: PauseMenu
     prefab: {fileID: 1153020896921941970, guid: ec9071b2963294441b37810cb9d58761, type: 3}
+  - id: InventorySlot
+    prefab: {fileID: 3042768390086393676, guid: d07f4657beae81341b9441a59d1ab041, type: 3}
   prefabs:
   - id: Player
     prefab: {fileID: 4094095531222265388, guid: 25d3d4678dec73b469ab53ea4996aaf9, type: 3}
@@ -28,9 +30,6 @@ MonoBehaviour:
   - id: StartScene
     sceneAsset: {fileID: 102900000, guid: 8c9cfa26abfee488c85f1582747f6a02, type: 3}
     sceneName: StartScene
-  - id: SelectScene
-    sceneAsset: {fileID: 102900000, guid: a7d9870980654cd4dbbc240ad1d45680, type: 3}
-    sceneName: SelectScene
   - id: Level1
     sceneAsset: {fileID: 102900000, guid: 26a0a8c6f00614a4db8228df6dd4e2be, type: 3}
     sceneName: Level1

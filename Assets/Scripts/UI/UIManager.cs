@@ -1,31 +1,24 @@
 using System.Collections.Generic;
 using BokeGameJam.Core;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace BokeGameJam.UI
 {
     /// <summary>
-    /// 运行时 UI 管理器。UI 预制体引用通过 ResourcesManager 解析。
+    /// 运行时 UI 管理器。按 ResourceDefinitionDatabase 的 resourceId 加载/关闭 UI。
     /// </summary>
     public class UIManager : MonoBehaviour
     {
         public static UIManager Instance { get; private set; }
 
         [Header("UI Root")]
+        [Tooltip("在预制体上绑定 Canvas / UIRoot；未绑定则 Load 会失败。")]
         [SerializeField] private Transform uiRoot;
         [SerializeField] private bool dontDestroyOnLoad = true;
 
         private readonly Dictionary<string, GameObject> loadedUIs = new();
 
-        public Transform UIRoot
-        {
-            get
-            {
-                EnsureUIRoot();
-                return uiRoot;
-            }
-        }
+        public Transform UIRoot => uiRoot;
 
         private void Awake()
         {
@@ -40,31 +33,25 @@ namespace BokeGameJam.UI
             if (dontDestroyOnLoad)
                 DontDestroyOnLoad(gameObject);
 
-            EnsureUIRoot();
+            if (uiRoot == null)
+                Debug.LogError("[UIManager] uiRoot 未绑定，请在 UIManager 预制体上指定 Canvas/UIRoot。", this);
         }
 
-        /// <summary>
-        /// 按需加载 UI 预制体并显示。
-        /// </summary>
-        public GameObject LoadUI(ResourceDefinitionDatabase.UIResource uiResource)
+        /// <summary>按 resourceId 加载并显示 UI；已加载则重新激活并置顶。</summary>
+        public GameObject Load(string resourceId)
         {
-            return LoadUI(uiResource, UIRoot);
-        }
-
-        /// <summary>
-        /// 按需在给定父节点下加载 UI 预制体并显示。
-        /// </summary>
-        public GameObject LoadUI(ResourceDefinitionDatabase.UIResource uiResource, Transform parent)
-        {
-            string cacheKey = GetUIId(uiResource);
-            if (string.IsNullOrEmpty(cacheKey))
+            string id = NormalizeId(resourceId);
+            if (string.IsNullOrEmpty(id))
+            {
+                Debug.LogError("[UIManager] resourceId is empty.", this);
                 return null;
+            }
 
-            if (loadedUIs.TryGetValue(cacheKey, out GameObject cachedUI))
+            if (loadedUIs.TryGetValue(id, out GameObject cachedUI))
             {
                 if (cachedUI == null)
                 {
-                    loadedUIs.Remove(cacheKey);
+                    loadedUIs.Remove(id);
                 }
                 else
                 {
@@ -74,158 +61,40 @@ namespace BokeGameJam.UI
                 }
             }
 
+            if (uiRoot == null)
+            {
+                Debug.LogError($"[UIManager] Cannot load '{id}': uiRoot is not assigned.", this);
+                return null;
+            }
+
+            if (!ResourcesManager.TryGetUI(id, out ResourceDefinitionDatabase.UIResource uiResource))
+            {
+                Debug.LogError($"[UIManager] Cannot find UI resource id: {id}", this);
+                return null;
+            }
+
             GameObject prefab = ResourcesManager.LoadUI(uiResource);
             if (prefab == null)
                 return null;
 
-            Transform targetParent = parent != null ? parent : UIRoot;
-            GameObject uiInstance = Instantiate(prefab, targetParent, false);
-            uiInstance.name = cacheKey;
+            GameObject uiInstance = Instantiate(prefab, uiRoot, false);
+            uiInstance.name = id;
             uiInstance.SetActive(true);
-            loadedUIs[cacheKey] = uiInstance;
-
+            loadedUIs[id] = uiInstance;
             return uiInstance;
         }
 
-        public GameObject LoadUIById(string uiId)
+        /// <summary>销毁已加载的 UI 实例。</summary>
+        public bool Close(string resourceId)
         {
-            return LoadUIById(uiId, UIRoot);
-        }
-
-        public GameObject LoadUIById(string uiId, Transform parent)
-        {
-            if (!ResourcesManager.TryGetUI(uiId, out ResourceDefinitionDatabase.UIResource uiResource))
-            {
-                Debug.LogError($"[UIManager] Cannot find UI resource id: {uiId}");
-                return null;
-            }
-
-            return LoadUI(uiResource, parent);
-        }
-
-        public T LoadUI<T>(ResourceDefinitionDatabase.UIResource uiResource) where T : Component
-        {
-            GameObject ui = LoadUI(uiResource);
-            return ui != null ? ui.GetComponent<T>() : null;
-        }
-
-        public T LoadUIById<T>(string uiId) where T : Component
-        {
-            GameObject ui = LoadUIById(uiId);
-            return ui != null ? ui.GetComponent<T>() : null;
-        }
-
-        public bool HideUI(ResourceDefinitionDatabase.UIResource uiResource)
-        {
-            if (!TryGetLoadedUI(uiResource, out GameObject ui))
+            string id = NormalizeId(resourceId);
+            if (string.IsNullOrEmpty(id))
                 return false;
 
-            ui.SetActive(false);
-            return true;
-        }
-
-        public bool HideUIById(string uiId)
-        {
-            if (!TryGetLoadedUIById(uiId, out GameObject ui))
+            if (!loadedUIs.TryGetValue(id, out GameObject ui))
                 return false;
 
-            ui.SetActive(false);
-            return true;
-        }
-
-        public bool CloseUI(ResourceDefinitionDatabase.UIResource uiResource)
-        {
-            string cacheKey = GetUIId(uiResource);
-            return CloseUIByCacheKey(cacheKey);
-        }
-
-        public bool CloseUIById(string uiId)
-        {
-            return CloseUIByCacheKey(NormalizeId(uiId));
-        }
-
-        public void HideAllUI()
-        {
-            foreach (GameObject ui in loadedUIs.Values)
-            {
-                if (ui != null)
-                    ui.SetActive(false);
-            }
-        }
-
-        public void CloseAllUI()
-        {
-            foreach (GameObject ui in loadedUIs.Values)
-            {
-                if (ui != null)
-                    Destroy(ui);
-            }
-
-            loadedUIs.Clear();
-        }
-
-        public bool TryGetLoadedUI(ResourceDefinitionDatabase.UIResource uiResource, out GameObject ui)
-        {
-            string cacheKey = GetUIId(uiResource);
-            return TryGetLoadedUIByCacheKey(cacheKey, out ui);
-        }
-
-        public bool TryGetLoadedUIById(string uiId, out GameObject ui)
-        {
-            return TryGetLoadedUIByCacheKey(NormalizeId(uiId), out ui);
-        }
-
-        public T GetLoadedUI<T>(ResourceDefinitionDatabase.UIResource uiResource) where T : Component
-        {
-            return TryGetLoadedUI(uiResource, out GameObject ui) ? ui.GetComponent<T>() : null;
-        }
-
-        public T GetLoadedUIById<T>(string uiId) where T : Component
-        {
-            return TryGetLoadedUIById(uiId, out GameObject ui) ? ui.GetComponent<T>() : null;
-        }
-
-        public bool IsUIVisible(ResourceDefinitionDatabase.UIResource uiResource)
-        {
-            return TryGetLoadedUI(uiResource, out GameObject ui) && ui.activeSelf;
-        }
-
-        public bool IsUIVisibleById(string uiId)
-        {
-            return TryGetLoadedUIById(uiId, out GameObject ui) && ui.activeSelf;
-        }
-
-        private void EnsureUIRoot()
-        {
-            if (uiRoot != null)
-                return;
-
-            GameObject root = new GameObject("UIRoot");
-            root.transform.SetParent(transform, false);
-
-            Canvas canvas = root.AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            canvas.sortingOrder = 100;
-
-            CanvasScaler canvasScaler = root.AddComponent<CanvasScaler>();
-            canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            canvasScaler.referenceResolution = new Vector2(1920f, 1080f);
-            canvasScaler.matchWidthOrHeight = 0.5f;
-
-            root.AddComponent<GraphicRaycaster>();
-
-            uiRoot = root.transform;
-        }
-
-        private bool CloseUIByCacheKey(string cacheKey)
-        {
-            if (string.IsNullOrEmpty(cacheKey))
-                return false;
-
-            if (!loadedUIs.TryGetValue(cacheKey, out GameObject ui))
-                return false;
-
-            loadedUIs.Remove(cacheKey);
+            loadedUIs.Remove(id);
 
             if (ui != null)
                 Destroy(ui);
@@ -233,41 +102,17 @@ namespace BokeGameJam.UI
             return true;
         }
 
-        private bool TryGetLoadedUIByCacheKey(string cacheKey, out GameObject ui)
+        /// <summary>已加载且当前激活则为 true。</summary>
+        public bool IsVisible(string resourceId)
         {
-            if (string.IsNullOrEmpty(cacheKey))
-            {
-                ui = null;
-                return false;
-            }
-
-            if (!loadedUIs.TryGetValue(cacheKey, out ui))
+            string id = NormalizeId(resourceId);
+            if (string.IsNullOrEmpty(id))
                 return false;
 
-            if (ui != null)
-                return true;
-
-            loadedUIs.Remove(cacheKey);
-            return false;
+            return loadedUIs.TryGetValue(id, out GameObject ui) && ui != null && ui.activeSelf;
         }
 
-        private string GetUIId(ResourceDefinitionDatabase.UIResource uiResource)
-        {
-            if (uiResource == null)
-            {
-                Debug.LogWarning("[UIManager] UI resource is null.");
-                return null;
-            }
-
-            string id = NormalizeId(uiResource.Id);
-            if (!string.IsNullOrEmpty(id))
-                return id;
-
-            Debug.LogWarning("[UIManager] UI resource id is empty.");
-            return null;
-        }
-
-        private string NormalizeId(string id)
+        private static string NormalizeId(string id)
         {
             return string.IsNullOrWhiteSpace(id) ? null : id.Trim();
         }

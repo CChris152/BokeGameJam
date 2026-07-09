@@ -47,13 +47,13 @@ namespace BokeGameJam.UI
                 return;
             }
 
-            if (UIManager.Instance.IsUIVisibleById(PauseMenuController.UiId))
+            if (UIManager.Instance.IsVisible(PauseMenuController.ResourceId))
             {
-                UIManager.Instance.CloseUIById(PauseMenuController.UiId);
+                UIManager.Instance.Close(PauseMenuController.ResourceId);
                 return;
             }
 
-            UIManager.Instance.LoadUIById(PauseMenuController.UiId);
+            UIManager.Instance.Load(PauseMenuController.ResourceId);
         }
 
         public void OpenPauseMenu()
@@ -64,7 +64,7 @@ namespace BokeGameJam.UI
                 return;
             }
 
-            UIManager.Instance.LoadUIById(PauseMenuController.UiId);
+            UIManager.Instance.Load(PauseMenuController.ResourceId);
         }
 
         public void ClosePauseMenu()
@@ -72,7 +72,7 @@ namespace BokeGameJam.UI
             if (UIManager.Instance == null)
                 return;
 
-            UIManager.Instance.CloseUIById(PauseMenuController.UiId);
+            UIManager.Instance.Close(PauseMenuController.ResourceId);
         }
     }
 }

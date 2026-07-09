@@ -9,7 +9,7 @@ namespace BokeGameJam.UI
     /// </summary>
     public class SettingsPanelController : MonoBehaviour
     {
-        public const string UiId = "SettingsPanel";
+        public const string ResourceId = "SettingsPanel";
 
         [SerializeField] private Button clearDataButton;
         [SerializeField] private Button closeButton;
@@ -133,7 +133,7 @@ namespace BokeGameJam.UI
                 return;
             }
 
-            UIManager.Instance.CloseUIById(UiId);
+            UIManager.Instance.Close(ResourceId);
         }
     }
 }

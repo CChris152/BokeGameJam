@@ -13,12 +13,9 @@ namespace BokeGameJam.UI
     /// </summary>
     public class MainMenuController : MonoBehaviour
     {
-        private const string SelectSceneId = "Level1";
-
         [SerializeField] private Button startButton;
         [SerializeField] private Button settingsButton;
         [SerializeField] private Button quitButton;
-        [SerializeField] private ResourceDefinitionDatabase.UIResource settingsPanelResource;
 
         private void Awake()
         {
@@ -41,13 +38,7 @@ namespace BokeGameJam.UI
 
         public void OnStartGameClicked()
         {
-            if (GameSceneManager.Instance == null)
-            {
-                Debug.LogError("[MainMenuController] GameSceneManager instance is missing.", this);
-                return;
-            }
-
-            GameSceneManager.Instance.LoadSceneById(SelectSceneId);
+            EventManager.Emit(GameEvents.GameStartRequested);
         }
 
         public void OnSettingsClicked()
@@ -58,13 +49,7 @@ namespace BokeGameJam.UI
                 return;
             }
 
-            if (settingsPanelResource != null && !string.IsNullOrWhiteSpace(settingsPanelResource.Id))
-            {
-                UIManager.Instance.LoadUI(settingsPanelResource);
-                return;
-            }
-
-            UIManager.Instance.LoadUIById(SettingsPanelController.UiId);
+            UIManager.Instance.Load(SettingsPanelController.ResourceId);
         }
 
         public void OnQuitGameClicked()

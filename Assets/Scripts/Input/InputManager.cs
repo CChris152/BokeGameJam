@@ -114,7 +114,10 @@ namespace BokeGameJam.Input
                 EventManager.Emit(InputEvents.PlayerJumpPressed);
 
             if (UnityEngine.Input.GetKeyDown(interactKey))
+            {
+                Debug.Log($"[InputManager] Interact key '{interactKey}' down → emit PlayerInteractPressed (context={currentContext})");
                 EventManager.Emit(InputEvents.PlayerInteractPressed);
+            }
 
             PollWorldToggle();
         }

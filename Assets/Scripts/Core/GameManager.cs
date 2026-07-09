@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
+using BokeGameJam.Levels;
 using BokeGameJam.UI;
 
 namespace BokeGameJam.Core
@@ -18,7 +20,7 @@ namespace BokeGameJam.Core
     /// <code>
     ///  Boot ─┐
     ///        ├─(MainMenu 场景)─▶ MainMenu
-    ///        ├─(LevelSelected)─▶ LevelLoading
+    ///        ├─(GameStartRequested / LevelSelected)─▶ LevelLoading
     ///        ├─(LevelStarted) ─▶ LevelPlaying    → 加载 InventorySlot HUD
     ///        ├─(LevelCompleted)▶ LevelCompleted  → 只广播事件（暂无结算 UI）
     ///        └─(回主菜单)     ─▶ MainMenu        → 卸载 HUD
@@ -34,20 +36,31 @@ namespace BokeGameJam.Core
         [SerializeField]
         private List<string> mainMenuSceneNames = new() { "StartScene", "MainMenu", "LevelSelect" };
 
-        [Header("按状态需要加载的 UI（ResourceDefinitionDatabase.uiPrefabs 的 id）")]
+        [Header("按状态需要加载的 UI（ResourceDefinitionDatabase.uiPrefabs 的 resourceId）")]
         [Tooltip("进入 LevelPlaying 时加载的 HUD 列表，默认包含物品栏。")]
+        [FormerlySerializedAs("levelPlayingUiIds")]
         [SerializeField]
-        private List<string> levelPlayingUiIds = new() { InventorySlotUI.UiId };
+        private List<string> levelPlayingResourceIds = new() { InventorySlotUI.ResourceId };
 
-        [Tooltip("离开 LevelPlaying 时要卸载（Close）的 UI id。默认与 levelPlayingUiIds 相同。")]
+        [Tooltip("离开 LevelPlaying 时要卸载（Close）的 resourceId。默认与 levelPlayingResourceIds 相同。")]
+        [FormerlySerializedAs("uiToCloseOnLevelExit")]
         [SerializeField]
-        private List<string> uiToCloseOnLevelExit = new() { InventorySlotUI.UiId };
+        private List<string> resourceIdsToCloseOnLevelExit = new() { InventorySlotUI.ResourceId };
+
+        [Header("Start Game")]
+        [Tooltip("主菜单点开始时进入的关卡 id（写入 LevelSelection）。")]
+        [SerializeField] private string startLevelId = "level_1";
+
+        [Tooltip("主菜单点开始时加载的场景名（需与 Build Settings 一致）。")]
+        [SerializeField] private string startSceneName = "Level1";
 
         [Header("Options")]
         [SerializeField] private bool dontDestroyOnLoad = true;
         [SerializeField] private bool logStateChanges = true;
 
-        private GameState state = GameState.Boot;
+        [Header("Runtime (只读)")]
+        [Tooltip("当前游戏流程状态，运行时由事件驱动更新。")]
+        [SerializeField] private GameState state = GameState.Boot;
 
         public GameState State => state;
 
@@ -76,6 +89,7 @@ namespace BokeGameJam.Core
 
         private void OnEnable()
         {
+            EventManager.On(GameEvents.GameStartRequested, OnGameStartRequested);
             EventManager.On<LevelSelection>(GameEvents.LevelSelected, OnLevelSelected);
             EventManager.On<string>(GameEvents.LevelStarted, OnLevelStarted);
             EventManager.On<string>(GameEvents.LevelCompleted, OnLevelCompleted);
@@ -84,6 +98,7 @@ namespace BokeGameJam.Core
 
         private void OnDisable()
         {
+            EventManager.Off(GameEvents.GameStartRequested, OnGameStartRequested);
             EventManager.Off<LevelSelection>(GameEvents.LevelSelected, OnLevelSelected);
             EventManager.Off<string>(GameEvents.LevelStarted, OnLevelStarted);
             EventManager.Off<string>(GameEvents.LevelCompleted, OnLevelCompleted);
@@ -103,6 +118,22 @@ namespace BokeGameJam.Core
         }
 
         // ---------- 事件处理 ----------
+
+        /// <summary>主菜单点开始：确保 LevelManager 在场，再广播 LevelSelected 进入正式开局流。</summary>
+        private void OnGameStartRequested()
+        {
+            if (string.IsNullOrWhiteSpace(startSceneName))
+            {
+                Debug.LogError("[GameManager] startSceneName 为空，无法开始游戏。", this);
+                return;
+            }
+
+            LevelManager.EnsureExists();
+
+            string levelId = string.IsNullOrWhiteSpace(startLevelId) ? startSceneName : startLevelId.Trim();
+            LevelSelection selection = new(levelId, 0, startSceneName.Trim(), string.Empty);
+            EventManager.Emit(GameEvents.LevelSelected, selection);
+        }
 
         private void OnLevelSelected(LevelSelection _)
         {
@@ -154,7 +185,7 @@ namespace BokeGameJam.Core
             // 离开 LevelPlaying：关闭 HUD、禁用 ESC 暂停
             if (prev == GameState.LevelPlaying && next != GameState.LevelPlaying)
             {
-                CloseUIList(uiToCloseOnLevelExit);
+                CloseUIList(resourceIdsToCloseOnLevelExit);
                 SetEscPauseEnabled(false);
             }
 
@@ -162,12 +193,12 @@ namespace BokeGameJam.Core
             {
                 case GameState.MainMenu:
                     // 回主菜单：确保 HUD 关掉、ESC 暂停关闭
-                    CloseUIList(uiToCloseOnLevelExit);
+                    CloseUIList(resourceIdsToCloseOnLevelExit);
                     SetEscPauseEnabled(false);
                     break;
 
                 case GameState.LevelPlaying:
-                    LoadUIList(levelPlayingUiIds);
+                    LoadUIList(levelPlayingResourceIds);
                     // 关卡进行中允许玩家按 ESC 打开暂停菜单
                     SetEscPauseEnabled(true);
                     break;
@@ -215,25 +246,25 @@ namespace BokeGameJam.Core
             return false;
         }
 
-        private static void LoadUIList(List<string> uiIds)
+        private static void LoadUIList(List<string> resourceIds)
         {
-            if (uiIds == null || UIManager.Instance == null) return;
+            if (resourceIds == null || UIManager.Instance == null) return;
 
-            foreach (string id in uiIds)
+            foreach (string id in resourceIds)
             {
                 if (string.IsNullOrWhiteSpace(id)) continue;
-                UIManager.Instance.LoadUIById(id);
+                UIManager.Instance.Load(id);
             }
         }
 
-        private static void CloseUIList(List<string> uiIds)
+        private static void CloseUIList(List<string> resourceIds)
         {
-            if (uiIds == null || UIManager.Instance == null) return;
+            if (resourceIds == null || UIManager.Instance == null) return;
 
-            foreach (string id in uiIds)
+            foreach (string id in resourceIds)
             {
                 if (string.IsNullOrWhiteSpace(id)) continue;
-                UIManager.Instance.CloseUIById(id);
+                UIManager.Instance.Close(id);
             }
         }
     }

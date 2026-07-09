@@ -3,87 +3,94 @@ using BokeGameJam.Core;
 
 namespace BokeGameJam.Gameplay
 {
-    /// <summary>
-    /// 玩家单格持有槽：拾取后持有一件，再按 E 放下。
-    /// </summary>
+    /// <summary>玩家单格持有槽：拾取后持有一件，再按 E 放下。</summary>
     public sealed class PlayerHeldItem : MonoBehaviour
     {
         [Header("Drop")]
         [SerializeField] private Vector2 dropOffset = new(0.6f, 0f);
         [SerializeField] private bool faceAwareDrop = true;
 
-        private HeldItemData held;
+        [Header("Debug")]
+        [SerializeField] private bool traceLogging = true;
 
-        public bool HasItem => held.IsValid;
-        public Sprite HeldIcon => held.Icon;
-        public string HeldDisplayName => held.DisplayName;
+        private GameObject heldPrefab;
+        private Sprite heldIcon;
+        private string heldName;
 
-        private void OnEnable()
+        public bool HasItem => heldPrefab != null;
+        public Sprite HeldIcon => heldIcon;
+        public string HeldDisplayName => heldName;
+
+        private void OnEnable() => EmitChanged();
+
+        public bool TryHold(GameObject prefab, Sprite icon, string displayName)
         {
-            EmitChanged();
-        }
+            Trace(
+                $"TryHold begin holder={Describe(this)} prefab={Describe(prefab)} icon={Describe(icon)} displayName='{displayName ?? string.Empty}' hasItem={HasItem} currentPrefab={Describe(heldPrefab)}");
 
-        public bool TryHold(HeldItemData item)
-        {
-            if (!item.IsValid || HasItem)
+            if (prefab == null)
+            {
+                Trace("TryHold rejected: prefab is null.");
                 return false;
+            }
 
-            held = item;
+            if (HasItem)
+            {
+                Trace($"TryHold rejected: holder already has {Describe(heldPrefab)}.");
+                return false;
+            }
+
+            heldPrefab = prefab;
+            heldIcon = icon;
+            heldName = displayName ?? string.Empty;
+            Trace($"TryHold success holder={Describe(this)} heldPrefab={Describe(heldPrefab)} icon={Describe(heldIcon)} heldName='{heldName}'.");
             EmitChanged();
             return true;
         }
 
         public bool TryDrop()
         {
-            if (!HasItem)
-                return false;
+            Trace(
+                $"TryDrop begin holder={Describe(this)} hasItem={HasItem} heldPrefab={Describe(heldPrefab)} position={transform.position} dropOffset={dropOffset} faceAwareDrop={faceAwareDrop} localScale={transform.localScale}");
 
-            HeldItemData dropping = held;
-            held = default;
-            EmitChanged();
+            if (!HasItem)
+            {
+                Trace("TryDrop rejected: holder has no item.");
+                return false;
+            }
 
             Vector2 offset = dropOffset;
             if (faceAwareDrop && transform.localScale.x < 0f)
                 offset.x = -Mathf.Abs(offset.x);
 
-            Vector3 spawnPos = transform.position + (Vector3)offset;
-            GameObject instance = Instantiate(dropping.DropPrefab, spawnPos, Quaternion.identity);
-            instance.name = dropping.DropPrefab.name;
-            return true;
-        }
+            GameObject instance = Instantiate(heldPrefab, transform.position + (Vector3)offset, Quaternion.identity);
+            instance.name = heldPrefab.name;
+            Trace($"TryDrop spawned instance={Describe(instance)} fromPrefab={Describe(heldPrefab)} spawnPosition={instance.transform.position}.");
 
-        public void Clear()
-        {
-            if (!HasItem)
-                return;
-
-            held = default;
+            heldPrefab = null;
+            heldIcon = null;
+            heldName = null;
+            Trace($"TryDrop cleared holder={Describe(this)} hasItem={HasItem}.");
             EmitChanged();
+            return true;
         }
 
         private void EmitChanged()
         {
-            HeldItemInfo info = HasItem
-                ? new HeldItemInfo(true, held.Icon, held.DisplayName)
-                : HeldItemInfo.Empty;
+            HeldItemInfo info = HasItem ? new HeldItemInfo(true, heldIcon, heldName) : HeldItemInfo.Empty;
+            Trace($"EmitChanged hasItem={info.HasItem} icon={Describe(info.Icon)} displayName='{info.DisplayName}'.");
             EventManager.Emit(GameEvents.HeldItemChanged, info);
         }
-    }
 
-    /// <summary>一次持有所需的数据。</summary>
-    public struct HeldItemData
-    {
-        public Sprite Icon;
-        public GameObject DropPrefab;
-        public string DisplayName;
-
-        public bool IsValid => DropPrefab != null;
-
-        public HeldItemData(Sprite icon, GameObject dropPrefab, string displayName)
+        private void Trace(string message)
         {
-            Icon = icon;
-            DropPrefab = dropPrefab;
-            DisplayName = displayName ?? string.Empty;
+            if (traceLogging)
+                Debug.Log($"[PlayerHeldItem] {message}", this);
+        }
+
+        private static string Describe(Object value)
+        {
+            return value != null ? $"{value.name}#{value.GetInstanceID()}" : "null";
         }
     }
 }

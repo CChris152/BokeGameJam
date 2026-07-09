@@ -5,6 +5,9 @@ namespace BokeGameJam.Core
     /// </summary>
     public static class GameEvents
     {
+        /// <summary>主菜单点击开始游戏（无 payload）</summary>
+        public const string GameStartRequested = "Game.GameStartRequested";
+
         /// <summary>玩家在选关界面选择了某个关卡，payload = <see cref="LevelSelection"/></summary>
         public const string LevelSelected = "Game.LevelSelected";
 

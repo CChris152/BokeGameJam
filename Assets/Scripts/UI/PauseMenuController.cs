@@ -9,7 +9,7 @@ namespace BokeGameJam.UI
     /// </summary>
     public class PauseMenuController : MonoBehaviour
     {
-        public const string UiId = "PauseMenu";
+        public const string ResourceId = "PauseMenu";
         private const string StartSceneId = "StartScene";
 
         [SerializeField] private Button returnToMainMenuButton;
@@ -146,7 +146,7 @@ namespace BokeGameJam.UI
                 return;
             }
 
-            UIManager.Instance.CloseUIById(UiId);
+            UIManager.Instance.Close(ResourceId);
         }
     }
 }

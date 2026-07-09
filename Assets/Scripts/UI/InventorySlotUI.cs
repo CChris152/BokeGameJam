@@ -16,11 +16,11 @@ namespace BokeGameJam.UI
     ///    - SlotBackground (可选): Image，作为底框，绑到 <see cref="slotBackground"/>
     ///    - IconImage (必需): Image，展示物品图标，绑到 <see cref="iconImage"/>
     ///    - NameLabel (可选): Text 或 TMP_Text，绑到 <see cref="nameLabel"/>；用于显示物品名
-    /// 3. 在 ResourceDefinitionDatabase.uiPrefabs 里以 id "InventorySlot" 登记该预制体。
+    /// 3. 在 ResourceDefinitionDatabase.uiPrefabs 里以 resourceId "InventorySlot" 登记该预制体。
     /// </remarks>
     public sealed class InventorySlotUI : MonoBehaviour
     {
-        public const string UiId = "InventorySlot";
+        public const string ResourceId = "InventorySlot";
 
         [Header("Wiring (在预制体上拖引用)")]
         [Tooltip("展示物品图标的 Image；未持有物品时会自动隐藏。")]
@@ -62,7 +62,13 @@ namespace BokeGameJam.UI
             EventManager.Off<HeldItemInfo>(GameEvents.HeldItemChanged, OnHeldItemChanged);
         }
 
-        private void OnHeldItemChanged(HeldItemInfo info) => Refresh(info);
+        private void OnHeldItemChanged(HeldItemInfo info)
+        {
+            Debug.Log(
+                $"[InventorySlotUI] HeldItemChanged hasItem={info.HasItem} name='{info.DisplayName}' icon={(info.Icon != null ? info.Icon.name : "null")}",
+                this);
+            Refresh(info);
+        }
 
         /// <summary>UI 晚于玩家启用时，主动同步一次当前持有物。</summary>
         private void SyncFromPlayer()
