@@ -48,8 +48,8 @@ namespace BokeGameJam.Gameplay
 
             NotifyInteracted();
 
-            // Holding item A: options take priority over plain dialogue.
-            if (HasUsableHeldItemA(interactor))
+            // 持有糖时优先弹出选项，否则普通对话。
+            if (HasHeldCandy(interactor))
             {
                 ShowChoiceOptions(interactor);
                 return;

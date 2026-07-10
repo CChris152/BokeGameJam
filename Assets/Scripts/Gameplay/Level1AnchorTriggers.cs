@@ -15,7 +15,8 @@ namespace BokeGameJam.Gameplay
     /// 玩家 X 从左到右越过 Anchor1 → 平滑移到 Place2；
     /// 越过 Anchor2 → Place3；反向越过则反向切换。
     /// 子物体命名：Place1 / Place2 / Place3 / Anchor1 / Anchor2（也可在 Inspector 拖引用）。
-    /// 开场 / 首次摘花 / 首次 Shift / 里世界首次到达 Place2 / 首次交付红黄花 / 错误交花 / 首次与鬼魂互动 剧情；
+    /// 开场 / 首次摘花 / 首次 Shift / 里世界首次到达 Place2 / 首次交付红黄花 / 错误交花 /
+    /// 首次与鬼魂互动 / 再次与鬼魂互动 / 灯光正确(Story9) / 通关(Story10) 剧情；
     /// 通关需同时满足：红黄花交付完成 + 表世界灯光（卧室亮、客厅暗、厨房亮）。
     /// </summary>
     [DefaultExecutionOrder(200)]
@@ -29,6 +30,9 @@ namespace BokeGameJam.Gameplay
         private const string DefaultFirstFlowerDeliveryStoryResourcePath = "ScriptableObjects/Stories/Story5";
         private const string DefaultWrongFlowerDeliveryStoryResourcePath = "ScriptableObjects/Stories/Story6";
         private const string DefaultFirstGhostInteractStoryResourcePath = "ScriptableObjects/Stories/Story7";
+        private const string DefaultRepeatGhostInteractStoryResourcePath = "ScriptableObjects/Stories/Story8";
+        private const string DefaultLightsCorrectStoryResourcePath = "ScriptableObjects/Stories/Story9";
+        private const string DefaultLevelClearStoryResourcePath = "ScriptableObjects/Stories/Story10";
 
         [Header("Camera Places (可拖拽，留空则按子物体名查找)")]
         [SerializeField] private Transform place1;
@@ -86,6 +90,24 @@ namespace BokeGameJam.Gameplay
         [SerializeField] private string firstGhostInteractStoryResourcePath = DefaultFirstGhostInteractStoryResourcePath;
         [SerializeField] private bool playStoryOnFirstGhostInteract = true;
 
+        [Header("Repeat Ghost Interact Story")]
+        [Tooltip("本关在里世界第二次及以后与鬼魂互动时播放（每次都触发）；留空则按 Resources 路径加载。")]
+        [SerializeField] private StorySequence repeatGhostInteractStory;
+        [SerializeField] private string repeatGhostInteractStoryResourcePath = DefaultRepeatGhostInteractStoryResourcePath;
+        [SerializeField] private bool playStoryOnRepeatGhostInteract = true;
+
+        [Header("Lights Correct Story")]
+        [Tooltip("三房间灯光首次达到正确状态时播放 Story9；留空则按 Resources 路径加载。")]
+        [SerializeField] private StorySequence lightsCorrectStory;
+        [SerializeField] private string lightsCorrectStoryResourcePath = DefaultLightsCorrectStoryResourcePath;
+        [SerializeField] private bool playStoryOnLightsCorrect = true;
+
+        [Header("Level Clear Story")]
+        [Tooltip("正式通关前播放 Story10，播完后进入下一关；留空则按 Resources 路径加载。")]
+        [SerializeField] private StorySequence levelClearStory;
+        [SerializeField] private string levelClearStoryResourcePath = DefaultLevelClearStoryResourcePath;
+        [SerializeField] private bool playStoryOnLevelClear = true;
+
         [Header("Level Clear Conditions")]
         [Tooltip("红黄花交付完成后为 true；由本脚本轮询 FlowerCollector。")]
         [SerializeField] private bool flowersDelivered;
@@ -104,14 +126,17 @@ namespace BokeGameJam.Gameplay
         private bool hasPreviousPlayerX;
         private Coroutine moveRoutine;
         private Coroutine introStoryRoutine;
+        private Coroutine clearSequenceRoutine;
         private bool sceneReady;
         private Transform currentPlace;
         private bool hasPlayedFirstFlowerStory;
         private bool hasPlayedFirstShiftStory;
         private bool hasPlayedPlace2Story;
         private bool hasPlayedFirstFlowerDeliveryStory;
-        private bool hasPlayedFirstGhostInteractStory;
+        private bool hasPlayedLightsCorrectStory;
+        private int underworldGhostInteractCount;
         private bool flowerCollectorBound;
+        private bool clearSequenceRunning;
         private bool levelAdvanceStarted;
 
         private void Awake()
@@ -170,6 +195,14 @@ namespace BokeGameJam.Gameplay
                 StopCoroutine(introStoryRoutine);
                 introStoryRoutine = null;
             }
+
+            if (clearSequenceRoutine != null)
+            {
+                StopCoroutine(clearSequenceRoutine);
+                clearSequenceRoutine = null;
+            }
+
+            clearSequenceRunning = false;
         }
 
         /// <summary>等一帧，确保 GameManager 已加载 CameraTopBanner 后再播剧情。</summary>
@@ -249,6 +282,21 @@ namespace BokeGameJam.Gameplay
             return ResolveStory(firstGhostInteractStory, firstGhostInteractStoryResourcePath);
         }
 
+        private StorySequence ResolveRepeatGhostInteractStory()
+        {
+            return ResolveStory(repeatGhostInteractStory, repeatGhostInteractStoryResourcePath);
+        }
+
+        private StorySequence ResolveLightsCorrectStory()
+        {
+            return ResolveStory(lightsCorrectStory, lightsCorrectStoryResourcePath);
+        }
+
+        private StorySequence ResolveLevelClearStory()
+        {
+            return ResolveStory(levelClearStory, levelClearStoryResourcePath);
+        }
+
         /// <summary>本关第一次按 Shift（世界切换）时播放 Story3。</summary>
         private void OnWorldTogglePressed()
         {
@@ -270,7 +318,7 @@ namespace BokeGameJam.Gameplay
             TryTriggerFirstFlowerStory();
             TryTriggerFirstFlowerDeliveryStory();
             TrySyncFlowerDeliveryCondition();
-            TryAdvanceLevelIfReady();
+            EvaluateLightsAndClearStories();
 
             float x = playerTransform.position.x;
             if (!hasPreviousPlayerX)
@@ -422,7 +470,7 @@ namespace BokeGameJam.Gameplay
 
         private void OnLightsOffChanged(RoomLightsInfo _)
         {
-            TryAdvanceLevelIfReady();
+            EvaluateLightsAndClearStories();
         }
 
         /// <summary>红黄花交付完成后，将 flowersDelivered 置为 true（不再由收集器直接切关）。</summary>
@@ -488,17 +536,28 @@ namespace BokeGameJam.Gameplay
             PlayStoryNow(ResolveWrongFlowerDeliveryStory(), "错误交付花朵剧情");
         }
 
-        /// <summary>本关第一次在里世界与鬼魂互动时播放 Story7（只一次）。</summary>
+        /// <summary>
+        /// 里世界与鬼魂互动：第一次播 Story7；第二次及以后每次播 Story8。
+        /// </summary>
         private void OnGhostInteracted()
         {
-            if (!sceneReady || !playStoryOnFirstGhostInteract || hasPlayedFirstGhostInteractStory)
+            if (!sceneReady)
                 return;
 
             if (GameManager.Instance == null || !GameManager.Instance.IsInUnderworld)
                 return;
 
-            hasPlayedFirstGhostInteractStory = true;
-            PlayStoryNow(ResolveFirstGhostInteractStory(), "首次与鬼魂互动剧情");
+            underworldGhostInteractCount++;
+
+            if (underworldGhostInteractCount == 1)
+            {
+                if (playStoryOnFirstGhostInteract)
+                    PlayStoryNow(ResolveFirstGhostInteractStory(), "首次与鬼魂互动剧情");
+                return;
+            }
+
+            if (playStoryOnRepeatGhostInteract)
+                PlayStoryNow(ResolveRepeatGhostInteractStory(), "再次与鬼魂互动剧情");
         }
 
         /// <summary>
@@ -521,16 +580,69 @@ namespace BokeGameJam.Gameplay
             return lightsOn == requireOn;
         }
 
-        private void TryAdvanceLevelIfReady()
+        /// <summary>
+        /// 灯光首次正确：播 Story9；若此时花也完成则接着播 Story10 并切关。
+        /// 花后补完成：只播 Story10 再切关。
+        /// </summary>
+        private void EvaluateLightsAndClearStories()
         {
-            if (!sceneReady || levelAdvanceStarted)
+            if (!sceneReady || clearSequenceRunning || levelAdvanceStarted)
                 return;
 
             TrySyncFlowerDeliveryCondition();
-            if (!flowersDelivered || !IsLightsConditionMet())
+            bool lightsOk = IsLightsConditionMet();
+            if (!lightsOk)
+                return;
+
+            if (!hasPlayedLightsCorrectStory)
+            {
+                hasPlayedLightsCorrectStory = true;
+                if (flowersDelivered)
+                {
+                    levelAdvanceStarted = true;
+                    clearSequenceRoutine = StartCoroutine(
+                        PlayClearSequenceRoutine(playStory9: true, playStory10: true, thenAdvance: true));
+                }
+                else
+                {
+                    clearSequenceRoutine = StartCoroutine(
+                        PlayClearSequenceRoutine(playStory9: true, playStory10: false, thenAdvance: false));
+                }
+
+                return;
+            }
+
+            if (!flowersDelivered)
                 return;
 
             levelAdvanceStarted = true;
+            clearSequenceRoutine = StartCoroutine(
+                PlayClearSequenceRoutine(playStory9: false, playStory10: true, thenAdvance: true));
+        }
+
+        private IEnumerator PlayClearSequenceRoutine(bool playStory9, bool playStory10, bool thenAdvance)
+        {
+            clearSequenceRunning = true;
+
+            if (playStory9 && playStoryOnLightsCorrect)
+                yield return PlayStoryAndWait(ResolveLightsCorrectStory(), "灯光正确剧情");
+
+            if (playStory10 && playStoryOnLevelClear)
+                yield return PlayStoryAndWait(ResolveLevelClearStory(), "通关剧情");
+
+            clearSequenceRunning = false;
+            clearSequenceRoutine = null;
+
+            if (!thenAdvance)
+                yield break;
+
+            // Story10 播完、切关前：关掉 ESC，并关闭已打开的暂停菜单。
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.ClosePauseMenuIfOpen();
+                GameManager.Instance.SetPauseMenuEscEnabled(false);
+            }
+
             LevelManager manager = LevelManager.EnsureExists();
             if (!manager.CompleteAndLoadNextLevel())
             {
@@ -538,7 +650,25 @@ namespace BokeGameJam.Gameplay
                     "[Level1AnchorTriggers] 通关条件已满足，但没有下一关可加载。",
                     this);
                 levelAdvanceStarted = false;
+                if (GameManager.Instance != null)
+                    GameManager.Instance.SetPauseMenuEscEnabled(true);
             }
+        }
+
+        private IEnumerator PlayStoryAndWait(StorySequence story, string storyLabel)
+        {
+            if (story == null || !story.HasLines)
+            {
+                Debug.LogWarning($"[Level1AnchorTriggers] {storyLabel}配置缺失或为空。", this);
+                yield break;
+            }
+
+            PlayStoryNow(story, storyLabel);
+            yield return null;
+
+            CameraTopBannerUI banner = CameraTopBannerUI.Instance;
+            while (banner != null && banner.IsPlayingStory)
+                yield return null;
         }
 
         private void SnapCameraTo(Transform place)

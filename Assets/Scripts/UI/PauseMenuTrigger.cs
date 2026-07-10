@@ -46,6 +46,7 @@ namespace BokeGameJam.UI
 
         /// <summary>
         /// 切换暂停菜单显示状态：已打开则关闭，未打开则加载。
+        /// 未启用 ESC 时不允许新打开（仍可关闭已打开的菜单）。
         /// </summary>
         public void TogglePauseMenu()
         {
@@ -61,12 +62,18 @@ namespace BokeGameJam.UI
                 return;
             }
 
+            if (!escEnabled)
+                return;
+
             UIManager.Instance.Load(PauseMenuController.ResourceId);
         }
 
-        /// <summary>打开暂停菜单（若已打开则由 UIManager 复用已有实例）。</summary>
+        /// <summary>打开暂停菜单（若已打开则由 UIManager 复用已有实例）。未启用 ESC 时忽略。</summary>
         public void OpenPauseMenu()
         {
+            if (!escEnabled)
+                return;
+
             if (UIManager.Instance == null)
             {
                 Debug.LogError("[PauseMenuTrigger] UIManager instance is missing.", this);

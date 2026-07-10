@@ -173,6 +173,8 @@ namespace BokeGameJam.Core
         private void OnLevelStarted(string _)
         {
             ChangeState(GameState.LevelPlaying);
+            // 即使状态未变（例如异常路径），进关也强制打开 ESC，避免上一关通关关掉后进 Level2 仍不可用。
+            SetEscPauseEnabled(true);
         }
 
         private void OnLevelCompleted(string _)
@@ -278,6 +280,27 @@ namespace BokeGameJam.Core
         }
 
         /// <summary>切换挂在 UIManager 上的 <see cref="PauseMenuTrigger"/> 的 ESC 触发开关。</summary>
+        public void SetPauseMenuEscEnabled(bool enabled)
+        {
+            SetEscPauseEnabled(enabled);
+        }
+
+        /// <summary>若暂停菜单已打开则关闭。</summary>
+        public void ClosePauseMenuIfOpen()
+        {
+            if (UIManager.Instance == null)
+                return;
+
+            PauseMenuTrigger trigger = UIManager.Instance.GetComponent<PauseMenuTrigger>();
+            if (trigger == null)
+                trigger = UIManager.Instance.GetComponentInChildren<PauseMenuTrigger>(true);
+
+            if (trigger != null)
+                trigger.ClosePauseMenu();
+            else if (UIManager.Instance.IsVisible(PauseMenuController.ResourceId))
+                UIManager.Instance.Close(PauseMenuController.ResourceId);
+        }
+
         private static void SetEscPauseEnabled(bool enabled)
         {
             if (UIManager.Instance == null)
