@@ -1,4 +1,5 @@
 using UnityEngine;
+using BokeGameJam.Core;
 
 namespace BokeGameJam.UI
 {
@@ -59,6 +60,7 @@ namespace BokeGameJam.UI
             if (UIManager.Instance.IsVisible(PauseMenuController.ResourceId))
             {
                 UIManager.Instance.Close(PauseMenuController.ResourceId);
+                PlayPauseToggleSfx();
                 return;
             }
 
@@ -66,6 +68,13 @@ namespace BokeGameJam.UI
                 return;
 
             UIManager.Instance.Load(PauseMenuController.ResourceId);
+            PlayPauseToggleSfx();
+        }
+
+        private static void PlayPauseToggleSfx()
+        {
+            if (GameAudioManager.Instance != null)
+                GameAudioManager.Instance.PlaySFXByResourcePath(GameSfxPaths.PauseToggle);
         }
 
         /// <summary>打开暂停菜单（若已打开则由 UIManager 复用已有实例）。未启用 ESC 时忽略。</summary>

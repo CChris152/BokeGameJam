@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using BokeGameJam.Core;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -65,6 +66,9 @@ namespace BokeGameJam.UI
         public void OnPointerEnter(PointerEventData eventData)
         {
             AnimateTo(normalScale * hoverScale, hoverColor);
+
+            if (GameAudioManager.Instance != null)
+                GameAudioManager.Instance.PlaySFXByResourcePath(GameSfxPaths.UiHover);
         }
 
         public void OnPointerExit(PointerEventData eventData)

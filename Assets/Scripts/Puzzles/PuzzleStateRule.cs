@@ -76,6 +76,7 @@ namespace BokeGameJam.Puzzles
             if (runOnlyWhenResultChanges && hasLastResult && lastResult == correct)
                 return;
 
+            bool resultChanged = !hasLastResult || lastResult != correct;
             hasLastResult = true;
             lastResult = correct;
 
@@ -87,6 +88,26 @@ namespace BokeGameJam.Puzzles
                 onCorrect?.Run(context);
             else
                 onIncorrect?.Run(context);
+
+            if (change.HasValue && resultChanged)
+                PlayResultSfx(correct);
+        }
+
+        private static void PlayResultSfx(bool correct)
+        {
+            if (GameAudioManager.Instance == null)
+                return;
+
+            if (correct)
+            {
+                GameAudioManager.Instance.PlaySFXByResourcePath(GameSfxPaths.PuzzleSuccess);
+                return;
+            }
+
+            GameAudioManager.Instance.PlayRandomSFXByResourcePaths(
+                1f,
+                GameSfxPaths.PuzzleFailure1,
+                GameSfxPaths.PuzzleFailure3);
         }
 
         private static string Normalize(string value)

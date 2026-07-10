@@ -253,6 +253,7 @@ namespace BokeGameJam.UI
         /// </summary>
         private void OnReturnToMainMenuClicked()
         {
+            PlayUiBack();
             CloseSelf();
 
             if (GameSceneManager.Instance == null)
@@ -283,7 +284,14 @@ namespace BokeGameJam.UI
         /// <summary>关闭按钮回调。</summary>
         private void OnCloseClicked()
         {
+            PlayUiBack();
             CloseSelf();
+        }
+
+        private static void PlayUiBack()
+        {
+            if (GameAudioManager.Instance != null)
+                GameAudioManager.Instance.PlaySFXByResourcePath(GameSfxPaths.UiBack);
         }
 
         /// <summary>通过 UIManager 卸载本弹窗；若管理器缺失则直接销毁自身。</summary>

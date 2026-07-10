@@ -60,7 +60,6 @@ namespace BokeGameJam.Gameplay
         private static bool hasPlayedAllLitStory;
         private static bool hasStartedEndingMedia;
 
-        private static AudioClip fallbackBeepClip;
         private static Sprite cachedOffSprite;
         private static Sprite cachedOnSprite;
 
@@ -233,6 +232,7 @@ namespace BokeGameJam.Gameplay
                 TurnOffAllRegistered();
                 progress = 0;
                 PlayBannerStory(ResolveWrongOrderStory(), "路灯错序剧情");
+                PlaySequenceFailureAudio();
                 return;
             }
 
@@ -450,7 +450,18 @@ namespace BokeGameJam.Gameplay
                 return;
             }
 
-            localAudioSource.PlayOneShot(GetFallbackBeepClip());
+            // LevelCompleted event supplies the approved completion cue.
+        }
+
+        private static void PlaySequenceFailureAudio()
+        {
+            if (GameAudioManager.Instance == null)
+                return;
+
+            GameAudioManager.Instance.PlayRandomSFXByResourcePaths(
+                1f,
+                GameSfxPaths.PuzzleFailure1,
+                GameSfxPaths.PuzzleFailure3);
         }
 
         private void EnsureLocalAudioSource()
@@ -464,28 +475,6 @@ namespace BokeGameJam.Gameplay
                 localAudioSource = gameObject.AddComponent<AudioSource>();
                 localAudioSource.playOnAwake = false;
             }
-        }
-
-        private static AudioClip GetFallbackBeepClip()
-        {
-            if (fallbackBeepClip != null)
-                return fallbackBeepClip;
-
-            const int sampleRate = 44100;
-            const float duration = 0.18f;
-            int sampleCount = Mathf.CeilToInt(sampleRate * duration);
-            float[] samples = new float[sampleCount];
-
-            for (int i = 0; i < sampleCount; i++)
-            {
-                float t = i / (float)sampleRate;
-                float envelope = 1f - (t / duration);
-                samples[i] = Mathf.Sin(2f * Mathf.PI * 880f * t) * envelope * 0.35f;
-            }
-
-            fallbackBeepClip = AudioClip.Create("StreetLampSequenceBeep", sampleCount, 1, sampleRate, false);
-            fallbackBeepClip.SetData(samples, 0);
-            return fallbackBeepClip;
         }
 
         private static bool IsInUnderworld()
