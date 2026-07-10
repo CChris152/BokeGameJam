@@ -32,12 +32,14 @@ namespace BokeGameJam.UI
         [Tooltip("是否在编辑器非播放时也预览效果")]
         [SerializeField] private bool previewInEditMode = true;
 
+#if UNITY_EDITOR
         protected override void OnValidate()
         {
             leftScale = Mathf.Max(0.05f, leftScale);
             rightScale = Mathf.Max(0.05f, rightScale);
             base.OnValidate();
         }
+#endif
 
         public override void ModifyMesh(VertexHelper vh)
         {

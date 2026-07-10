@@ -18,7 +18,7 @@ namespace BokeGameJam.Gameplay
     /// </summary>
     public class InteractableObjectPowerGated : InteractableObject
     {
-        private const string DefaultHintPrefabResourcePath = "Prefabs/Interactable/InteractHint";
+        private const string DefaultHintPrefabResourcePath = "Prefabs/Terrians/Interactable/InteractHint";
 
         private static bool powerSwitchActivated;
 

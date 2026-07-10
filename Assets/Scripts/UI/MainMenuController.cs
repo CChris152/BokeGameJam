@@ -1,4 +1,5 @@
 using BokeGameJam.Core;
+using BokeGameJam.Levels;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -13,6 +14,9 @@ namespace BokeGameJam.UI
     /// </summary>
     public class MainMenuController : MonoBehaviour
     {
+        /// <summary>主菜单「开始游戏」进入的关卡 id（对应 LevelCatalog）。</summary>
+        private const string StartLevelId = "level_1";
+
         /// <summary>主菜单循环 BGM 资源 id（对应 ResourceDefinitionDatabase）。</summary>
         private const string MainMenuBgmId = "scene1_background";
 
@@ -94,7 +98,7 @@ namespace BokeGameJam.UI
         }
 
         /// <summary>
-        /// 开始游戏：播放开场媒体序列，完成后广播开局事件进入第一关。
+        /// 开始游戏：播放开场媒体序列，完成后加载关卡 1（LevelCatalog: level_1 → Level1）。
         /// </summary>
         public void OnStartGameClicked()
         {
@@ -106,14 +110,25 @@ namespace BokeGameJam.UI
             if (mediaPlayer == null)
             {
                 Debug.LogWarning("[MainMenuController] BlackScreenMediaPlayer missing, start game immediately.", this);
-                EventManager.Emit(GameEvents.GameStartRequested);
+                StartLevel1();
                 return;
             }
 
-            mediaPlayer.Play(BlackScreenMediaPlayer.PresetStartToLevel1, () =>
+            mediaPlayer.Play(BlackScreenMediaPlayer.PresetStartToLevel1, StartLevel1);
+        }
+
+        /// <summary>确保管理器在场后，按 Catalog 加载第一关。</summary>
+        private static void StartLevel1()
+        {
+            GameManager.EnsureExists();
+            LevelManager manager = LevelManager.EnsureExists();
+            if (manager == null)
             {
-                EventManager.Emit(GameEvents.GameStartRequested);
-            });
+                Debug.LogError("[MainMenuController] LevelManager missing, cannot start Level1.");
+                return;
+            }
+
+            manager.LoadLevelById(StartLevelId);
         }
 
         /// <summary>打开设置弹窗。</summary>

@@ -56,7 +56,7 @@
   - 用 `WorldToScreenPoint` 跟随鬼魂头顶，不遮挡世界里的主角 Sprite
 - 关闭：再按 E / 鼠标左键 / Esc。
 - 关卡编辑器可写 `dialogueText`，会进 JSON 的 `dialogueText` 字段。
-- Prefab：`Assets/Prefabs/Terrians/Interactable/GhostObject.prefab`（含 `PopupPanel` 子物体）
+- Prefab：`Assets/Resources/Prefabs/Terrians/Interactable/GhostObject.prefab`（含 `PopupPanel` 子物体）
 
 ## 关卡配置要点
 
