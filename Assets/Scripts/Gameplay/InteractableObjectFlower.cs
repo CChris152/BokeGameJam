@@ -14,6 +14,7 @@ namespace BokeGameJam.Gameplay
     /// <summary>
     /// 可交互物体 A 变体：花。
     /// 与普通 A 一样可捡起 / 丢弃 / 交付；摘取后原位置 5 秒刷新。
+    /// 持有副本被丢弃后会快速淡出并销毁（交付消耗仍走 PlayerInteractor.ConsumeHeldItem）。
     /// 关卡一通常共五朵（多种植会打 Warning）。
     /// </summary>
     public class InteractableObjectFlower : InteractableObject
@@ -24,10 +25,14 @@ namespace BokeGameJam.Gameplay
         [SerializeField] private FlowerColor flowerColor = FlowerColor.Red;
         [Tooltip("摘取后多少秒在原位置重新可摘。")]
         [SerializeField] private float respawnDelaySeconds = 5f;
+        [Tooltip("丢弃后淡出销毁时长（秒）。")]
+        [SerializeField] private float discardFadeDuration = 0.25f;
 
         private bool isHeldCopy;
         private bool isDepleted;
+        private bool isDiscarding;
         private Coroutine respawnRoutine;
+        private Coroutine discardFadeRoutine;
 
         public FlowerColor ColorKind => flowerColor;
         public bool IsDepleted => isDepleted;
@@ -52,6 +57,10 @@ namespace BokeGameJam.Gameplay
             // 层级切换会停掉协程；仍 depleted 时重新开始刷新计时。
             if (!isHeldCopy && isDepleted && respawnRoutine == null && isActiveAndEnabled)
                 respawnRoutine = StartCoroutine(RespawnAfterDelay());
+
+            // 丢弃淡出中被禁用后恢复时，继续淡出销毁。
+            if (isHeldCopy && isDiscarding && discardFadeRoutine == null && isActiveAndEnabled)
+                discardFadeRoutine = StartCoroutine(DiscardFadeAndDestroy());
         }
 
         private void OnDisable()
@@ -60,6 +69,12 @@ namespace BokeGameJam.Gameplay
             {
                 StopCoroutine(respawnRoutine);
                 respawnRoutine = null;
+            }
+
+            if (discardFadeRoutine != null)
+            {
+                StopCoroutine(discardFadeRoutine);
+                discardFadeRoutine = null;
             }
         }
 
@@ -71,6 +86,9 @@ namespace BokeGameJam.Gameplay
 
         public override bool CanInteract(PlayerInteractor interactor)
         {
+            if (isDiscarding)
+                return false;
+
             if (isHeldCopy)
                 return !IsHeld;
 
@@ -105,16 +123,79 @@ namespace BokeGameJam.Gameplay
             return true;
         }
 
+        /// <summary>丢弃持有副本：落地后快速淡出并销毁。</summary>
+        public override void Drop(Vector2 worldPosition)
+        {
+            base.Drop(worldPosition);
+
+            if (!isHeldCopy || isDiscarding)
+                return;
+
+            BeginDiscardFade();
+        }
+
         private void PrepareAsHeldCopy()
         {
             isHeldCopy = true;
             isDepleted = false;
+            isDiscarding = false;
 
             if (respawnRoutine != null)
             {
                 StopCoroutine(respawnRoutine);
                 respawnRoutine = null;
             }
+
+            if (discardFadeRoutine != null)
+            {
+                StopCoroutine(discardFadeRoutine);
+                discardFadeRoutine = null;
+            }
+        }
+
+        private void BeginDiscardFade()
+        {
+            isDiscarding = true;
+
+            if (Col != null)
+                Col.enabled = false;
+
+            if (discardFadeRoutine != null)
+                StopCoroutine(discardFadeRoutine);
+
+            discardFadeRoutine = StartCoroutine(DiscardFadeAndDestroy());
+        }
+
+        private IEnumerator DiscardFadeAndDestroy()
+        {
+            SpriteRenderer sr = SpriteRenderer;
+            Color start = sr != null ? sr.color : Color.white;
+            float duration = Mathf.Max(0.01f, discardFadeDuration);
+            float elapsed = 0f;
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float t = Mathf.Clamp01(elapsed / duration);
+                if (sr != null)
+                {
+                    Color c = start;
+                    c.a = Mathf.Lerp(start.a, 0f, t);
+                    sr.color = c;
+                }
+
+                yield return null;
+            }
+
+            if (sr != null)
+            {
+                Color c = start;
+                c.a = 0f;
+                sr.color = c;
+            }
+
+            discardFadeRoutine = null;
+            Destroy(gameObject);
         }
 
         private void BeginDepleted()
