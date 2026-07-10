@@ -594,6 +594,8 @@ namespace BokeGameJam.Gameplay
             if (!hasPlayedLightsCorrectStory)
             {
                 hasPlayedLightsCorrectStory = true;
+                // Story8 触发后锁定全部灯开关（不可再 E 交互，也不显示提示）。
+                InteractableObjectLightSwitch.LockAllInteractions();
                 if (flowersDelivered)
                 {
                     levelAdvanceStarted = true;

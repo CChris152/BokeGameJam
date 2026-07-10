@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using BokeGameJam.Core;
 
@@ -7,9 +8,14 @@ namespace BokeGameJam.Gameplay
     /// 灯开关（InteractableObjectB 变体）：可反复拨动。
     /// 开灯时激活「开关开」，关灯时激活「开关关」；状态通过
     /// <see cref="GameEvents.LightsOffChanged"/> 广播，并与 <see cref="roomId"/> 绑定。
+    /// 第一关灯光谜题完成后可由 <see cref="LockAllInteractions"/> 禁止再交互。
     /// </summary>
     public class InteractableObjectLightSwitch : InteractableObjectB
     {
+        private static readonly List<InteractableObjectLightSwitch> allActive = new();
+        private static bool interactionsLocked;
+        private static bool levelStartedSubscribed;
+
         [Header("Light Switch")]
         [Tooltip("所属房间 id；须与该房间背景 BackgroundSpriteSwitcher.roomId 一致。")]
         [SerializeField] private string roomId = "room_1";
@@ -28,12 +34,48 @@ namespace BokeGameJam.Gameplay
         public string RoomId => roomId != null ? roomId.Trim() : string.Empty;
         public bool LightsOn => lightsOn;
         public bool LightsOff => !lightsOn;
+        public static bool InteractionsLocked => interactionsLocked;
+
+        /// <summary>灯光谜题通关后调用：禁止所有灯开关交互并隐藏 E 提示。</summary>
+        public static void LockAllInteractions()
+        {
+            if (interactionsLocked)
+                return;
+
+            interactionsLocked = true;
+            RefreshAllHints();
+        }
+
+        /// <summary>新关卡开始时解除锁定。</summary>
+        public static void ClearInteractionLock()
+        {
+            if (!interactionsLocked)
+                return;
+
+            interactionsLocked = false;
+            RefreshAllHints();
+        }
 
         protected override void Awake()
         {
             base.Awake();
             lightsOn = startLightsOn;
             ResolveVisualObjects();
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            if (!allActive.Contains(this))
+                allActive.Add(this);
+
+            EnsureLevelStartedSubscription();
+        }
+
+        protected override void OnDisable()
+        {
+            allActive.Remove(this);
+            base.OnDisable();
         }
 
         private void Start()
@@ -43,9 +85,49 @@ namespace BokeGameJam.Gameplay
             EmitLightsState();
         }
 
+        private static void EnsureLevelStartedSubscription()
+        {
+            if (levelStartedSubscribed)
+                return;
+
+            levelStartedSubscribed = true;
+            EventManager.On<string>(GameEvents.LevelStarted, OnLevelStarted);
+        }
+
+        private static void OnLevelStarted(string _)
+        {
+            ClearInteractionLock();
+        }
+
+        private static void RefreshAllHints()
+        {
+            for (int i = allActive.Count - 1; i >= 0; i--)
+            {
+                InteractableObjectLightSwitch sw = allActive[i];
+                if (sw == null)
+                {
+                    allActive.RemoveAt(i);
+                    continue;
+                }
+
+                sw.RefreshInteractHint();
+            }
+        }
+
         public override bool CanInteract(PlayerInteractor interactor)
         {
+            if (interactionsLocked)
+                return false;
+
             return base.CanInteract(interactor);
+        }
+
+        protected override bool ShouldShowInteractHint()
+        {
+            if (interactionsLocked)
+                return false;
+
+            return base.ShouldShowInteractHint();
         }
 
         public override void OnInteract(PlayerInteractor interactor)
