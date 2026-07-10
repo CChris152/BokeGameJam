@@ -42,7 +42,7 @@ namespace BokeGameJam.Core
         [SerializeField] private string startLevelId = "level_1";
 
         [Tooltip("主菜单点开始时加载的场景名（需与 Build Settings 一致）。")]
-        [SerializeField] private string startSceneName = "Level1";
+        [SerializeField] private string startSceneName = "Level2";
 
         [Header("Level Playing UI")]
         [Tooltip("进入 LevelPlaying 时通过 UIManager 加载的 UI resourceId 列表。")]
@@ -214,11 +214,14 @@ namespace BokeGameJam.Core
 
         private void HandleStateTransition(GameState prev, GameState next)
         {
-            // 离开 LevelPlaying：禁用 ESC 暂停，并关闭关卡 HUD
+            // 离开 LevelPlaying：禁用 ESC 暂停。
+            // LevelCompleted 时保留 CameraTopBanner，供通关剧情（如 Story17）播放；
+            // 回主菜单等路径仍会在下方 switch 里关闭关卡 HUD。
             if (prev == GameState.LevelPlaying && next != GameState.LevelPlaying)
             {
                 SetEscPauseEnabled(false);
-                CloseLevelPlayingUIs();
+                if (next != GameState.LevelCompleted)
+                    CloseLevelPlayingUIs();
             }
 
             switch (next)
