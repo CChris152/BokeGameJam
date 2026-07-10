@@ -816,7 +816,8 @@ namespace BokeGameJam.LevelEditor
                 GetPaintSequenceIndex());
 
             InteractableObjectD ghost = instance.GetComponent<InteractableObjectD>();
-            if (ghost != null)
+            // 空字符串保留预制体默认 dialogueText，避免刷子未填时把「吃糖…」等覆盖成「……」
+            if (ghost != null && !string.IsNullOrWhiteSpace(paintDialogueText))
                 ghost.ApplyDialogueText(paintDialogueText);
 
             InteractableObjectLightSwitch lightSwitch = instance.GetComponent<InteractableObjectLightSwitch>();
@@ -843,7 +844,8 @@ namespace BokeGameJam.LevelEditor
                 entry.sequenceIndex);
 
             InteractableObjectD ghost = instance.GetComponent<InteractableObjectD>();
-            if (ghost != null)
+            // JSON 里 dialogueText 为空时保留预制体默认值，不覆盖
+            if (ghost != null && !string.IsNullOrWhiteSpace(entry.dialogueText))
                 ghost.ApplyDialogueText(entry.dialogueText);
 
             InteractableObjectLightSwitch lightSwitch = instance.GetComponent<InteractableObjectLightSwitch>();

@@ -46,8 +46,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuSceneNames:
   - MainMenu
-  startLevelId: level_1
-  startSceneName: Level1
+  startLevelId: level_2
+  startSceneName: Level2
   levelPlayingUiIds:
   - InventorySlot
   - CameraTopBanner
