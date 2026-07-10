@@ -1,11 +1,12 @@
 using UnityEngine;
 using BokeGameJam.Core;
+using BokeGameJam.Levels;
 
 namespace BokeGameJam.Gameplay
 {
     /// <summary>
     /// 花朵收集交付处（InteractableObjectC 变体）。
-    /// 玩家持有红花 / 黄花时按 E 交付；数量达标后完成。
+    /// 玩家持有红花 / 黄花时按 E 交付；数量达标后通关并切换到下一关。
     /// </summary>
     public class InteractableObjectFlowerCollector : InteractableObjectC
     {
@@ -13,8 +14,13 @@ namespace BokeGameJam.Gameplay
         [SerializeField] private int requiredRedFlowers = 1;
         [SerializeField] private int requiredYellowFlowers = 1;
 
+        [Header("Level Transition")]
+        [Tooltip("收集完成后是否自动进入下一关")]
+        [SerializeField] private bool loadNextLevelOnComplete = true;
+
         private int collectedRed;
         private int collectedYellow;
+        private bool levelTransitionStarted;
 
         public int RequiredRedFlowers => Mathf.Max(0, requiredRedFlowers);
         public int RequiredYellowFlowers => Mathf.Max(0, requiredYellowFlowers);
@@ -38,13 +44,16 @@ namespace BokeGameJam.Gameplay
 
             if (color == FlowerColor.Red)
                 collectedRed++;
-            else
+            else if (color == FlowerColor.Yellow)
                 collectedYellow++;
+            else
+                return;
 
             if (IsCollectionComplete())
             {
                 completed = true;
                 ApplyVisual(false);
+                TryAdvanceToNextLevel();
                 return;
             }
 
@@ -79,6 +88,22 @@ namespace BokeGameJam.Gameplay
             return TryGetNeededHeldFlower(interactor, out _);
         }
 
+        private void TryAdvanceToNextLevel()
+        {
+            if (!loadNextLevelOnComplete || levelTransitionStarted)
+                return;
+
+            levelTransitionStarted = true;
+
+            LevelManager manager = LevelManager.EnsureExists();
+            if (!manager.CompleteAndLoadNextLevel())
+            {
+                Debug.Log(
+                    $"[InteractableObjectFlowerCollector] '{name}' 收集完成，但没有下一关可加载。",
+                    this);
+            }
+        }
+
         private bool IsCollectionComplete()
         {
             return collectedRed >= RequiredRedFlowers
@@ -87,9 +112,11 @@ namespace BokeGameJam.Gameplay
 
         private bool NeedsColor(FlowerColor color)
         {
-            return color == FlowerColor.Red
-                ? collectedRed < RequiredRedFlowers
-                : collectedYellow < RequiredYellowFlowers;
+            if (color == FlowerColor.Red)
+                return collectedRed < RequiredRedFlowers;
+            if (color == FlowerColor.Yellow)
+                return collectedYellow < RequiredYellowFlowers;
+            return false;
         }
 
         private static bool TryGetHeldFlower(PlayerInteractor interactor, out InteractableObjectFlower flower)

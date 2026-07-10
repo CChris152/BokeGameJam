@@ -68,6 +68,9 @@ namespace BokeGameJam.Core
         public GameState State => state;
         public WorldId ActiveWorld => activeWorld;
 
+        /// <summary>当前是否在里世界（阴间 / World B）。</summary>
+        public bool IsInUnderworld => activeWorld == WorldId.B;
+
         /// <summary>确保单例存在（若场景中没有则新建一个）。</summary>
         public static GameManager EnsureExists()
         {

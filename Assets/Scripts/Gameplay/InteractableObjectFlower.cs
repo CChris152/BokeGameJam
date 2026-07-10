@@ -6,7 +6,9 @@ namespace BokeGameJam.Gameplay
     public enum FlowerColor
     {
         Red = 0,
-        Yellow = 1
+        Yellow = 1,
+        Purple = 2,
+        Blue = 3
     }
 
     /// <summary>

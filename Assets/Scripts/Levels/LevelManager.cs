@@ -9,6 +9,7 @@ namespace BokeGameJam.Levels
     /// - 监听 <see cref="GameEvents.LevelSelected"/>，记录"当前关卡"
     /// - 关卡加载完成时广播 <see cref="GameEvents.LevelStarted"/>
     /// - 提供 <see cref="CompleteCurrentLevel"/>：解锁下一关 + 广播 <see cref="GameEvents.LevelCompleted"/>
+    /// - 提供 <see cref="CompleteAndLoadNextLevel"/>：通关后自动加载下一关场景
     ///
     /// 关卡内的脚本（例如 LevelLoader）只需读 <see cref="CurrentLevel"/> 就能知道要加载哪张地图。
     /// </summary>
@@ -99,15 +100,76 @@ namespace BokeGameJam.Levels
             if (!hasCurrent) return;
             EventManager.Emit(GameEvents.LevelCompleted, currentSelection.LevelId);
 
+            LevelCatalog.Level next = GetNextLevel();
+            if (next != null)
+                Catalog.SetUnlocked(next.levelId, true);
+        }
+
+        /// <summary>
+        /// 通关当前关卡并加载下一关。
+        /// 若尚未选关（例如直接打开关卡场景调试），会按当前场景名绑定 Catalog 条目。
+        /// 若已是最后一关，只完成通关（解锁/广播），不切场景。
+        /// </summary>
+        /// <returns>是否成功发起下一关加载。</returns>
+        public bool CompleteAndLoadNextLevel()
+        {
+            if (!hasCurrent && !TryBindCurrentFromActiveScene())
+            {
+                Debug.LogWarning("[LevelManager] CompleteAndLoadNextLevel: 无法确定当前关卡。");
+                return false;
+            }
+
+            CompleteCurrentLevel();
+
+            LevelCatalog.Level next = GetNextLevel();
+            if (next == null)
+            {
+                Debug.Log("[LevelManager] 已是最后一关，通关后不切换场景。");
+                return false;
+            }
+
+            LoadLevelById(next.levelId);
+            return true;
+        }
+
+        /// <summary>按当前活动场景名，在 Catalog 中绑定为当前关卡（不加载场景）。</summary>
+        public bool TryBindCurrentFromActiveScene()
+        {
             LevelCatalog c = Catalog;
-            if (c == null) return;
+            if (c == null)
+                return false;
+
+            string sceneName = SceneManager.GetActiveScene().name;
+            for (int i = 0; i < c.Count; i++)
+            {
+                LevelCatalog.Level level = c.Get(i);
+                if (level == null)
+                    continue;
+                if (!string.Equals(level.sceneName, sceneName, System.StringComparison.Ordinal))
+                    continue;
+
+                string id = string.IsNullOrWhiteSpace(level.levelId)
+                    ? c.ResolveLevelId(i)
+                    : level.levelId;
+                currentSelection = new LevelSelection(id, i, level.sceneName, level.levelFile);
+                hasCurrent = true;
+                return true;
+            }
+
+            return false;
+        }
+
+        private LevelCatalog.Level GetNextLevel()
+        {
+            LevelCatalog c = Catalog;
+            if (c == null || !hasCurrent)
+                return null;
 
             int idx = c.IndexOf(currentSelection.LevelId);
-            if (idx < 0 || idx + 1 >= c.Count) return;
+            if (idx < 0 || idx + 1 >= c.Count)
+                return null;
 
-            LevelCatalog.Level next = c.Get(idx + 1);
-            if (next != null)
-                c.SetUnlocked(next.levelId, true);
+            return c.Get(idx + 1);
         }
 
         /// <summary>直接以 levelId 触发一次选关（等价于点击选关按钮）。</summary>

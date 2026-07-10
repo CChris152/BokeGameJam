@@ -53,6 +53,10 @@ PrefabInstance:
       value: YellowFlower
       objectReference: {fileID: 0}
     - target: {fileID: 7290282104871919419, guid: b20154ca4af81c243a84581a2d1ae358, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 530dd1f93017f914aa453b1e39875ed2, type: 3}
+    - target: {fileID: 7290282104871919419, guid: b20154ca4af81c243a84581a2d1ae358, type: 3}
       propertyPath: m_Color.b
       value: 0.2
       objectReference: {fileID: 0}
@@ -68,6 +72,10 @@ PrefabInstance:
       propertyPath: flowerColor
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8216303662586995734, guid: b20154ca4af81c243a84581a2d1ae358, type: 3}
+      propertyPath: iconOverride
+      value: 
+      objectReference: {fileID: 21300000, guid: 530dd1f93017f914aa453b1e39875ed2, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

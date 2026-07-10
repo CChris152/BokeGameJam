@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7477931512140464865}
   - component: {fileID: 728153878285478316}
+  - component: {fileID: 1419968488244448064}
   m_Layer: 0
   m_Name: BackGround
   m_TagString: BG
@@ -73,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -724
-  m_Sprite: {fileID: 21300000, guid: 6c4adfc9703cd3247a92df30f26096cf, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1a98310d36eb33b4abf5ec987918c4ce, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -81,6 +82,22 @@ SpriteRenderer:
   m_Size: {x: 27.521679, y: 15.36}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1419968488244448064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1497082967374742237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dd604adc91074c46acd424d96613bad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomId: room_1
+  livingWorldSprite: {fileID: 21300000, guid: 1a98310d36eb33b4abf5ec987918c4ce, type: 3}
+  underworldSprite: {fileID: 21300000, guid: 738fd48ab9dd25f4ead1d34263e3e978, type: 3}
+  lightsOffSprite: {fileID: 21300000, guid: 9cb2ac948d0936f4280b1dcf180fd775, type: 3}

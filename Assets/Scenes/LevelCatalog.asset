@@ -14,11 +14,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levels:
   - levelId: level_1
-    displayName: 
+    displayName: Level1
     sceneName: Level1
     levelFile: 
     thumbnail: {fileID: 0}
     unlockedByDefault: 1
+  - levelId: level_2
+    displayName: Level2
+    sceneName: Level2
+    levelFile: 
+    thumbnail: {fileID: 0}
+    unlockedByDefault: 0
+  - levelId: level_3
+    displayName: Level3
+    sceneName: Level3
+    levelFile: 
+    thumbnail: {fileID: 0}
+    unlockedByDefault: 0
   - levelId: level_3
     displayName: "\u949F\u697C\u5185\u90E8"
     sceneName: Level3
