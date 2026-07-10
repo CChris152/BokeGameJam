@@ -45,6 +45,9 @@ namespace BokeGameJam.Puzzles.Mirror
         private Coroutine focusRoutine;
 
         public Vector3 InteractionPosition => transform.position;
+        public bool HasPanelPrefab => panelPrefab != null;
+        public bool IsOpen => isOpen;
+        public bool IsSolved => isSolved;
 
         private void Awake()
         {
@@ -55,6 +58,11 @@ namespace BokeGameJam.Puzzles.Mirror
                     $"[MirrorPuzzleFrame] '{name}' should usually use a trigger Collider2D for player interaction.",
                     this);
             }
+        }
+
+        private void OnDisable()
+        {
+            CleanupOpenState();
         }
 
         public void SetInInteractRange(bool inRange)
@@ -91,6 +99,7 @@ namespace BokeGameJam.Puzzles.Mirror
             }
 
             isOpen = true;
+            EnsureEventSystem();
             EnterUiContext();
             BeginCameraFocus();
 
@@ -148,6 +157,17 @@ namespace BokeGameJam.Puzzles.Mirror
             createdCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
             createdCanvas.sortingOrder = 200;
             return canvasObject.transform;
+        }
+
+        private static void EnsureEventSystem()
+        {
+            if (FindObjectOfType<UnityEngine.EventSystems.EventSystem>() != null)
+                return;
+
+            new GameObject(
+                "EventSystem",
+                typeof(UnityEngine.EventSystems.EventSystem),
+                typeof(UnityEngine.EventSystems.StandaloneInputModule));
         }
 
         private void EnterUiContext()
@@ -267,6 +287,40 @@ namespace BokeGameJam.Puzzles.Mirror
         {
             focusedCamera = null;
             previousFollowTarget = null;
+        }
+
+        private void CleanupOpenState()
+        {
+            if (!isOpen && activePanel == null && !hasPreviousContext && focusedCamera == null)
+                return;
+
+            if (activePanel != null)
+            {
+                activePanel.Solved -= OnPanelSolved;
+                activePanel.Closed -= OnPanelClosed;
+                Destroy(activePanel.gameObject);
+                activePanel = null;
+            }
+
+            if (focusRoutine != null)
+            {
+                StopCoroutine(focusRoutine);
+                focusRoutine = null;
+            }
+
+            if (focusedCamera != null)
+            {
+                if (CameraManager.Instance != null)
+                    RestoreFollowTarget();
+
+                focusedCamera.transform.position = previousCameraPosition;
+                if (focusedCamera.orthographic)
+                    focusedCamera.orthographicSize = previousOrthoSize;
+                ClearFocusedCamera();
+            }
+
+            ExitUiContext();
+            isOpen = false;
         }
     }
 }
