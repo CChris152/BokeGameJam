@@ -12,6 +12,8 @@ namespace BokeGameJam.Core
     {
         private const string SfxResourceRoot = "Audio/SFX";
         private const int InitialOneShotSourceCount = 6;
+        private const string Level2SceneName = "Level2";
+        private const string Level2BgmId = "li-bgm-v4-memory";
         private const float AudibleSampleThreshold = 0.002f;
         private const float AudibleStartPreRollSeconds = 0.003f;
 
@@ -578,8 +580,19 @@ namespace BokeGameJam.Core
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            if (mode == LoadSceneMode.Single)
-                ApplySceneAmbience(scene.name);
+            if (mode != LoadSceneMode.Single)
+                return;
+
+            ApplySceneBgm(scene.name);
+            ApplySceneAmbience(scene.name);
+        }
+
+        private void ApplySceneBgm(string sceneName)
+        {
+            if (!string.Equals(sceneName, Level2SceneName, System.StringComparison.Ordinal))
+                return;
+
+            SwitchBGMById(Level2BgmId);
         }
 
         private void ApplySceneAmbience(string sceneName)
