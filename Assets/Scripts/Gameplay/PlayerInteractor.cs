@@ -126,7 +126,7 @@ namespace BokeGameJam.Gameplay
             contactCounts.Remove(item);
             held = item;
             item.SetInInteractRange(false);
-            item.PickUp(transform);
+            item.PickUp();
             EmitHeldChanged();
             return true;
         }

@@ -24,7 +24,6 @@ namespace BokeGameJam.Gameplay
         [SerializeField] private string mechanismId;
         [SerializeField] private string displayName;
         [SerializeField] private Sprite iconOverride;
-        [SerializeField] private Vector2 holdLocalOffset = new(0.35f, 0.15f);
 
         [Header("Interact Hint")]
         [Tooltip("互动提示预制体；留空则尝试 Resources 路径。")]
@@ -143,27 +142,20 @@ namespace BokeGameJam.Gameplay
             return string.Equals(selfId, otherId, System.StringComparison.Ordinal);
         }
 
-        public virtual void PickUp(Transform holder)
+        public virtual void PickUp()
         {
             isHeld = true;
-            transform.SetParent(holder, false);
-            transform.localPosition = holdLocalOffset;
-            transform.localRotation = Quaternion.identity;
-            transform.localScale = originalLocalScale;
-
-            if (col != null)
-                col.enabled = false;
-
             isInInteractRange = false;
             RefreshInteractHint();
+            gameObject.SetActive(false);
         }
 
         public virtual void Drop(Vector2 worldPosition)
         {
             isHeld = false;
-            transform.SetParent(null, true);
             transform.position = worldPosition;
             transform.localScale = originalLocalScale;
+            gameObject.SetActive(true);
 
             if (col != null)
                 col.enabled = true;
