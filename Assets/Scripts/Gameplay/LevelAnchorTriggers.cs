@@ -19,6 +19,10 @@ namespace BokeGameJam.Gameplay
         [Tooltip("留空则任意场景可用；填写后仅在该场景名下启用。")]
         [SerializeField] private string targetSceneName;
 
+        [Header("Scene Gate")]
+        [Tooltip("仅在该场景名下启用；留空则任意场景都启用")]
+        [SerializeField] private string targetSceneName;
+
         [Header("Camera Places (从左到右)")]
         [SerializeField] private Transform[] places;
 
@@ -58,6 +62,14 @@ namespace BokeGameJam.Gameplay
             }
         }
 
+        private void OnEnable()
+        {
+            if (!IsTargetSceneActive())
+                return;
+
+            EventManager.On(InputEvents.WorldToggle, OnWorldTogglePressed);
+        }
+
         private void Start()
         {
             if (!sceneReady || places == null || places.Length == 0)
@@ -66,9 +78,94 @@ namespace BokeGameJam.Gameplay
             if (CameraManager.Instance != null)
                 CameraManager.Instance.SetFollowTarget(null);
 
-            Transform startPlace = places[0];
-            SnapCameraTo(startPlace);
-            currentPlace = startPlace;
+            SnapCameraTo(places[0]);
+
+            if (playIntroStoryOnStart)
+                introStoryRoutine = StartCoroutine(PlayStoryNextFrame(ResolveIntroStory(), "开场剧情"));
+        }
+
+        private void OnDisable()
+        {
+            EventManager.Off(InputEvents.WorldToggle, OnWorldTogglePressed);
+
+            if (introStoryRoutine != null)
+            {
+                StopCoroutine(introStoryRoutine);
+                introStoryRoutine = null;
+            }
+        }
+
+        private bool IsTargetSceneActive()
+        {
+            return string.IsNullOrEmpty(targetSceneName)
+                || SceneManager.GetActiveScene().name == targetSceneName;
+        }
+
+        /// <summary>等一帧，确保 GameManager 已加载 CameraTopBanner 后再播剧情。</summary>
+        private IEnumerator PlayStoryNextFrame(StorySequence story, string storyLabel)
+        {
+            yield return null;
+            PlayStoryNow(story, storyLabel);
+            introStoryRoutine = null;
+        }
+
+        private void PlayStoryNow(StorySequence story, string storyLabel)
+        {
+            if (story == null || !story.HasLines)
+            {
+                Debug.LogWarning($"[LevelAnchorTriggers] {storyLabel}配置缺失或为空。", this);
+                return;
+            }
+
+            CameraTopBannerUI banner = CameraTopBannerUI.Instance;
+            if (banner == null && UIManager.Instance != null)
+                banner = UIManager.Instance.ShowTopBanner();
+
+            if (banner == null)
+            {
+                Debug.LogWarning(
+                    $"[LevelAnchorTriggers] CameraTopBannerUI 未找到，无法播放{storyLabel}。",
+                    this);
+                return;
+            }
+
+            banner.PlayStory(story.CreateLineList());
+        }
+
+        private static StorySequence ResolveStory(StorySequence assigned, string resourcePath)
+        {
+            if (assigned != null)
+                return assigned;
+
+            if (string.IsNullOrWhiteSpace(resourcePath))
+                return null;
+
+            return Resources.Load<StorySequence>(resourcePath.Trim());
+        }
+
+        private StorySequence ResolveIntroStory()
+        {
+            return ResolveStory(introStory, introStoryResourcePath);
+        }
+
+        private StorySequence ResolveFirstFlowerStory()
+        {
+            return ResolveStory(firstFlowerStory, firstFlowerStoryResourcePath);
+        }
+
+        private StorySequence ResolveFirstShiftStory()
+        {
+            return ResolveStory(firstShiftStory, firstShiftStoryResourcePath);
+        }
+
+        /// <summary>本关第一次按 Shift（世界切换）时播放剧情。</summary>
+        private void OnWorldTogglePressed()
+        {
+            if (!sceneReady || !playStoryOnFirstShift || hasPlayedFirstShiftStory)
+                return;
+
+            hasPlayedFirstShiftStory = true;
+            PlayStoryNow(ResolveFirstShiftStory(), "首次Shift剧情");
         }
 
         private void Update()
@@ -177,6 +274,41 @@ namespace BokeGameJam.Gameplay
 
             playerTransform = player.transform;
             return true;
+        }
+
+        /// <summary>本关第一次捡到红花或黄花时播放剧情。</summary>
+        private void TryTriggerFirstFlowerStory()
+        {
+            if (!playStoryOnFirstFlowerPickup || hasPlayedFirstFlowerStory)
+                return;
+
+            if (!TryGetPlayerInteractor(out PlayerInteractor interactor))
+                return;
+
+            if (interactor.HeldItem is not InteractableObjectFlower flower)
+                return;
+
+            if (flower.ColorKind != FlowerColor.Red && flower.ColorKind != FlowerColor.Yellow)
+                return;
+
+            hasPlayedFirstFlowerStory = true;
+            PlayStoryNow(ResolveFirstFlowerStory(), "首次摘花剧情");
+        }
+
+        private bool TryGetPlayerInteractor(out PlayerInteractor interactor)
+        {
+            interactor = playerInteractor;
+            if (interactor != null)
+                return true;
+
+            if (player != null)
+                interactor = player.GetComponent<PlayerInteractor>();
+
+            if (interactor == null)
+                interactor = FindObjectOfType<PlayerInteractor>();
+
+            playerInteractor = interactor;
+            return interactor != null;
         }
 
         private void SnapCameraTo(Transform place)
