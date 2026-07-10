@@ -56,6 +56,19 @@ namespace BokeGameJam.Gameplay
             base.OnDisable();
         }
 
+        protected override void OnDestroy()
+        {
+            // Choice panel may stay under UIRoot when Close skipped reparent during OnDisable.
+            if (choicePanel != null)
+            {
+                Transform panelTransform = choicePanel.transform;
+                if (panelTransform != null && panelTransform.parent != transform)
+                    Destroy(panelTransform.gameObject);
+            }
+
+            base.OnDestroy();
+        }
+
         public override void OnInteract(PlayerInteractor interactor)
         {
             if (!CanInteract(interactor))

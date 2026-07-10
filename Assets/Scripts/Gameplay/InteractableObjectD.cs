@@ -61,6 +61,17 @@ namespace BokeGameJam.Gameplay
             base.OnDisable();
         }
 
+        protected virtual void OnDestroy()
+        {
+            // Popup may stay under UIRoot (DDOL) when Close skipped reparent during OnDisable.
+            if (popupPanel == null)
+                return;
+
+            Transform panelTransform = popupPanel.transform;
+            if (panelTransform != null && panelTransform.parent != transform)
+                Destroy(panelTransform.gameObject);
+        }
+
         private void LateUpdate()
         {
             // 对话关闭后 BlocksInteract 变化，需补刷提示（不会再次触发 SetInInteractRange）。

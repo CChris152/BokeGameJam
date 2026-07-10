@@ -240,11 +240,26 @@ namespace BokeGameJam.UI
             if (originalParent == null || transform.parent == originalParent)
                 return;
 
+            // Unity forbids SetParent while a hierarchy is activating/deactivating
+            // (e.g. world toggle disables the ghost and Close runs from OnDisable).
+            // Leave the panel under UIRoot; Show() re-attaches next time.
+            if (!originalParent.gameObject.activeInHierarchy)
+                return;
+
             transform.SetParent(originalParent, false);
             if (panelRect != null)
             {
                 panelRect.anchoredPosition = Vector2.zero;
                 panelRect.localScale = Vector3.one;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (openInstance == this)
+            {
+                isOpen = false;
+                openInstance = null;
             }
         }
 
