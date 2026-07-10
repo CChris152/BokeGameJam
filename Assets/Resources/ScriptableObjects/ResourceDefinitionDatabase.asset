@@ -19,6 +19,8 @@ MonoBehaviour:
     prefab: {fileID: 1153020896921941970, guid: ec9071b2963294441b37810cb9d58761, type: 3}
   - id: InventorySlot
     prefab: {fileID: 3042768390086393676, guid: d07f4657beae81341b9441a59d1ab041, type: 3}
+  - id: CameraTopBanner
+    prefab: {fileID: 5538461209858373478, guid: 3024392f6c67c3748916a643ad4ec822, type: 3}
   prefabs:
   - id: Player
     prefab: {fileID: 4094095531222265388, guid: 25d3d4678dec73b469ab53ea4996aaf9, type: 3}

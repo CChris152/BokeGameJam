@@ -46,9 +46,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuSceneNames:
   - MainMenu
+  startLevelId: level_1
+  startSceneName: Level1
   levelPlayingUiIds:
   - InventorySlot
+  - CameraTopBanner
   uiToCloseOnLevelExit:
   - InventorySlot
+  - CameraTopBanner
+  startWorld: 0
   dontDestroyOnLoad: 1
   logStateChanges: 1
+  state: 0

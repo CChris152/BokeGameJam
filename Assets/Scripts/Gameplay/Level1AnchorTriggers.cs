@@ -1,5 +1,7 @@
 using System.Collections;
 using BokeGameJam.CameraSystem;
+using BokeGameJam.Data;
+using BokeGameJam.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,11 +12,13 @@ namespace BokeGameJam.Gameplay
     /// 玩家 X 从左到右越过 Anchor1 → 平滑移到 Place2；
     /// 越过 Anchor2 → Place3；反向越过则反向切换。
     /// 子物体命名：Place1 / Place2 / Place3 / Anchor1 / Anchor2（也可在 Inspector 拖引用）。
+    /// 开场可播放配置的剧情字幕。
     /// </summary>
     [DefaultExecutionOrder(200)]
     public sealed class Level1AnchorTriggers : MonoBehaviour
     {
         private const string TargetSceneName = "Level1";
+        private const string DefaultIntroStoryResourcePath = "ScriptableObjects/Stories/Level1Intro";
 
         [Header("Camera Places (可拖拽，留空则按子物体名查找)")]
         [SerializeField] private Transform place1;
@@ -30,10 +34,17 @@ namespace BokeGameJam.Gameplay
         [Tooltip("相机目标 Y 额外偏移（与 CameraManager followOffset.y 类似时可填 1.5）")]
         [SerializeField] private float cameraYOffset;
 
+        [Header("Intro Story")]
+        [Tooltip("开场剧情配置；留空则按 Resources 路径加载。")]
+        [SerializeField] private StorySequence introStory;
+        [SerializeField] private string introStoryResourcePath = DefaultIntroStoryResourcePath;
+        [SerializeField] private bool playIntroStoryOnStart = true;
+
         private PlayerController player;
         private float previousPlayerX;
         private bool hasPreviousPlayerX;
         private Coroutine moveRoutine;
+        private Coroutine introStoryRoutine;
         private bool sceneReady;
         private Transform currentPlace;
 
@@ -63,6 +74,57 @@ namespace BokeGameJam.Gameplay
 
             SnapCameraTo(place1);
             currentPlace = place1;
+
+            if (playIntroStoryOnStart)
+                introStoryRoutine = StartCoroutine(PlayIntroStoryNextFrame());
+        }
+
+        private void OnDisable()
+        {
+            if (introStoryRoutine != null)
+            {
+                StopCoroutine(introStoryRoutine);
+                introStoryRoutine = null;
+            }
+        }
+
+        /// <summary>等一帧，确保 GameManager 已加载 CameraTopBanner 后再播剧情。</summary>
+        private IEnumerator PlayIntroStoryNextFrame()
+        {
+            yield return null;
+
+            StorySequence story = ResolveIntroStory();
+            if (story == null || !story.HasLines)
+            {
+                Debug.LogWarning("[Level1AnchorTriggers] 开场剧情配置缺失或为空。", this);
+                introStoryRoutine = null;
+                yield break;
+            }
+
+            CameraTopBannerUI banner = CameraTopBannerUI.Instance;
+            if (banner == null && UIManager.Instance != null)
+                banner = UIManager.Instance.ShowTopBanner();
+
+            if (banner == null)
+            {
+                Debug.LogWarning("[Level1AnchorTriggers] CameraTopBannerUI 未找到，无法播放开场剧情。", this);
+                introStoryRoutine = null;
+                yield break;
+            }
+
+            banner.PlayStory(story.CreateLineList());
+            introStoryRoutine = null;
+        }
+
+        private StorySequence ResolveIntroStory()
+        {
+            if (introStory != null)
+                return introStory;
+
+            if (string.IsNullOrWhiteSpace(introStoryResourcePath))
+                return null;
+
+            return Resources.Load<StorySequence>(introStoryResourcePath.Trim());
         }
 
         private void Update()

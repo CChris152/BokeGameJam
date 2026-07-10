@@ -46,10 +46,10 @@ namespace BokeGameJam.Core
 
         [Header("Level Playing UI")]
         [Tooltip("进入 LevelPlaying 时通过 UIManager 加载的 UI resourceId 列表。")]
-        [SerializeField] private List<string> levelPlayingUiIds = new() { "InventorySlot" };
+        [SerializeField] private List<string> levelPlayingUiIds = new() { "InventorySlot", "CameraTopBanner" };
 
         [Tooltip("离开关卡（回主菜单等）时关闭的 UI resourceId 列表。")]
-        [SerializeField] private List<string> uiToCloseOnLevelExit = new() { "InventorySlot" };
+        [SerializeField] private List<string> uiToCloseOnLevelExit = new() { "InventorySlot", "CameraTopBanner" };
 
         [Header("World")]
         [Tooltip("开局默认世界：A = 阳间，B = 阴间。")]

@@ -115,6 +115,37 @@ namespace BokeGameJam.UI
             return loadedUIs.TryGetValue(id, out GameObject ui) && ui != null && ui.activeSelf;
         }
 
+        /// <summary>加载并显示顶部提示条，可选设置文本。</summary>
+        public CameraTopBannerUI ShowTopBanner(string text = null)
+        {
+            GameObject go = Load(CameraTopBannerUI.ResourceId);
+            CameraTopBannerUI banner = go != null
+                ? go.GetComponent<CameraTopBannerUI>()
+                : null;
+
+            if (banner == null)
+                return null;
+
+            banner.Show(text);
+            return banner;
+        }
+
+        /// <summary>设置顶部提示条文本（未加载则先加载）。</summary>
+        public void SetTopBannerText(string text)
+        {
+            CameraTopBannerUI banner = CameraTopBannerUI.Instance;
+            if (banner == null)
+                banner = ShowTopBanner(text);
+            else
+                banner.SetText(text);
+        }
+
+        /// <summary>关闭顶部提示条。</summary>
+        public void HideTopBanner()
+        {
+            Close(CameraTopBannerUI.ResourceId);
+        }
+
         private static string NormalizeId(string id)
         {
             return string.IsNullOrWhiteSpace(id) ? null : id.Trim();
