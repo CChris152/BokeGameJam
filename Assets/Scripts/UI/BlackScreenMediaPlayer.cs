@@ -251,6 +251,13 @@ namespace BokeGameJam.UI
         /// <summary>按自定义顺序播放（可任意交替文字与视频）。</summary>
         public void Play(IReadOnlyList<MediaSequenceItem> sequence, Action onComplete = null)
         {
+            // 忽略重复 Play（例如 UI Submit/空格再次触发开始游戏），避免 CG 被中途重启。
+            if (IsPlaying)
+            {
+                Debug.LogWarning("[BlackScreenMediaPlayer] Already playing; ignoring duplicate Play request.", this);
+                return;
+            }
+
             StopCurrent();
             runningRoutine = StartCoroutine(PlayRoutine(sequence, onComplete));
         }
