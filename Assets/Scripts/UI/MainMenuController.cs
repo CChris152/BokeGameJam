@@ -93,8 +93,16 @@ namespace BokeGameJam.UI
                 return;
             }
 
+            button.onClick.RemoveListener(PlayUiConfirm);
             button.onClick.RemoveListener(callback);
+            button.onClick.AddListener(PlayUiConfirm);
             button.onClick.AddListener(callback);
+        }
+
+        private static void PlayUiConfirm()
+        {
+            if (GameAudioManager.Instance != null)
+                GameAudioManager.Instance.PlaySFXByResourcePath(GameSfxPaths.UiConfirm);
         }
 
         /// <summary>
