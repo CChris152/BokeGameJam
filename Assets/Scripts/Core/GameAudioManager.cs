@@ -11,6 +11,9 @@ namespace BokeGameJam.Core
     public class GameAudioManager : MonoBehaviour
     {
         private const string SfxResourceRoot = "Audio/SFX";
+        private const int InitialOneShotSourceCount = 6;
+        private const float AudibleSampleThreshold = 0.002f;
+        private const float AudibleStartPreRollSeconds = 0.003f;
 
         public static GameAudioManager Instance { get; private set; }
 
@@ -30,12 +33,14 @@ namespace BokeGameJam.Core
         private AudioSource bgmSourceA;
         private AudioSource bgmSourceB;
         private AudioSource bgmActiveSource;
-        private AudioSource sfxOneShotSource;
 
+        private readonly List<AudioSource> oneShotSources = new();
         private readonly Dictionary<string, AudioSource> loopingSfxSources = new();
         private readonly Dictionary<string, float> loopingSfxVolumeScales = new();
         private readonly Dictionary<string, AudioClip> resourcePathClips = new();
+        private readonly Dictionary<AudioClip, int> audibleStartSamples = new();
         private readonly HashSet<string> missingResourcePaths = new();
+        private readonly HashSet<AudioClip> unreadableAudioClips = new();
 
         private string currentBgmId;
         private float currentBgmVolumeScale = 1f;
@@ -58,7 +63,11 @@ namespace BokeGameJam.Core
 
             bgmSourceA = CreateChildSource("BGM_A", loop: true);
             bgmSourceB = CreateChildSource("BGM_B", loop: true);
-            sfxOneShotSource = CreateChildSource("SFX_OneShot", loop: false);
+            for (int i = 0; i < InitialOneShotSourceCount; i++)
+            {
+                AudioSource source = CreateChildSource($"SFX_OneShot_{i + 1}", loop: false);
+                oneShotSources.Add(source);
+            }
 
             bgmActiveSource = bgmSourceA;
             PreloadResourceSfx();
@@ -237,7 +246,7 @@ namespace BokeGameJam.Core
             if (!TryLoadSound(sfx, ResourceDefinitionDatabase.SoundCategory.SFX, out AudioClip clip))
                 return;
 
-            sfxOneShotSource.PlayOneShot(clip, sfxVolume * sfx.VolumeScale * volumeScale);
+            PlayClipImmediate(clip, sfxVolume * sfx.VolumeScale * volumeScale);
         }
 
         public void PlaySFXById(string sfxId, float volumeScale = 1f)
@@ -261,7 +270,7 @@ namespace BokeGameJam.Core
             if (clip == null)
                 return;
 
-            sfxOneShotSource.PlayOneShot(clip, sfxVolume * Mathf.Max(0f, volumeScale));
+            PlayClipImmediate(clip, sfxVolume * Mathf.Max(0f, volumeScale));
         }
 
         public void PlayRandomSFXByResourcePaths(float volumeScale, params string[] resourcePaths)
@@ -281,7 +290,7 @@ namespace BokeGameJam.Core
                 return;
 
             AudioClip selected = availableClips[Random.Range(0, availableClips.Count)];
-            sfxOneShotSource.PlayOneShot(selected, sfxVolume * Mathf.Max(0f, volumeScale));
+            PlayClipImmediate(selected, sfxVolume * Mathf.Max(0f, volumeScale));
         }
 
         public void PlaySFXLoop(ResourceDefinitionDatabase.SoundResource sfx, float volumeScale = 1f)
@@ -295,6 +304,7 @@ namespace BokeGameJam.Core
             float finalVolumeScale = sfx.VolumeScale * volumeScale;
             source.clip = clip;
             source.volume = sfxVolume * finalVolumeScale;
+            source.timeSamples = GetAudibleStartSample(clip);
             source.Play();
 
             loopingSfxSources[sfx.Id] = source;
@@ -325,6 +335,7 @@ namespace BokeGameJam.Core
             float finalVolumeScale = Mathf.Max(0f, volumeScale);
             source.clip = clip;
             source.volume = sfxVolume * finalVolumeScale;
+            source.timeSamples = GetAudibleStartSample(clip);
             source.Play();
 
             loopingSfxSources[loopKey] = source;
@@ -410,6 +421,37 @@ namespace BokeGameJam.Core
             return source;
         }
 
+        private void PlayClipImmediate(AudioClip clip, float volume)
+        {
+            if (clip == null)
+                return;
+
+            EnsureAudioDataLoaded(clip);
+            AudioSource source = GetAvailableOneShotSource();
+            source.Stop();
+            source.clip = clip;
+            source.loop = false;
+            source.volume = Mathf.Max(0f, volume);
+            source.timeSamples = GetAudibleStartSample(clip);
+            source.Play();
+        }
+
+        private AudioSource GetAvailableOneShotSource()
+        {
+            for (int i = 0; i < oneShotSources.Count; i++)
+            {
+                AudioSource source = oneShotSources[i];
+                if (source != null && !source.isPlaying)
+                    return source;
+            }
+
+            AudioSource extraSource = CreateChildSource(
+                $"SFX_OneShot_{oneShotSources.Count + 1}",
+                loop: false);
+            oneShotSources.Add(extraSource);
+            return extraSource;
+        }
+
         private AudioClip LoadSfxByResourcePath(string resourcePath)
         {
             if (string.IsNullOrWhiteSpace(resourcePath))
@@ -454,6 +496,7 @@ namespace BokeGameJam.Core
 
                 EnsureAudioDataLoaded(clip);
                 resourcePathClips[$"{SfxResourceRoot}/{clip.name}"] = clip;
+                audibleStartSamples[clip] = FindAudibleStartSample(clip);
             }
         }
 
@@ -461,6 +504,66 @@ namespace BokeGameJam.Core
         {
             if (clip != null && clip.loadState == AudioDataLoadState.Unloaded)
                 clip.LoadAudioData();
+        }
+
+        private int GetAudibleStartSample(AudioClip clip)
+        {
+            if (clip == null)
+                return 0;
+
+            if (audibleStartSamples.TryGetValue(clip, out int sample))
+                return sample;
+
+            sample = FindAudibleStartSample(clip);
+            audibleStartSamples[clip] = sample;
+            return sample;
+        }
+
+        private int FindAudibleStartSample(AudioClip clip)
+        {
+            if (clip == null
+                || clip.samples <= 0
+                || clip.channels <= 0
+                || clip.loadType == AudioClipLoadType.Streaming)
+            {
+                return 0;
+            }
+
+            const int chunkFrames = 4096;
+            int channels = clip.channels;
+            float[] samples = new float[chunkFrames * channels];
+
+            try
+            {
+                for (int frameOffset = 0; frameOffset < clip.samples; frameOffset += chunkFrames)
+                {
+                    int framesToRead = Mathf.Min(chunkFrames, clip.samples - frameOffset);
+                    if (!clip.GetData(samples, frameOffset))
+                        return 0;
+
+                    int valuesToRead = framesToRead * channels;
+                    for (int i = 0; i < valuesToRead; i++)
+                    {
+                        if (Mathf.Abs(samples[i]) < AudibleSampleThreshold)
+                            continue;
+
+                        int audibleFrame = frameOffset + (i / channels);
+                        int preRollFrames = Mathf.RoundToInt(
+                            clip.frequency * AudibleStartPreRollSeconds);
+                        return Mathf.Max(0, audibleFrame - preRollFrames);
+                    }
+                }
+            }
+            catch (System.Exception exception)
+            {
+                if (unreadableAudioClips.Add(clip))
+                {
+                    Debug.LogWarning(
+                        $"[GameAudioManager] Cannot inspect leading silence for '{clip.name}': {exception.Message}");
+                }
+            }
+
+            return 0;
         }
 
         private static string GetResourceLoopKey(string resourcePath)
