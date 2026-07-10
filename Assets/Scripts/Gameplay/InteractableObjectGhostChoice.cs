@@ -5,26 +5,18 @@ using BokeGameJam.UI;
 namespace BokeGameJam.Gameplay
 {
     /// <summary>
-    /// 鬼魂变体（继承 D）：空手时弹出对话；持有物品 A 时优先弹出互动选项
-    ///（交给对方 / 只是聊聊）。交给对方会消耗持有物，并可标记 mechanism 已满足。
+    /// 鬼魂变体（继承 D）：空手时弹出对话；持有「糖」时优先弹出互动选项
+    ///（交给对方 / 只是聊聊）。交给对方会消耗糖果并广播
+    /// <see cref="GameEvents.CandyReceived"/>；本物体监听该事件后消失。
     /// </summary>
     public class InteractableObjectGhostChoice : InteractableObjectD
     {
-        [Header("Choice (when holding item A)")]
+        [Header("Choice (when holding candy)")]
         [SerializeField] private DialogueChoicePopup choicePanel;
         [SerializeField] private string choiceTitle = "要怎么做？";
         [SerializeField] private string giveOptionLabel = "交给对方";
         [SerializeField] private string talkOptionLabel = "只是聊聊";
-        [TextArea(2, 6)]
-        [SerializeField] private string giveSuccessDialogue = "谢谢你……";
-        [Tooltip("mechanismId 非空时，仅同 id 的物品 A 会触发选项；为空则任意可拾取 A 均可。")]
-        [SerializeField] private bool requireMatchingMechanismId = true;
-        [Tooltip("成功交付后是否广播 MechanismSatisfied（供交付处 C 等使用）。")]
-        [SerializeField] private bool emitMechanismSatisfiedOnGive = true;
-        [Tooltip("交付成功后是否禁止再次交付（仍可对话）。")]
-        [SerializeField] private bool giveOnlyOnce = true;
 
-        private bool hasGiven;
         private PlayerInteractor pendingInteractor;
 
         protected override void Awake()
@@ -33,8 +25,16 @@ namespace BokeGameJam.Gameplay
             EnsureChoicePanel();
         }
 
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            EventManager.On(GameEvents.CandyReceived, OnCandyReceived);
+        }
+
         protected override void OnDisable()
         {
+            EventManager.Off(GameEvents.CandyReceived, OnCandyReceived);
+
             if (choicePanel != null && DialogueChoicePopup.IsOpen)
                 choicePanel.Close();
 
@@ -46,8 +46,8 @@ namespace BokeGameJam.Gameplay
             if (!CanInteract(interactor))
                 return;
 
-            // Holding item A: options take priority over plain dialogue.
-            if (HasUsableHeldItemA(interactor))
+            // Holding candy: options take priority over plain dialogue.
+            if (HasHeldCandy(interactor))
             {
                 ShowChoiceOptions(interactor);
                 return;
@@ -67,7 +67,7 @@ namespace BokeGameJam.Gameplay
             }
 
             pendingInteractor = interactor;
-            string itemName = interactor.HeldItem != null ? interactor.HeldItem.DisplayName : "物品";
+            string itemName = interactor.HeldItem != null ? interactor.HeldItem.DisplayName : "糖";
             string primary = string.IsNullOrWhiteSpace(giveOptionLabel)
                 ? $"交给对方（{itemName}）"
                 : giveOptionLabel.Trim();
@@ -86,19 +86,15 @@ namespace BokeGameJam.Gameplay
             PlayerInteractor interactor = pendingInteractor;
             pendingInteractor = null;
 
-            if (interactor == null || !HasUsableHeldItemA(interactor))
+            if (interactor == null || !HasHeldCandy(interactor))
             {
                 ShowDialogue(dialogueText);
                 return;
             }
 
             interactor.ConsumeHeldItem();
-            hasGiven = true;
-
-            if (emitMechanismSatisfiedOnGive && !string.IsNullOrEmpty(MechanismId))
-                EventManager.Emit(GameEvents.MechanismSatisfied, MechanismId);
-
-            ShowDialogue(giveSuccessDialogue);
+            // 广播「拿到糖」；本物体通过监听该事件消失（也供其他系统订阅）。
+            EventManager.Emit(GameEvents.CandyReceived);
         }
 
         private void OnTalkChosen()
@@ -107,11 +103,21 @@ namespace BokeGameJam.Gameplay
             ShowDialogue(dialogueText);
         }
 
-        private bool HasUsableHeldItemA(PlayerInteractor interactor)
+        private void OnCandyReceived()
         {
-            if (giveOnlyOnce && hasGiven)
-                return false;
+            if (choicePanel != null && DialogueChoicePopup.IsOpen)
+                choicePanel.Close();
 
+            if (popupPanel != null && (popupPanel.isActiveAndEnabled || DialoguePopup.IsOpen))
+                popupPanel.Close();
+            else if (DialoguePopup.IsOpen)
+                DialoguePopup.Hide();
+
+            gameObject.SetActive(false);
+        }
+
+        private static bool HasHeldCandy(PlayerInteractor interactor)
+        {
             if (interactor == null || !interactor.HasHeldItem)
                 return false;
 
@@ -119,13 +125,8 @@ namespace BokeGameJam.Gameplay
             if (held == null || held.Mode != InteractMode.PickUp)
                 return false;
 
-            if (!requireMatchingMechanismId)
-                return true;
-
-            if (string.IsNullOrEmpty(MechanismId))
-                return true;
-
-            return MatchesMechanism(held);
+            return held is InteractableObjectPowerGated gated
+                && gated.ItemKind == PowerGatedItemKind.Candy;
         }
 
         private void EnsureChoicePanel()

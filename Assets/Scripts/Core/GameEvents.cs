@@ -29,6 +29,12 @@ namespace BokeGameJam.Core
         /// <summary>物品 B 机制成功触发，payload = string mechanismId</summary>
         public const string MechanismSatisfied = "Game.MechanismSatisfied";
 
+        /// <summary>电闸启动（无 payload）；受电闸锁定的可交互物收到后才可互动</summary>
+        public const string PowerSwitchActivated = "Game.PowerSwitchActivated";
+
+        /// <summary>鬼魂收到糖果（无 payload）；交付成功后广播，监听方可消失等</summary>
+        public const string CandyReceived = "Game.CandyReceived";
+
         /// <summary>全局游戏状态切换，payload = GameState</summary>
         public const string GameStateChanged = "Game.GameStateChanged";
 
