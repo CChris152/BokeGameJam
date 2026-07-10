@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f4d05d0ebf78042b77867a97716f36, type: 3}
   m_Name: Story2
   m_EditorClassIdentifier: 
-  storyId: "2"
+  storyId: 2
   lines:
-  - "???: 这些花……开得可真好。"
+  - "???\uFF1A\u2026\u2026\u8BA9\u6211\u60F3\u8D77\u5BA2\u5385\u7684\u8001\u76F8\u7247\u3002 "
