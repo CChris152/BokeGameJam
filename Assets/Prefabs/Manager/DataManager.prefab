@@ -48,9 +48,23 @@ MonoBehaviour:
   - id: MasterVolume
     key: 
     valueType: 1
-    description: Shared master volume for BGM and SFX (0-1).
+    description: Legacy shared master volume (0-1). Used only as migration fallback.
     defaultInt: 0
     defaultFloat: 0.6
+    defaultString: 
+  - id: BgmVolume
+    key: 
+    valueType: 1
+    description: BGM / music volume (0-1).
+    defaultInt: 0
+    defaultFloat: 0.6
+    defaultString: 
+  - id: SfxVolume
+    key: 
+    valueType: 1
+    description: SFX / sound effect volume (0-1).
+    defaultInt: 0
+    defaultFloat: 1
     defaultString: 
   warnOnUnregisteredKey: 1
   autoSave: 1

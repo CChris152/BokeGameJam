@@ -6,21 +6,15 @@ using UnityEngine.UI;
 namespace BokeGameJam.UI
 {
     /// <summary>
-    /// 设置弹窗控制器：清空数据、音量调节、关闭弹窗。
-    /// 打开时可在 Inspector 切换两种演示动画：淡入 / 从上滑入。
+    /// 设置弹窗控制器：清空数据、音乐/音效音量调节、关闭弹窗。
+    /// 打开时中间内容面板播放淡入动画。
     /// </summary>
     public class SettingsPanelController : MonoBehaviour
     {
         public const string ResourceId = "SettingsPanel";
 
-        /// <summary>打开动画方案（给策划演示用，可在 Inspector 切换）。</summary>
-        public enum OpenAnimationStyle
-        {
-            /// <summary>中间内容从透明变为不透明。</summary>
-            FadeIn = 0,
-            /// <summary>中间内容从界面上方弹到中间（带缓动）。</summary>
-            SlideFromTop = 1
-        }
+        private const float DefaultBgmVolume = 0.6f;
+        private const float DefaultSfxVolume = 1f;
 
         [Header("按钮")]
         [Tooltip("清空存档数据按钮（逻辑暂未实现）")]
@@ -30,24 +24,20 @@ namespace BokeGameJam.UI
         [SerializeField] private Button closeButton;
 
         [Header("音量")]
-        [Tooltip("主音量滑条（BGM 与 SFX 共用）")]
-        [SerializeField] private Slider volumeSlider;
+        [Tooltip("音乐（BGM）音量滑条")]
+        [SerializeField] private Slider bgmVolumeSlider;
 
-        [Header("打开动画（演示切换）")]
+        [Tooltip("音效（SFX）音量滑条")]
+        [SerializeField] private Slider sfxVolumeSlider;
+
+        [Header("打开动画")]
         [Tooltip("中间内容面板（通常是 Panel）")]
         [SerializeField] private RectTransform contentPanel;
-
-        [Tooltip("打开动画方案：FadeIn=淡入，SlideFromTop=从上滑入")]
-        [SerializeField] private OpenAnimationStyle openAnimation = OpenAnimationStyle.FadeIn;
 
         [Tooltip("打开动画时长（秒）")]
         [SerializeField] private float openDuration = 0.35f;
 
-        [Tooltip("从上滑入时，起始位置相对屏幕高度的偏移倍数（越大越靠上）")]
-        [SerializeField] private float slideFromTopOffsetFactor = 1.2f;
-
         private CanvasGroup contentCanvasGroup;
-        private Vector2 contentRestPosition;
         private Coroutine openRoutine;
 
         private void Awake()
@@ -73,27 +63,16 @@ namespace BokeGameJam.UI
                 Debug.LogWarning("[SettingsPanelController] Close button is missing.", this);
             }
 
-            if (volumeSlider != null)
-            {
-                volumeSlider.minValue = 0f;
-                volumeSlider.maxValue = 1f;
-                volumeSlider.onValueChanged.RemoveListener(OnVolumeChanged);
-                volumeSlider.onValueChanged.AddListener(OnVolumeChanged);
-            }
-            else
-            {
-                Debug.LogWarning("[SettingsPanelController] Volume slider is missing.", this);
-            }
+            BindVolumeSlider(bgmVolumeSlider, OnBgmVolumeChanged, "BGM volume slider");
+            BindVolumeSlider(sfxVolumeSlider, OnSfxVolumeChanged, "SFX volume slider");
 
             ResolveContentPanel();
-            if (contentPanel != null)
-                contentRestPosition = contentPanel.anchoredPosition;
         }
 
         private void OnEnable()
         {
             // 每次显示时从存档同步滑条与运行时音量
-            SyncVolumeFromSavedData();
+            SyncVolumesFromSavedData();
             PlayOpenAnimation();
         }
 
@@ -114,48 +93,86 @@ namespace BokeGameJam.UI
             if (closeButton != null)
                 closeButton.onClick.RemoveListener(OnCloseClicked);
 
-            if (volumeSlider != null)
-                volumeSlider.onValueChanged.RemoveListener(OnVolumeChanged);
+            UnbindVolumeSlider(bgmVolumeSlider, OnBgmVolumeChanged);
+            UnbindVolumeSlider(sfxVolumeSlider, OnSfxVolumeChanged);
         }
 
-        /// <summary>
-        /// 读取已保存的主音量，刷新滑条并应用到音频管理器。
-        /// </summary>
-        private void SyncVolumeFromSavedData()
+        /// <summary>绑定单个音量滑条（0-1）。</summary>
+        private void BindVolumeSlider(Slider slider, UnityEngine.Events.UnityAction<float> callback, string missingLabel)
         {
-            if (volumeSlider == null)
+            if (slider == null)
+            {
+                Debug.LogWarning($"[SettingsPanelController] {missingLabel} is missing.", this);
                 return;
+            }
 
-            float volume = ResolveSavedMasterVolume();
-            // 不触发 onValueChanged，避免打开面板时重复写盘
-            volumeSlider.SetValueWithoutNotify(volume);
-            ApplyMasterVolume(volume);
+            slider.minValue = 0f;
+            slider.maxValue = 1f;
+            slider.onValueChanged.RemoveListener(callback);
+            slider.onValueChanged.AddListener(callback);
+        }
+
+        private static void UnbindVolumeSlider(Slider slider, UnityEngine.Events.UnityAction<float> callback)
+        {
+            if (slider != null)
+                slider.onValueChanged.RemoveListener(callback);
         }
 
         /// <summary>
-        /// 解析当前应显示的主音量：优先 DataManager，其次运行时音频值，最后回退默认值。
+        /// 读取已保存的音乐/音效音量，刷新滑条并应用到音频管理器。
         /// </summary>
-        private float ResolveSavedMasterVolume()
+        private void SyncVolumesFromSavedData()
+        {
+            float bgmVolume = ResolveSavedVolume(DataManager.Keys.BgmVolume, DefaultBgmVolume, useRuntimeBgm: true);
+            float sfxVolume = ResolveSavedVolume(DataManager.Keys.SfxVolume, DefaultSfxVolume, useRuntimeBgm: false);
+
+            if (bgmVolumeSlider != null)
+                bgmVolumeSlider.SetValueWithoutNotify(bgmVolume);
+
+            if (sfxVolumeSlider != null)
+                sfxVolumeSlider.SetValueWithoutNotify(sfxVolume);
+
+            ApplyBgmVolume(bgmVolume);
+            ApplySfxVolume(sfxVolume);
+        }
+
+        /// <summary>
+        /// 解析已保存音量：优先独立键，其次旧版 MasterVolume，再回退运行时/默认值。
+        /// </summary>
+        private static float ResolveSavedVolume(string volumeKey, float defaultValue, bool useRuntimeBgm)
         {
             if (DataManager.Instance != null)
-                return Mathf.Clamp01(DataManager.Instance.GetFloat(DataManager.Keys.MasterVolume));
+            {
+                if (DataManager.Instance.HasKey(volumeKey))
+                    return Mathf.Clamp01(DataManager.Instance.GetFloat(volumeKey));
+
+                if (DataManager.Instance.HasKey(DataManager.Keys.MasterVolume))
+                    return Mathf.Clamp01(DataManager.Instance.GetFloat(DataManager.Keys.MasterVolume));
+
+                return Mathf.Clamp01(DataManager.Instance.GetFloat(volumeKey, defaultValue));
+            }
 
             if (GameAudioManager.Instance != null)
-                return GameAudioManager.Instance.BgmVolume;
+                return useRuntimeBgm ? GameAudioManager.Instance.BgmVolume : GameAudioManager.Instance.SfxVolume;
 
-            return 0.6f;
+            return defaultValue;
         }
 
-        /// <summary>滑条拖动回调：同时更新运行时音量并持久化。</summary>
-        private void OnVolumeChanged(float value)
+        private void OnBgmVolumeChanged(float value)
         {
             float volume = Mathf.Clamp01(value);
-            ApplyMasterVolume(volume);
-            PersistMasterVolume(volume);
+            ApplyBgmVolume(volume);
+            PersistVolume(DataManager.Keys.BgmVolume, volume);
         }
 
-        /// <summary>将主音量应用到 BGM 与 SFX（当前共用同一数值）。</summary>
-        private static void ApplyMasterVolume(float volume)
+        private void OnSfxVolumeChanged(float value)
+        {
+            float volume = Mathf.Clamp01(value);
+            ApplySfxVolume(volume);
+            PersistVolume(DataManager.Keys.SfxVolume, volume);
+        }
+
+        private static void ApplyBgmVolume(float volume)
         {
             if (GameAudioManager.Instance == null)
             {
@@ -163,21 +180,30 @@ namespace BokeGameJam.UI
                 return;
             }
 
-            // 目前 BGM 与 SFX 共用同一主音量
             GameAudioManager.Instance.SetBGMVolume(volume);
-            GameAudioManager.Instance.SetSFXVolume(volume);
         }
 
-        /// <summary>通过 DataManager 将主音量写入 PlayerPrefs。</summary>
-        private static void PersistMasterVolume(float volume)
+        private static void ApplySfxVolume(float volume)
         {
-            if (DataManager.Instance == null)
+            if (GameAudioManager.Instance == null)
             {
-                Debug.LogWarning("[SettingsPanelController] DataManager instance is missing. Volume was not saved.");
+                Debug.LogWarning("[SettingsPanelController] GameAudioManager instance is missing.");
                 return;
             }
 
-            DataManager.Instance.SetFloat(DataManager.Keys.MasterVolume, volume);
+            GameAudioManager.Instance.SetSFXVolume(volume);
+        }
+
+        /// <summary>通过 DataManager 将音量写入 PlayerPrefs。</summary>
+        private static void PersistVolume(string volumeKey, float volume)
+        {
+            if (DataManager.Instance == null)
+            {
+                Debug.LogWarning($"[SettingsPanelController] DataManager instance is missing. Volume '{volumeKey}' was not saved.");
+                return;
+            }
+
+            DataManager.Instance.SetFloat(volumeKey, volume);
         }
 
         /// <summary>清空数据按钮回调（占位，后续接入存档清理）。</summary>
@@ -199,7 +225,7 @@ namespace BokeGameJam.UI
             UIManager.Instance.Close(ResourceId);
         }
 
-        /// <summary>按当前方案播放打开动画。</summary>
+        /// <summary>播放打开淡入动画。</summary>
         private void PlayOpenAnimation()
         {
             ResolveContentPanel();
@@ -210,17 +236,7 @@ namespace BokeGameJam.UI
                 StopCoroutine(openRoutine);
 
             EnsureContentCanvasGroup();
-            contentPanel.anchoredPosition = contentRestPosition;
-
-            switch (openAnimation)
-            {
-                case OpenAnimationStyle.SlideFromTop:
-                    openRoutine = StartCoroutine(SlideFromTopRoutine());
-                    break;
-                default:
-                    openRoutine = StartCoroutine(FadeInRoutine());
-                    break;
-            }
+            openRoutine = StartCoroutine(FadeInRoutine());
         }
 
         private IEnumerator FadeInRoutine()
@@ -229,7 +245,6 @@ namespace BokeGameJam.UI
             contentCanvasGroup.alpha = 0f;
             contentCanvasGroup.interactable = false;
             contentCanvasGroup.blocksRaycasts = false;
-            contentPanel.anchoredPosition = contentRestPosition;
 
             float elapsed = 0f;
             while (elapsed < duration)
@@ -246,43 +261,6 @@ namespace BokeGameJam.UI
             contentCanvasGroup.interactable = true;
             contentCanvasGroup.blocksRaycasts = true;
             openRoutine = null;
-        }
-
-        private IEnumerator SlideFromTopRoutine()
-        {
-            float duration = Mathf.Max(0.01f, openDuration);
-            float startY = ResolveSlideStartY();
-            Vector2 startPos = new Vector2(contentRestPosition.x, startY);
-
-            contentCanvasGroup.alpha = 1f;
-            contentCanvasGroup.interactable = false;
-            contentCanvasGroup.blocksRaycasts = false;
-            contentPanel.anchoredPosition = startPos;
-
-            float elapsed = 0f;
-            while (elapsed < duration)
-            {
-                elapsed += Time.unscaledDeltaTime;
-                float t = Mathf.Clamp01(elapsed / duration);
-                // EaseOutCubic：开始快、落地前减速，更像“弹到中间”
-                float eased = 1f - Mathf.Pow(1f - t, 3f);
-                contentPanel.anchoredPosition = Vector2.LerpUnclamped(startPos, contentRestPosition, eased);
-                yield return null;
-            }
-
-            contentPanel.anchoredPosition = contentRestPosition;
-            contentCanvasGroup.interactable = true;
-            contentCanvasGroup.blocksRaycasts = true;
-            openRoutine = null;
-        }
-
-        private float ResolveSlideStartY()
-        {
-            float panelHeight = contentPanel.rect.height;
-            RectTransform parent = contentPanel.parent as RectTransform;
-            float parentHeight = parent != null ? parent.rect.height : Screen.height;
-            // 放到父节点上方之外，再按系数拉开一点距离
-            return contentRestPosition.y + parentHeight * Mathf.Max(0.5f, slideFromTopOffsetFactor) + panelHeight;
         }
 
         private void ResolveContentPanel()

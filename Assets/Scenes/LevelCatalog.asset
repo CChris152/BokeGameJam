@@ -31,5 +31,11 @@ MonoBehaviour:
     levelFile: 
     thumbnail: {fileID: 0}
     unlockedByDefault: 0
+  - levelId: level_3
+    displayName: "\u949F\u697C\u5185\u90E8"
+    sceneName: Level3
+    levelFile: Level3
+    thumbnail: {fileID: 0}
+    unlockedByDefault: 1
   useProgressPersistence: 1
   progressKeyPrefix: LevelUnlocked_

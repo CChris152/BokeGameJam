@@ -61,21 +61,39 @@ namespace BokeGameJam.Core
 
         private void Start()
         {
-            // 启动时从 DataManager 恢复已保存的主音量
+            // 启动时从 DataManager 分别恢复 BGM / SFX 音量
             LoadVolumesFromDataManager();
         }
 
         /// <summary>
-        /// 从 DataManager 读取共用主音量（MasterVolume），并同时应用到 BGM 与 SFX。
+        /// 从 DataManager 分别读取 BGM / SFX 音量并应用。
+        /// 若新键尚未写入，则回退到旧版 MasterVolume，再回退到当前运行时默认值。
         /// </summary>
         public void LoadVolumesFromDataManager()
         {
             if (DataManager.Instance == null)
                 return;
 
-            float masterVolume = Mathf.Clamp01(DataManager.Instance.GetFloat(DataManager.Keys.MasterVolume));
-            SetBGMVolume(masterVolume);
-            SetSFXVolume(masterVolume);
+            SetBGMVolume(ResolveSavedVolume(DataManager.Keys.BgmVolume, bgmVolume));
+            SetSFXVolume(ResolveSavedVolume(DataManager.Keys.SfxVolume, sfxVolume));
+        }
+
+        /// <summary>
+        /// 解析已保存音量：优先独立键，其次旧版 MasterVolume，最后使用 fallback。
+        /// </summary>
+        private static float ResolveSavedVolume(string volumeKey, float fallback)
+        {
+            DataManager data = DataManager.Instance;
+            if (data == null)
+                return Mathf.Clamp01(fallback);
+
+            if (data.HasKey(volumeKey))
+                return Mathf.Clamp01(data.GetFloat(volumeKey));
+
+            if (data.HasKey(DataManager.Keys.MasterVolume))
+                return Mathf.Clamp01(data.GetFloat(DataManager.Keys.MasterVolume));
+
+            return Mathf.Clamp01(data.GetFloat(volumeKey, fallback));
         }
 
         #region 背景音乐
