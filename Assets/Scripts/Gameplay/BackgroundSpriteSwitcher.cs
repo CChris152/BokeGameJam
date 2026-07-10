@@ -6,7 +6,8 @@ namespace BokeGameJam.Gameplay
     /// <summary>
     /// 挂在背景上：持有阳间 / 阴间 / 关灯三张 Sprite，
     /// 订阅 <see cref="GameEvents.ActiveWorldChanged"/> 与 <see cref="GameEvents.LightsOffChanged"/> 切换显示。
-    /// 只响应同 <see cref="roomId"/> 的关灯事件；关灯优先于世界切换。
+    /// 只响应同 <see cref="roomId"/> 的关灯事件。
+    /// 关灯 + 世界 A 显示关灯图；关灯 + Shift 到世界 B 时与开灯切阴间相同，显示阴间图。
     /// </summary>
     [RequireComponent(typeof(SpriteRenderer))]
     public sealed class BackgroundSpriteSwitcher : MonoBehaviour
@@ -18,9 +19,9 @@ namespace BokeGameJam.Gameplay
         [Header("Sprites")]
         [Tooltip("阳间（世界 A）")]
         [SerializeField] private Sprite livingWorldSprite;
-        [Tooltip("阴间（世界 B）")]
+        [Tooltip("阴间（世界 B）；开灯 Shift 与关灯 Shift 均用此图")]
         [SerializeField] private Sprite underworldSprite;
-        [Tooltip("关灯")]
+        [Tooltip("关灯（世界 A）")]
         [SerializeField] private Sprite lightsOffSprite;
 
         private SpriteRenderer spriteRenderer;
@@ -79,10 +80,10 @@ namespace BokeGameJam.Gameplay
                 return;
 
             Sprite next;
-            if (lightsOff)
-                next = lightsOffSprite;
-            else if (activeWorld == WorldId.B)
+            if (activeWorld == WorldId.B)
                 next = underworldSprite;
+            else if (lightsOff)
+                next = lightsOffSprite;
             else
                 next = livingWorldSprite;
 
