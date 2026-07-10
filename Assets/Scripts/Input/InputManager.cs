@@ -84,8 +84,10 @@ namespace BokeGameJam.Input
 
         private void Update()
         {
-            // 编辑器切换键在所有上下文下都可用（除 UI 上下文外）
-            if (currentContext != InputContext.UI && UnityEngine.Input.GetKeyDown(toggleEditorKey))
+            // 编辑器切换键仅在 Unity 编辑器可用；打包后禁用地图编辑入口
+            if (Application.isEditor
+                && currentContext != InputContext.UI
+                && UnityEngine.Input.GetKeyDown(toggleEditorKey))
                 EventManager.Emit(InputEvents.EditorToggle);
 
             switch (currentContext)

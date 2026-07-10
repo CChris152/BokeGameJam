@@ -720,7 +720,7 @@ PrefabInstance:
     - target: {fileID: 4340439550777877636, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
       propertyPath: underworldSprite
       value: 
-      objectReference: {fileID: 21300000, guid: d033934fbb86547459d03fe4f09be75c, type: 3}
+      objectReference: {fileID: 21300000, guid: 52fc6b6541a41f449a48b2b4ebe06485, type: 3}
     - target: {fileID: 4340439550777877636, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
       propertyPath: livingWorldSprite
       value: 
@@ -982,6 +982,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: "\u524D\u8857\u9053"
       objectReference: {fileID: 0}
+    - target: {fileID: 2677670495659346456, guid: b558b390fb40ad748bbf65a3aa4398b5, type: 3}
+      propertyPath: underworldSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 0accf9e0b9b743e4aa86978961c40376, type: 3}
     - target: {fileID: 2677670495659346456, guid: b558b390fb40ad748bbf65a3aa4398b5, type: 3}
       propertyPath: livingWorldSprite
       value: 

@@ -350,7 +350,13 @@ namespace BokeGameJam.LevelEditor
 
         // ---------- 事件回调 ----------
 
-        private void OnToggleRequest() => SetEditMode(!isEditMode);
+        private void OnToggleRequest()
+        {
+            if (!EditingAllowed)
+                return;
+
+            SetEditMode(!isEditMode);
+        }
 
         private void OnActiveWorldChanged(WorldId world)
         {
@@ -482,8 +488,14 @@ namespace BokeGameJam.LevelEditor
 
         // ---------- 模式切换 ----------
 
+        /// <summary>仅 Unity 编辑器内可进入地图编辑；打包后只负责加载关卡。</summary>
+        public static bool EditingAllowed => Application.isEditor;
+
         public void SetEditMode(bool value)
         {
+            if (value && !EditingAllowed)
+                return;
+
             if (!value)
                 CancelSharedDrag(restore: true);
 
@@ -1169,6 +1181,9 @@ namespace BokeGameJam.LevelEditor
 
         private void OnGUI()
         {
+            if (!EditingAllowed)
+                return;
+
             EnsureStyles();
             DrawModeBadge();
 
