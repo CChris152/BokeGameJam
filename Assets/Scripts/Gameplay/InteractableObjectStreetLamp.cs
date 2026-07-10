@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using BokeGameJam.Core;
@@ -108,6 +109,13 @@ namespace BokeGameJam.Gameplay
             if (!string.Equals(levelId, Level2Id, System.StringComparison.Ordinal))
                 return;
 
+            // 同帧内 GameManager 可能已 Destroy 旧 Banner；延后一帧再播，确保 UI 可用。
+            StartCoroutine(PlayAllLitStoryNextFrame());
+        }
+
+        private IEnumerator PlayAllLitStoryNextFrame()
+        {
+            yield return null;
             TryPlayAllLitStory();
         }
 
