@@ -7,20 +7,11 @@ namespace BokeGameJam.UI
 {
     /// <summary>
     /// 设置弹窗控制器：清空数据、音量调节、关闭弹窗。
-    /// 打开时可在 Inspector 切换两种演示动画：淡入 / 从上滑入。
+    /// 打开时中间内容面板播放淡入动画。
     /// </summary>
     public class SettingsPanelController : MonoBehaviour
     {
         public const string ResourceId = "SettingsPanel";
-
-        /// <summary>打开动画方案（给策划演示用，可在 Inspector 切换）。</summary>
-        public enum OpenAnimationStyle
-        {
-            /// <summary>中间内容从透明变为不透明。</summary>
-            FadeIn = 0,
-            /// <summary>中间内容从界面上方弹到中间（带缓动）。</summary>
-            SlideFromTop = 1
-        }
 
         [Header("按钮")]
         [Tooltip("清空存档数据按钮（逻辑暂未实现）")]
@@ -33,21 +24,14 @@ namespace BokeGameJam.UI
         [Tooltip("主音量滑条（BGM 与 SFX 共用）")]
         [SerializeField] private Slider volumeSlider;
 
-        [Header("打开动画（演示切换）")]
+        [Header("打开动画")]
         [Tooltip("中间内容面板（通常是 Panel）")]
         [SerializeField] private RectTransform contentPanel;
-
-        [Tooltip("打开动画方案：FadeIn=淡入，SlideFromTop=从上滑入")]
-        [SerializeField] private OpenAnimationStyle openAnimation = OpenAnimationStyle.FadeIn;
 
         [Tooltip("打开动画时长（秒）")]
         [SerializeField] private float openDuration = 0.35f;
 
-        [Tooltip("从上滑入时，起始位置相对屏幕高度的偏移倍数（越大越靠上）")]
-        [SerializeField] private float slideFromTopOffsetFactor = 1.2f;
-
         private CanvasGroup contentCanvasGroup;
-        private Vector2 contentRestPosition;
         private Coroutine openRoutine;
 
         private void Awake()
@@ -86,8 +70,6 @@ namespace BokeGameJam.UI
             }
 
             ResolveContentPanel();
-            if (contentPanel != null)
-                contentRestPosition = contentPanel.anchoredPosition;
         }
 
         private void OnEnable()
@@ -199,7 +181,7 @@ namespace BokeGameJam.UI
             UIManager.Instance.Close(ResourceId);
         }
 
-        /// <summary>按当前方案播放打开动画。</summary>
+        /// <summary>播放打开淡入动画。</summary>
         private void PlayOpenAnimation()
         {
             ResolveContentPanel();
@@ -210,17 +192,7 @@ namespace BokeGameJam.UI
                 StopCoroutine(openRoutine);
 
             EnsureContentCanvasGroup();
-            contentPanel.anchoredPosition = contentRestPosition;
-
-            switch (openAnimation)
-            {
-                case OpenAnimationStyle.SlideFromTop:
-                    openRoutine = StartCoroutine(SlideFromTopRoutine());
-                    break;
-                default:
-                    openRoutine = StartCoroutine(FadeInRoutine());
-                    break;
-            }
+            openRoutine = StartCoroutine(FadeInRoutine());
         }
 
         private IEnumerator FadeInRoutine()
@@ -229,7 +201,6 @@ namespace BokeGameJam.UI
             contentCanvasGroup.alpha = 0f;
             contentCanvasGroup.interactable = false;
             contentCanvasGroup.blocksRaycasts = false;
-            contentPanel.anchoredPosition = contentRestPosition;
 
             float elapsed = 0f;
             while (elapsed < duration)
@@ -246,43 +217,6 @@ namespace BokeGameJam.UI
             contentCanvasGroup.interactable = true;
             contentCanvasGroup.blocksRaycasts = true;
             openRoutine = null;
-        }
-
-        private IEnumerator SlideFromTopRoutine()
-        {
-            float duration = Mathf.Max(0.01f, openDuration);
-            float startY = ResolveSlideStartY();
-            Vector2 startPos = new Vector2(contentRestPosition.x, startY);
-
-            contentCanvasGroup.alpha = 1f;
-            contentCanvasGroup.interactable = false;
-            contentCanvasGroup.blocksRaycasts = false;
-            contentPanel.anchoredPosition = startPos;
-
-            float elapsed = 0f;
-            while (elapsed < duration)
-            {
-                elapsed += Time.unscaledDeltaTime;
-                float t = Mathf.Clamp01(elapsed / duration);
-                // EaseOutCubic：开始快、落地前减速，更像“弹到中间”
-                float eased = 1f - Mathf.Pow(1f - t, 3f);
-                contentPanel.anchoredPosition = Vector2.LerpUnclamped(startPos, contentRestPosition, eased);
-                yield return null;
-            }
-
-            contentPanel.anchoredPosition = contentRestPosition;
-            contentCanvasGroup.interactable = true;
-            contentCanvasGroup.blocksRaycasts = true;
-            openRoutine = null;
-        }
-
-        private float ResolveSlideStartY()
-        {
-            float panelHeight = contentPanel.rect.height;
-            RectTransform parent = contentPanel.parent as RectTransform;
-            float parentHeight = parent != null ? parent.rect.height : Screen.height;
-            // 放到父节点上方之外，再按系数拉开一点距离
-            return contentRestPosition.y + parentHeight * Mathf.Max(0.5f, slideFromTopOffsetFactor) + panelHeight;
         }
 
         private void ResolveContentPanel()

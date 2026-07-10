@@ -344,10 +344,8 @@ MonoBehaviour:
   clearDataButton: {fileID: 837511116213034359}
   closeButton: {fileID: 7424244390657861177}
   volumeSlider: {fileID: 4816354498057266204}
-  contentPanel: {fileID: 0}
-  openAnimation: 0
+  contentPanel: {fileID: 5090449651704400388}
   openDuration: 0.35
-  slideFromTopOffsetFactor: 1.2
 --- !u!1 &3083428597958228386
 GameObject:
   m_ObjectHideFlags: 0

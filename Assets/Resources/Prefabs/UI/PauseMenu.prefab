@@ -218,6 +218,8 @@ MonoBehaviour:
   returnToMainMenuButton: {fileID: 450789762620352734}
   closeButton: {fileID: 9161347800892107833}
   volumeSlider: {fileID: 18722101290317475}
+  contentPanel: {fileID: 4463750600283316006}
+  openDuration: 0.35
 --- !u!1 &2235092837495748689
 GameObject:
   m_ObjectHideFlags: 0
