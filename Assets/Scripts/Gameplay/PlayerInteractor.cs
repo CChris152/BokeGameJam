@@ -9,6 +9,7 @@ namespace BokeGameJam.Gameplay
     /// <summary>
     /// 玩家交互：范围内按 E 对最近可交互物执行捡起或触发。
     /// 持有物品时优先交付 C 或触发非拾取谜题，否则丢弃。
+    /// 切换到里世界（B）时，手中的花会自动丢弃。
     /// </summary>
     public sealed class PlayerInteractor : MonoBehaviour
     {
@@ -26,11 +27,13 @@ namespace BokeGameJam.Gameplay
         private void OnEnable()
         {
             EventManager.On(InputEvents.PlayerInteractPressed, OnInteractPressed);
+            EventManager.On<WorldId>(GameEvents.ActiveWorldChanged, OnActiveWorldChanged);
         }
 
         private void OnDisable()
         {
             EventManager.Off(InputEvents.PlayerInteractPressed, OnInteractPressed);
+            EventManager.Off<WorldId>(GameEvents.ActiveWorldChanged, OnActiveWorldChanged);
 
             foreach (IInteractable interactable in nearby)
             {
@@ -135,6 +138,15 @@ namespace BokeGameJam.Gameplay
             Vector2 dropPos = (Vector2)transform.position + GetDropOffset();
             item.Drop(dropPos);
             EmitHeldChanged();
+        }
+
+        /// <summary>切换到里世界（B）时，自动丢弃手中的花。</summary>
+        private void OnActiveWorldChanged(WorldId world)
+        {
+            if (world != WorldId.B || held is not InteractableObjectFlower)
+                return;
+
+            DropHeld();
         }
 
         /// <summary>交付处消耗当前持有物（销毁）。</summary>

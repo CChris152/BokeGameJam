@@ -1,4 +1,5 @@
 using UnityEngine;
+using BokeGameJam.Core;
 using BokeGameJam.UI;
 
 namespace BokeGameJam.Gameplay
@@ -6,6 +7,7 @@ namespace BokeGameJam.Gameplay
     /// <summary>
     /// 可交互物体 D（鬼魂）：可反复互动，每关通常只有一个；
     /// 交互后显示自身 PopupPanel 子物体上的对话框。
+    /// 切回表世界（A）时关闭对话；表世界中不可触发，回到里世界后仍可再触发。
     /// </summary>
     public class InteractableObjectD : InteractableObject
     {
@@ -41,20 +43,26 @@ namespace BokeGameJam.Gameplay
             }
 
             activeInLevel = this;
+            EventManager.On<WorldId>(GameEvents.ActiveWorldChanged, OnActiveWorldChanged);
         }
 
         protected virtual void OnDisable()
         {
+            EventManager.Off<WorldId>(GameEvents.ActiveWorldChanged, OnActiveWorldChanged);
+
             if (activeInLevel == this)
                 activeInLevel = null;
 
-            if (popupPanel != null && DialoguePopup.IsOpen)
-                popupPanel.Close();
+            CloseDialogueIfOpen();
         }
 
         public override bool CanInteract(PlayerInteractor interactor)
         {
-            return !DialoguePopup.BlocksInteract;
+            // 表世界会关掉 B 层；物体禁用后仍可能留在 nearby，必须拒绝。
+            // 不要做“回过表世界就永久禁用”，否则开局隐藏 B 层时会被误伤。
+            return isActiveAndEnabled
+                && gameObject.activeInHierarchy
+                && !DialoguePopup.BlocksInteract;
         }
 
         public override void OnInteract(PlayerInteractor interactor)
@@ -91,6 +99,26 @@ namespace BokeGameJam.Gameplay
 
             if (popupPanel == null)
                 popupPanel = GetComponentInChildren<DialoguePopup>(true);
+        }
+
+        private void OnActiveWorldChanged(WorldId world)
+        {
+            // 回到表世界：关掉已挂到 UI 根上的对话框，避免按 E 仍开关对话。
+            if (world == WorldId.A)
+                CloseDialogueIfOpen();
+        }
+
+        private void CloseDialogueIfOpen()
+        {
+            if (popupPanel != null)
+            {
+                if (popupPanel.isActiveAndEnabled || DialoguePopup.IsOpen)
+                    popupPanel.Close();
+                return;
+            }
+
+            if (DialoguePopup.IsOpen)
+                DialoguePopup.Hide();
         }
     }
 }

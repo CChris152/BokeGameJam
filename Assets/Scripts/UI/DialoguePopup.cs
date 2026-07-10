@@ -147,6 +147,7 @@ namespace BokeGameJam.UI
             isOpen = true;
             openInstance = this;
             gameObject.SetActive(true);
+            BringToFront();
             UpdateScreenPosition();
         }
 
@@ -181,7 +182,6 @@ namespace BokeGameJam.UI
             if (transform.parent != uiRoot)
                 transform.SetParent(uiRoot, false);
 
-            transform.SetAsLastSibling();
             rootCanvas = uiRoot.GetComponentInParent<Canvas>();
             uiCamera = rootCanvas != null && rootCanvas.renderMode != RenderMode.ScreenSpaceOverlay
                 ? rootCanvas.worldCamera
@@ -195,6 +195,14 @@ namespace BokeGameJam.UI
                 panelRect.localScale = Vector3.one;
                 panelRect.localRotation = Quaternion.identity;
             }
+
+            BringToFront();
+        }
+
+        /// <summary>提到 UI 根最前，避免被 Inventory / Banner 等盖住。</summary>
+        private void BringToFront()
+        {
+            transform.SetAsLastSibling();
         }
 
         private void RestoreOriginalParent()
@@ -214,6 +222,10 @@ namespace BokeGameJam.UI
         {
             if (panelRect == null || worldAnchor == null)
                 return;
+
+            // 打开期间保持在最上层（其他 UI 可能后加载）。
+            if (isOpen)
+                BringToFront();
 
             Camera worldCam = Camera.main;
             if (worldCam == null)

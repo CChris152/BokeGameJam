@@ -2041,6 +2041,86 @@
             "sequenceIndex": 0,
             "dialogueText": "",
             "roomId": ""
+        },
+        {
+            "x": 8,
+            "y": -1,
+            "tileId": "Interactable/LightSwitch",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": "room_1"
+        },
+        {
+            "x": 28,
+            "y": -1,
+            "tileId": "Interactable/LightSwitch",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": "room_2"
+        },
+        {
+            "x": 29,
+            "y": -1,
+            "tileId": "Interactable/LightSwitch",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": "room_3"
+        },
+        {
+            "x": -4,
+            "y": -1,
+            "tileId": "Interactable/BlueFlower",
+            "mechanismId": "0",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 2,
+            "y": 0,
+            "tileId": "Interactable/YellowFlower",
+            "mechanismId": "0",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 35,
+            "y": -2,
+            "tileId": "Interactable/PurpleFlower",
+            "mechanismId": "0",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 41,
+            "y": -2,
+            "tileId": "Interactable/RedFlower",
+            "mechanismId": "0",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 19,
+            "y": 0,
+            "tileId": "Interactable/FlowerCollector",
+            "mechanismId": "0",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
         }
     ],
     "tilesB": [
@@ -3413,99 +3493,18 @@
             "sequenceIndex": 0,
             "dialogueText": "",
             "roomId": ""
-        }
-    ],
-    "tilesShared": [
+        },
         {
-            "x": -2,
+            "x": 43,
             "y": -2,
-            "tileId": "Interactable/YellowFlower",
-            "mechanismId": "0",
+            "tileId": "Interactable/GhostObject",
+            "mechanismId": "残响",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 1,
-            "y": -2,
-            "tileId": "Interactable/RedFlower",
-            "mechanismId": "0",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 7,
-            "y": -1,
-            "tileId": "Interactable/LightSwitch",
-            "mechanismId": "0",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": "room_1"
-        },
-        {
-            "x": 28,
-            "y": -1,
-            "tileId": "Interactable/LightSwitch",
-            "mechanismId": "0",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": "room_2"
-        },
-        {
-            "x": 30,
-            "y": -1,
-            "tileId": "Interactable/LightSwitch",
-            "mechanismId": "0",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": "room_3"
-        },
-        {
-            "x": 19,
-            "y": 0,
-            "tileId": "Interactable/FlowerCollector",
-            "mechanismId": "0",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 24,
-            "y": -2,
-            "tileId": "Interactable/RedFlower",
-            "mechanismId": "0",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 36,
-            "y": -2,
-            "tileId": "Interactable/YellowFlower",
-            "mechanismId": "0",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 41,
-            "y": -2,
-            "tileId": "Interactable/RedFlower",
-            "mechanismId": "0",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
+            "dialogueText": "那晚我在厨房给热着甜汤，爸爸尚未归来，你们两个人在卧室玩耍，只有客厅空着，连灯也没人想起去开。",
             "roomId": ""
         }
     ],
+    "tilesShared": [],
     "tiles": []
 }

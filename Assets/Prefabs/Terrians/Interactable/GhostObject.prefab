@@ -107,7 +107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelLayer: 1
   mechanismId: 
-  displayName: Ghost
+  displayName: "\u6B8B\u54CD"
   iconOverride: {fileID: 0}
   holdLocalOffset: {x: 0.35, y: 0.15}
   dialogueText: ......
@@ -190,7 +190,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Ghost
+  m_Text: "\u6B8B\u54CD"
 --- !u!1 &7933454368534461242
 GameObject:
   m_ObjectHideFlags: 0

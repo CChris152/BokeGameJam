@@ -45,13 +45,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 014cc5d49774bc94a8accb894536ad6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelLayer: 2
+  levelLayer: 0
   mechanismId: 
   displayName: "\u7D2B\u82B1"
   iconOverride: {fileID: 21300000, guid: 40b4e86b8fa641f4f84c100d63e77a81, type: 3}
   holdLocalOffset: {x: 0.35, y: 0.15}
   flowerColor: 2
   respawnDelaySeconds: 5
+  discardFadeDuration: 0.25
 --- !u!1 &2933725045221405296
 GameObject:
   m_ObjectHideFlags: 0

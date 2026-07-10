@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94f9174c059b2ed41ac540043d1a02d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelLayer: 2
+  levelLayer: 0
   mechanismId: 
   displayName: Flower Collector
   iconOverride: {fileID: 0}

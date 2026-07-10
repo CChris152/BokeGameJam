@@ -579,7 +579,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 637488419}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5eaec04a0bef0d84ca320f5f0cea640f, type: 3}
+  m_Script: {fileID: 11500000, guid: cccbca50dd73e574990d8ba386fd46f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   place1: {fileID: 434003584}
@@ -592,6 +592,12 @@ MonoBehaviour:
   introStory: {fileID: 0}
   introStoryResourcePath: ScriptableObjects/Stories/Story1
   playIntroStoryOnStart: 1
+  firstFlowerStory: {fileID: 0}
+  firstFlowerStoryResourcePath: ScriptableObjects/Stories/Story2
+  playStoryOnFirstFlowerPickup: 1
+  firstShiftStory: {fileID: 0}
+  firstShiftStoryResourcePath: ScriptableObjects/Stories/Story3
+  playStoryOnFirstShift: 1
 --- !u!4 &637488421
 Transform:
   m_ObjectHideFlags: 0

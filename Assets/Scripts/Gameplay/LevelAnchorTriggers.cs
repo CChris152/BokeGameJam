@@ -1,29 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using BokeGameJam.CameraSystem;
-using BokeGameJam.Core;
-using BokeGameJam.Data;
-using BokeGameJam.Input;
-using BokeGameJam.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace BokeGameJam.Gameplay
 {
     /// <summary>
-    /// Level1 分段相机：Start 固定到 Place1；
-    /// 玩家 X 从左到右越过 Anchor1 → 平滑移到 Place2；
-    /// 越过 Anchor2 → Place3；反向越过则反向切换。
-    /// 子物体命名：Place1 / Place2 / Place3 / Anchor1 / Anchor2（也可在 Inspector 拖引用）。
-    /// 开场可播放配置的剧情字幕。
+    /// 通用分段相机：Start 固定到第一个 Place；
+    /// 玩家 X 越过 Anchor[i] 时在 Place[i] / Place[i+1] 间切换。
+    /// 子物体可命名 Place1..N / Anchor1..N-1（也可在 Inspector 拖引用）。
+    /// 第一关请使用 <see cref="Level1AnchorTriggers"/>。
     /// </summary>
     [DefaultExecutionOrder(200)]
     public sealed class LevelAnchorTriggers : MonoBehaviour
     {
-        private const string TargetSceneName = "Level1";
-        private const string DefaultIntroStoryResourcePath = "ScriptableObjects/Stories/Story1";
-        private const string DefaultFirstFlowerStoryResourcePath = "ScriptableObjects/Stories/Story2";
-        private const string DefaultFirstShiftStoryResourcePath = "ScriptableObjects/Stories/Story3";
+        [Header("Scene")]
+        [Tooltip("留空则任意场景可用；填写后仅在该场景名下启用。")]
+        [SerializeField] private string targetSceneName;
 
         [Header("Camera Places (从左到右)")]
         [SerializeField] private Transform[] places;
@@ -36,34 +30,12 @@ namespace BokeGameJam.Gameplay
         [Tooltip("相机目标 Y 额外偏移（与 CameraManager followOffset.y 类似时可填 1.5）")]
         [SerializeField] private float cameraYOffset;
 
-        [Header("Intro Story")]
-        [Tooltip("开场剧情配置；留空则按 Resources 路径加载。")]
-        [SerializeField] private StorySequence introStory;
-        [SerializeField] private string introStoryResourcePath = DefaultIntroStoryResourcePath;
-        [SerializeField] private bool playIntroStoryOnStart = true;
-
-        [Header("First Flower Story")]
-        [Tooltip("本关第一次捡到红/黄花时播放；留空则按 Resources 路径加载。")]
-        [SerializeField] private StorySequence firstFlowerStory;
-        [SerializeField] private string firstFlowerStoryResourcePath = DefaultFirstFlowerStoryResourcePath;
-        [SerializeField] private bool playStoryOnFirstFlowerPickup = true;
-
-        [Header("First Shift Story")]
-        [Tooltip("本关第一次按 Shift（切换世界）时播放；留空则按 Resources 路径加载。")]
-        [SerializeField] private StorySequence firstShiftStory;
-        [SerializeField] private string firstShiftStoryResourcePath = DefaultFirstShiftStoryResourcePath;
-        [SerializeField] private bool playStoryOnFirstShift = true;
-
         private PlayerController player;
-        private PlayerInteractor playerInteractor;
         private float previousPlayerX;
         private bool hasPreviousPlayerX;
         private Coroutine moveRoutine;
-        private Coroutine introStoryRoutine;
         private bool sceneReady;
         private Transform currentPlace;
-        private bool hasPlayedFirstFlowerStory;
-        private bool hasPlayedFirstShiftStory;
 
         private void Awake()
         {
@@ -86,106 +58,17 @@ namespace BokeGameJam.Gameplay
             }
         }
 
-        private void OnEnable()
-        {
-            if (SceneManager.GetActiveScene().name != TargetSceneName)
-                return;
-
-            EventManager.On(InputEvents.WorldToggle, OnWorldTogglePressed);
-        }
-
         private void Start()
         {
             if (!sceneReady || places == null || places.Length == 0)
                 return;
 
-            // 停掉跟随，避免与分段固定相机抢控制权。
             if (CameraManager.Instance != null)
                 CameraManager.Instance.SetFollowTarget(null);
 
-            SnapCameraTo(place1);
-            currentPlace = place1;
-
-            if (playIntroStoryOnStart)
-                introStoryRoutine = StartCoroutine(PlayStoryNextFrame(ResolveIntroStory(), "开场剧情"));
-        }
-
-        private void OnDisable()
-        {
-            EventManager.Off(InputEvents.WorldToggle, OnWorldTogglePressed);
-
-            if (introStoryRoutine != null)
-            {
-                StopCoroutine(introStoryRoutine);
-                introStoryRoutine = null;
-            }
-        }
-
-        /// <summary>等一帧，确保 GameManager 已加载 CameraTopBanner 后再播剧情。</summary>
-        private IEnumerator PlayStoryNextFrame(StorySequence story, string storyLabel)
-        {
-            yield return null;
-            PlayStoryNow(story, storyLabel);
-            introStoryRoutine = null;
-        }
-
-        private void PlayStoryNow(StorySequence story, string storyLabel)
-        {
-            if (story == null || !story.HasLines)
-            {
-                Debug.LogWarning($"[Level1AnchorTriggers] {storyLabel}配置缺失或为空。", this);
-                return;
-            }
-
-            CameraTopBannerUI banner = CameraTopBannerUI.Instance;
-            if (banner == null && UIManager.Instance != null)
-                banner = UIManager.Instance.ShowTopBanner();
-
-            if (banner == null)
-            {
-                Debug.LogWarning(
-                    $"[Level1AnchorTriggers] CameraTopBannerUI 未找到，无法播放{storyLabel}。",
-                    this);
-                return;
-            }
-
-            banner.PlayStory(story.CreateLineList());
-        }
-
-        private static StorySequence ResolveStory(StorySequence assigned, string resourcePath)
-        {
-            if (assigned != null)
-                return assigned;
-
-            if (string.IsNullOrWhiteSpace(resourcePath))
-                return null;
-
-            return Resources.Load<StorySequence>(resourcePath.Trim());
-        }
-
-        private StorySequence ResolveIntroStory()
-        {
-            return ResolveStory(introStory, introStoryResourcePath);
-        }
-
-        private StorySequence ResolveFirstFlowerStory()
-        {
-            return ResolveStory(firstFlowerStory, firstFlowerStoryResourcePath);
-        }
-
-        private StorySequence ResolveFirstShiftStory()
-        {
-            return ResolveStory(firstShiftStory, firstShiftStoryResourcePath);
-        }
-
-        /// <summary>本关第一次按 Shift（世界切换）时播放 Story3。</summary>
-        private void OnWorldTogglePressed()
-        {
-            if (!sceneReady || !playStoryOnFirstShift || hasPlayedFirstShiftStory)
-                return;
-
-            hasPlayedFirstShiftStory = true;
-            PlayStoryNow(ResolveFirstShiftStory(), "首次Shift剧情");
+            Transform startPlace = places[0];
+            SnapCameraTo(startPlace);
+            currentPlace = startPlace;
         }
 
         private void Update()
@@ -195,8 +78,6 @@ namespace BokeGameJam.Gameplay
 
             if (!TryGetPlayer(out Transform playerTransform))
                 return;
-
-            TryTriggerFirstFlowerStory();
 
             float x = playerTransform.position.x;
             if (!hasPreviousPlayerX)
@@ -298,41 +179,6 @@ namespace BokeGameJam.Gameplay
             return true;
         }
 
-        /// <summary>本关第一次捡到红花或黄花时播放 Story2。</summary>
-        private void TryTriggerFirstFlowerStory()
-        {
-            if (!playStoryOnFirstFlowerPickup || hasPlayedFirstFlowerStory)
-                return;
-
-            if (!TryGetPlayerInteractor(out PlayerInteractor interactor))
-                return;
-
-            if (interactor.HeldItem is not InteractableObjectFlower flower)
-                return;
-
-            if (flower.ColorKind != FlowerColor.Red && flower.ColorKind != FlowerColor.Yellow)
-                return;
-
-            hasPlayedFirstFlowerStory = true;
-            PlayStoryNow(ResolveFirstFlowerStory(), "首次摘花剧情");
-        }
-
-        private bool TryGetPlayerInteractor(out PlayerInteractor interactor)
-        {
-            interactor = playerInteractor;
-            if (interactor != null)
-                return true;
-
-            if (player != null)
-                interactor = player.GetComponent<PlayerInteractor>();
-
-            if (interactor == null)
-                interactor = FindObjectOfType<PlayerInteractor>();
-
-            playerInteractor = interactor;
-            return interactor != null;
-        }
-
         private void SnapCameraTo(Transform place)
         {
             if (place == null)
@@ -390,7 +236,7 @@ namespace BokeGameJam.Gameplay
             {
                 elapsed += Time.deltaTime;
                 float t = Mathf.Clamp01(elapsed / duration);
-                float s = t * t * (3f - 2f * t); // smoothstep
+                float s = t * t * (3f - 2f * t);
                 cam.transform.position = Vector3.Lerp(start, end, s);
                 yield return null;
             }
