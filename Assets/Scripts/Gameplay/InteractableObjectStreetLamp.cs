@@ -204,6 +204,9 @@ namespace BokeGameJam.Gameplay
             if (!CanInteract(interactor))
                 return;
 
+            if (GameAudioManager.Instance != null)
+                GameAudioManager.Instance.PlaySFXByResourcePath(GameSfxPaths.LightSwitch);
+
             if (!puzzleArmed)
             {
                 if (IsActivated)
