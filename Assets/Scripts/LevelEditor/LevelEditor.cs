@@ -106,6 +106,7 @@ namespace BokeGameJam.LevelEditor
         private string paintSequenceIndexText = "0";
         private string paintDialogueText = string.Empty;
         private string paintRoomId = string.Empty;
+        private string paintInitialLightsStateText = "1";
 
         // 光标预览
         private GameObject cursorPreview;
@@ -854,6 +855,14 @@ namespace BokeGameJam.LevelEditor
             return int.TryParse(paintSequenceIndexText, out int value) ? value : 0;
         }
 
+        private int GetPaintInitialLightsState()
+        {
+            if (!int.TryParse(paintInitialLightsStateText, out int value))
+                return 1;
+
+            return value != 0 ? 1 : 0;
+        }
+
         private void ApplyPaintConfigToInstance(GameObject instance, LevelLayer layer)
         {
             if (instance == null)
@@ -879,7 +888,10 @@ namespace BokeGameJam.LevelEditor
 
             InteractableObjectLightSwitch lightSwitch = instance.GetComponent<InteractableObjectLightSwitch>();
             if (lightSwitch != null)
+            {
                 lightSwitch.ApplyRoomId(paintRoomId);
+                lightSwitch.ApplyInitialLightsState(GetPaintInitialLightsState());
+            }
         }
 
         private static void ApplyTileEntryConfig(GameObject instance, LevelData.TileEntry entry, LevelLayer layer)
@@ -907,7 +919,10 @@ namespace BokeGameJam.LevelEditor
 
             InteractableObjectLightSwitch lightSwitch = instance.GetComponent<InteractableObjectLightSwitch>();
             if (lightSwitch != null)
+            {
                 lightSwitch.ApplyRoomId(entry.roomId);
+                lightSwitch.ApplyInitialLightsState(entry.initialLightsState);
+            }
         }
 
         private static LevelData.TileEntry CaptureTileEntry(Vector2Int cell, PlacedTile tile)
@@ -917,6 +932,7 @@ namespace BokeGameJam.LevelEditor
             int sequenceIndex = 0;
             string dialogueText = null;
             string roomId = null;
+            int initialLightsState = 1;
 
             if (tile.instance != null)
             {
@@ -934,6 +950,7 @@ namespace BokeGameJam.LevelEditor
                     {
                         mechanismId = lightSwitch.MechanismId;
                         roomId = lightSwitch.RoomId;
+                        initialLightsState = lightSwitch.InitialLightsState;
                     }
                     else
                     {
@@ -962,7 +979,8 @@ namespace BokeGameJam.LevelEditor
                 sequenceGroupId,
                 sequenceIndex,
                 dialogueText,
-                roomId);
+                roomId,
+                initialLightsState);
         }
 
         public void RemoveTile(Vector2Int cell)
@@ -1294,7 +1312,12 @@ namespace BokeGameJam.LevelEditor
                     GUILayout.Label("roomId", GUILayout.Width(110));
                     paintRoomId = GUILayout.TextField(paintRoomId ?? string.Empty);
                     GUILayout.EndHorizontal();
-                    GUILayout.Label("灯开关：与同房间背景 roomId 一致；再刷可更新", mutedStyle);
+
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Label("初始状态", GUILayout.Width(110));
+                    paintInitialLightsStateText = GUILayout.TextField(paintInitialLightsStateText ?? "1");
+                    GUILayout.EndHorizontal();
+                    GUILayout.Label("0=暗，1=亮；与同房间背景 roomId 一致；再刷可更新", mutedStyle);
                 }
                 else if (CurrentBrushHasSequenceFields())
                 {

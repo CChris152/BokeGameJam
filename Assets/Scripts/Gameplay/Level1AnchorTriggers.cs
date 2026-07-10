@@ -15,8 +15,8 @@ namespace BokeGameJam.Gameplay
     /// 玩家 X 从左到右越过 Anchor1 → 平滑移到 Place2；
     /// 越过 Anchor2 → Place3；反向越过则反向切换。
     /// 子物体命名：Place1 / Place2 / Place3 / Anchor1 / Anchor2（也可在 Inspector 拖引用）。
-    /// 开场 / 首次摘花 / 首次 Shift / 里世界首次到达 Place2 / 首次交付红黄花 / 错误交花 /
-    /// 再次与鬼魂互动 / 灯光正确(Story8) / 通关(Story9) 剧情；
+    /// 开场 / 首次摘花 / 首次 Shift / 里世界首次到达 Place2 / 首次进入厨房(Story18) /
+    /// 首次交付红黄花 / 错误交花 / 再次与鬼魂互动 / 灯光正确(Story8) / 通关(Story9) 剧情；
     /// 通关需同时满足：红黄花交付完成 + 表世界灯光（卧室亮、客厅暗、厨房亮）。
     /// </summary>
     [DefaultExecutionOrder(200)]
@@ -33,6 +33,7 @@ namespace BokeGameJam.Gameplay
         private const string DefaultRepeatGhostInteractStoryResourcePath = "ScriptableObjects/Stories/Story7";
         private const string DefaultLightsCorrectStoryResourcePath = "ScriptableObjects/Stories/Story8";
         private const string DefaultLevelClearStoryResourcePath = "ScriptableObjects/Stories/Story9";
+        private const string DefaultKitchenStoryResourcePath = "ScriptableObjects/Stories/Story18";
 
         [Header("Camera Places (可拖拽，留空则按子物体名查找)")]
         [SerializeField] private Transform place1;
@@ -71,6 +72,12 @@ namespace BokeGameJam.Gameplay
         [SerializeField] private StorySequence place2Story;
         [SerializeField] private string place2StoryResourcePath = DefaultPlace2StoryResourcePath;
         [SerializeField] private bool playStoryOnFirstReachPlace2 = true;
+
+        [Header("Kitchen Story")]
+        [Tooltip("本关第一次越过 Anchor2 进入厨房（相机到 Place3）时播放 Story18；留空则按 Resources 路径加载。")]
+        [SerializeField] private StorySequence kitchenStory;
+        [SerializeField] private string kitchenStoryResourcePath = DefaultKitchenStoryResourcePath;
+        [SerializeField] private bool playStoryOnFirstEnterKitchen = true;
 
         [Header("First Flower Delivery Story")]
         [Tooltip("本关第一次成功交付红花或黄花时播放；留空则按 Resources 路径加载。")]
@@ -132,6 +139,7 @@ namespace BokeGameJam.Gameplay
         private bool hasPlayedFirstFlowerStory;
         private bool hasPlayedFirstShiftStory;
         private bool hasPlayedPlace2Story;
+        private bool hasPlayedKitchenStory;
         private bool hasPlayedFirstFlowerDeliveryStory;
         private bool hasPlayedLightsCorrectStory;
         private int underworldGhostInteractCount;
@@ -267,6 +275,11 @@ namespace BokeGameJam.Gameplay
             return ResolveStory(place2Story, place2StoryResourcePath);
         }
 
+        private StorySequence ResolveKitchenStory()
+        {
+            return ResolveStory(kitchenStory, kitchenStoryResourcePath);
+        }
+
         private StorySequence ResolveFirstFlowerDeliveryStory()
         {
             return ResolveStory(firstFlowerDeliveryStory, firstFlowerDeliveryStoryResourcePath);
@@ -343,14 +356,19 @@ namespace BokeGameJam.Gameplay
                     MoveCameraTo(place1);
             }
 
-            // Anchor2：左→右到 Place3；右→左到 Place2
+            // Anchor2：左→右到 Place3（厨房）；右→左到 Place2
             if (anchor2 != null)
             {
                 float a2 = anchor2.position.x;
                 if (prevX < a2 && x >= a2)
+                {
                     MoveCameraTo(place3);
+                    TryPlayKitchenStory();
+                }
                 else if (prevX > a2 && x <= a2)
+                {
                     MoveCameraTo(place2);
+                }
             }
         }
 
@@ -450,6 +468,16 @@ namespace BokeGameJam.Gameplay
         {
             hasPlayedPlace2Story = true;
             PlayStoryNow(ResolvePlace2Story(), "Place2里世界剧情");
+        }
+
+        /// <summary>本关第一次越过 Anchor2 进入厨房（相机到 Place3）时播放 Story18。</summary>
+        private void TryPlayKitchenStory()
+        {
+            if (!playStoryOnFirstEnterKitchen || hasPlayedKitchenStory)
+                return;
+
+            hasPlayedKitchenStory = true;
+            PlayStoryNow(ResolveKitchenStory(), "首次进入厨房剧情");
         }
 
         private bool TryGetPlayerInteractor(out PlayerInteractor interactor)

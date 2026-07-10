@@ -19,7 +19,7 @@ namespace BokeGameJam.Gameplay
         [Header("Light Switch")]
         [Tooltip("所属房间 id；须与该房间背景 BackgroundSpriteSwitcher.roomId 一致。")]
         [SerializeField] private string roomId = "room_1";
-        [Tooltip("开局是否开灯。")]
+        [Tooltip("开局是否开灯。关卡编辑器「初始状态」：0=暗，1=亮。")]
         [SerializeField] private bool startLightsOn = true;
 
         [Header("Switch Visual")]
@@ -34,6 +34,8 @@ namespace BokeGameJam.Gameplay
         public string RoomId => roomId != null ? roomId.Trim() : string.Empty;
         public bool LightsOn => lightsOn;
         public bool LightsOff => !lightsOn;
+        /// <summary>编辑器 / 存档用：0=暗，1=亮。</summary>
+        public int InitialLightsState => startLightsOn ? 1 : 0;
         public static bool InteractionsLocked => interactionsLocked;
 
         /// <summary>灯光谜题通关后调用：禁止所有灯开关交互并隐藏 E 提示。</summary>
@@ -147,6 +149,19 @@ namespace BokeGameJam.Gameplay
             roomId = newRoomId != null ? newRoomId.Trim() : string.Empty;
             if (initialized)
                 EmitLightsState();
+        }
+
+        /// <summary>关卡编辑器写入初始亮暗：0=暗，非 0=亮。</summary>
+        public void ApplyInitialLightsState(int state)
+        {
+            bool on = state != 0;
+            startLightsOn = on;
+            lightsOn = on;
+            if (initialized)
+            {
+                ApplySwitchVisual();
+                EmitLightsState();
+            }
         }
 
         public void SetLightsOn(bool on)

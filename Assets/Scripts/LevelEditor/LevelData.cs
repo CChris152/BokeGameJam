@@ -49,6 +49,9 @@ namespace BokeGameJam.LevelEditor
             /// <summary>灯开关 / 房间背景：房间绑定 id。</summary>
             public string roomId;
 
+            /// <summary>灯开关初始状态：0=暗，1=亮。</summary>
+            public int initialLightsState;
+
             public TileEntry(int x, int y, string tileId)
             {
                 this.x = x;
@@ -59,6 +62,7 @@ namespace BokeGameJam.LevelEditor
                 this.sequenceIndex = 0;
                 this.dialogueText = null;
                 this.roomId = null;
+                this.initialLightsState = 1;
             }
 
             public TileEntry(
@@ -69,7 +73,8 @@ namespace BokeGameJam.LevelEditor
                 string sequenceGroupId,
                 int sequenceIndex,
                 string dialogueText = null,
-                string roomId = null)
+                string roomId = null,
+                int initialLightsState = 1)
             {
                 this.x = x;
                 this.y = y;
@@ -79,6 +84,7 @@ namespace BokeGameJam.LevelEditor
                 this.sequenceIndex = sequenceIndex;
                 this.dialogueText = dialogueText;
                 this.roomId = roomId;
+                this.initialLightsState = initialLightsState != 0 ? 1 : 0;
             }
 
             public Vector2Int Position => new(x, y);
