@@ -1394,77 +1394,7 @@
         },
         {
             "x": 65,
-            "y": -4,
-            "tileId": "Ground/糖果墙A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 65,
-            "y": -3,
-            "tileId": "Ground/糖果墙A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 65,
-            "y": -2,
-            "tileId": "Ground/糖果墙A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 65,
-            "y": -1,
-            "tileId": "Ground/糖果墙A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 65,
-            "y": 0,
-            "tileId": "Ground/糖果墙A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 65,
-            "y": 1,
-            "tileId": "Ground/糖果墙A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 65,
-            "y": 2,
-            "tileId": "Ground/糖果墙A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 65,
-            "y": 3,
+            "y": 5,
             "tileId": "Ground/糖果墙A",
             "mechanismId": "",
             "sequenceGroupId": "",
@@ -1484,7 +1414,77 @@
         },
         {
             "x": 65,
-            "y": 5,
+            "y": 3,
+            "tileId": "Ground/糖果墙A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 65,
+            "y": 2,
+            "tileId": "Ground/糖果墙A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 65,
+            "y": 1,
+            "tileId": "Ground/糖果墙A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 65,
+            "y": 0,
+            "tileId": "Ground/糖果墙A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 65,
+            "y": -1,
+            "tileId": "Ground/糖果墙A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 65,
+            "y": -2,
+            "tileId": "Ground/糖果墙A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 65,
+            "y": -3,
+            "tileId": "Ground/糖果墙A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 65,
+            "y": -4,
             "tileId": "Ground/糖果墙A",
             "mechanismId": "",
             "sequenceGroupId": "",
@@ -3005,36 +3005,6 @@
             "roomId": ""
         },
         {
-            "x": 69,
-            "y": 3,
-            "tileId": "Ground/BGround",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 69,
-            "y": 2,
-            "tileId": "Ground/BGround",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 28,
-            "y": 0,
-            "tileId": "Ground/BGround",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
             "x": 46,
             "y": 0,
             "tileId": "Interactable/相机",
@@ -3150,6 +3120,16 @@
             "x": 75,
             "y": -3,
             "tileId": "Interactable/壁灯组",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 59,
+            "y": -3,
+            "tileId": "Interactable/电闸",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,

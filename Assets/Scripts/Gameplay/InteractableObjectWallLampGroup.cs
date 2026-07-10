@@ -1,11 +1,13 @@
 using System.Collections;
 using UnityEngine;
+using BokeGameJam.Core;
 
 namespace BokeGameJam.Gameplay
 {
     /// <summary>
     /// 壁灯组：默认全暗；交互后按编号顺序闪烁（默认 3→4→1→2→6→5），
-    /// 闪烁结束后等待一段时间再恢复可交互。六个灯做在同一预制体里。
+    /// 闪烁结束后广播 <see cref="GameEvents.WallLampSequenceCompleted"/>（payload = 闪烁顺序），
+    /// 再等待一段时间恢复可交互。六个灯做在同一预制体里。
     /// </summary>
     public class InteractableObjectWallLampGroup : InteractableObject
     {
@@ -94,6 +96,11 @@ namespace BokeGameJam.Gameplay
             }
 
             ApplyAllOff();
+
+            int[] orderPayload = flashOrder != null
+                ? (int[])flashOrder.Clone()
+                : System.Array.Empty<int>();
+            EventManager.Emit(GameEvents.WallLampSequenceCompleted, orderPayload);
 
             float cooldown = Mathf.Max(0f, cooldownAfterSequenceSeconds);
             if (cooldown > 0f)

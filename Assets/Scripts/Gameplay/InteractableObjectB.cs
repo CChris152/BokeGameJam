@@ -85,7 +85,7 @@ namespace BokeGameJam.Gameplay
             }
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             if (!allActive.Contains(this))
                 allActive.Add(this);
@@ -93,7 +93,7 @@ namespace BokeGameJam.Gameplay
             RegisterToGroup();
         }
 
-        protected override void OnDisable()
+        protected virtual void OnDisable()
         {
             // Only the member hosting the delay coroutine should cancel it.
             if (resetRoutine != null)

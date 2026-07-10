@@ -35,6 +35,9 @@ namespace BokeGameJam.Core
         /// <summary>鬼魂收到糖果（无 payload）；交付成功后广播，监听方可消失等</summary>
         public const string CandyReceived = "Game.CandyReceived";
 
+        /// <summary>壁灯组闪烁表演结束，payload = int[] 1-based 闪烁顺序；路灯据此注册并复现</summary>
+        public const string WallLampSequenceCompleted = "Game.WallLampSequenceCompleted";
+
         /// <summary>全局游戏状态切换，payload = GameState</summary>
         public const string GameStateChanged = "Game.GameStateChanged";
 
