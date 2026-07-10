@@ -77,6 +77,9 @@ namespace BokeGameJam.UI
         /// <summary>第一关通关后进入第二关的预设 id。</summary>
         public const string PresetStartToLevel2 = "StartToLevel2";
 
+        /// <summary>第二关通关剧情后回到主菜单的预设 id。</summary>
+        public const string PresetLevel2ToMainMenu = "Level2ToMainMenu";
+
         public static BlackScreenMediaPlayer Instance { get; private set; }
 
         [Header("遮罩")]
@@ -122,6 +125,19 @@ namespace BokeGameJam.UI
                     MediaSequenceItem.Text(3),
                     MediaSequenceItem.Video(1),
                     MediaSequenceItem.Text(4),
+                }
+            },
+            new SequencePreset
+            {
+                id = PresetLevel2ToMainMenu,
+                steps = new List<MediaSequenceItem>
+                {
+                    MediaSequenceItem.Text(6),
+                    MediaSequenceItem.Text(7),
+                    MediaSequenceItem.Text(8),
+                    MediaSequenceItem.Text(9),
+                    MediaSequenceItem.Video(2),
+                    MediaSequenceItem.Text(10),
                 }
             }
         };
@@ -725,6 +741,10 @@ namespace BokeGameJam.UI
             if (font == null && !string.IsNullOrWhiteSpace(messageFontResourcePath))
                 font = Resources.Load<TMP_FontAsset>(messageFontResourcePath.Trim());
 
+            // 合并后序列化引用可能丢失：再强制按约定 Resources 路径加载。
+            if (font == null)
+                font = Resources.Load<TMP_FontAsset>("Art/Fonts/FZFENGRSTJW-EB SDF");
+
             if (font != null)
             {
                 messageFont = font;
@@ -733,7 +753,7 @@ namespace BokeGameJam.UI
             else
             {
                 Debug.LogWarning(
-                    $"[BlackScreenMediaPlayer] 未找到字体 '{messageFontResourcePath}'。",
+                    $"[BlackScreenMediaPlayer] 未找到字体 '{messageFontResourcePath}'（Resources/Art/Fonts/FZFENGRSTJW-EB SDF）。",
                     this);
             }
 
