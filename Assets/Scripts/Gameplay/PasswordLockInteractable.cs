@@ -114,7 +114,7 @@ namespace BokeGameJam.Gameplay
             unlocked = true;
             isInRange = false;
             ApplyVisualState();
-            PlayFeedback(successSfxOverride, successSfxId, GameSfxPaths.ClockHourBell);
+            PlayFeedback(successSfxOverride, successSfxId, GameSfxPaths.PuzzleSuccess);
             onUnlocked?.Invoke();
             EventManager.Emit(PasswordLockEvents.Unlocked, this);
             Debug.Log($"[PasswordLock] '{name}' unlocked successfully.", this);
