@@ -54,6 +54,9 @@ namespace BokeGameJam.Gameplay
 
         public override bool CanInteract(PlayerInteractor interactor)
         {
+            if (!isActiveAndEnabled || !gameObject.activeInHierarchy)
+                return false;
+
             if (interactOnlyInOuterWorld && IsInUnderworld())
                 return false;
 

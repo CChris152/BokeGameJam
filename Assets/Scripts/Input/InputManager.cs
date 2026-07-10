@@ -76,6 +76,10 @@ namespace BokeGameJam.Input
 
             currentContext = context;
             EventManager.Emit(InputEvents.ContextChanged, context);
+
+            // 进入 UI（暂停等）时清零移动输入，避免暂停前后残留速度。
+            if (context == InputContext.UI)
+                EventManager.Emit(InputEvents.PlayerMove, 0f);
         }
 
         private void Update()

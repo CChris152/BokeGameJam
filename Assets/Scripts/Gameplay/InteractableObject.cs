@@ -78,7 +78,10 @@ namespace BokeGameJam.Gameplay
 
         public virtual bool CanInteract(PlayerInteractor interactor)
         {
-            return !isHeld;
+            // 切世界后非当前层物体可能仍留在 PlayerInteractor.nearby，必须拒绝未激活对象。
+            return !isHeld
+                && isActiveAndEnabled
+                && gameObject.activeInHierarchy;
         }
 
         public virtual void SetInInteractRange(bool inRange)

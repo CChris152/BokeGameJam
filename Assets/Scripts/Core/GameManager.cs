@@ -224,6 +224,8 @@ namespace BokeGameJam.Core
                 case GameState.MainMenu:
                     SetEscPauseEnabled(false);
                     CloseLevelPlayingUIs();
+                    // 回主菜单时还原为表世界，避免下次进关仍停留在里世界。
+                    SetWorld(WorldId.A);
                     break;
 
                 case GameState.LevelPlaying:
