@@ -53,6 +53,8 @@ namespace BokeGameJam.CameraSystem
         private Vector3 followVelocity;
         private InputContext currentContext = InputContext.Gameplay;
         private Vector2 editorInputDir;
+        /// <summary>为 true 时表示外部已显式清空跟随目标，禁止再按 Tag 自动找回玩家。</summary>
+        private bool suppressAutoFindFollowTarget;
 
         // 记录进入编辑模式前的相机尺寸/FOV，退出时恢复
         private float savedOrthoSize;
@@ -101,7 +103,9 @@ namespace BokeGameJam.CameraSystem
 
         private void Start()
         {
-            if (followTarget == null && !string.IsNullOrEmpty(autoFindPlayerTag))
+            if (followTarget == null
+                && !suppressAutoFindFollowTarget
+                && !string.IsNullOrEmpty(autoFindPlayerTag))
                 TryAutoFindPlayer();
         }
 
@@ -114,7 +118,9 @@ namespace BokeGameJam.CameraSystem
             {
                 case InputContext.Gameplay:
                 case InputContext.UI:
-                    if (followTarget == null && !string.IsNullOrEmpty(autoFindPlayerTag))
+                    if (followTarget == null
+                        && !suppressAutoFindFollowTarget
+                        && !string.IsNullOrEmpty(autoFindPlayerTag))
                         TryAutoFindPlayer();
                     FollowStep();
                     break;
@@ -251,6 +257,8 @@ namespace BokeGameJam.CameraSystem
         public void SetFollowTarget(Transform target)
         {
             followTarget = target;
+            // null = 明确关闭跟随；非 null = 恢复正常跟随（允许之后再自动查找）
+            suppressAutoFindFollowTarget = target == null;
         }
     }
 }
