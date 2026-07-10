@@ -1,4 +1,5 @@
 using BokeGameJam.Core;
+using BokeGameJam.Input;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,6 +24,10 @@ namespace BokeGameJam.UI
         [Header("音量")]
         [Tooltip("主音量滑条（BGM 与 SFX 共用，逻辑与设置面板一致）")]
         [SerializeField] private Slider volumeSlider;
+
+        private float previousTimeScale = 1f;
+        private InputContext previousInputContext = InputContext.Gameplay;
+        private bool pauseStateApplied;
 
         private void Awake()
         {
@@ -62,12 +67,20 @@ namespace BokeGameJam.UI
 
         private void OnEnable()
         {
+            ApplyPauseState();
             // 每次显示时从存档同步滑条与运行时音量
             SyncVolumeFromSavedData();
         }
 
+        private void OnDisable()
+        {
+            RestorePauseState();
+        }
+
         private void OnDestroy()
         {
+            RestorePauseState();
+
             if (returnToMainMenuButton != null)
                 returnToMainMenuButton.onClick.RemoveListener(OnReturnToMainMenuClicked);
 
@@ -76,6 +89,36 @@ namespace BokeGameJam.UI
 
             if (volumeSlider != null)
                 volumeSlider.onValueChanged.RemoveListener(OnVolumeChanged);
+        }
+
+        private void ApplyPauseState()
+        {
+            if (pauseStateApplied)
+                return;
+
+            previousTimeScale = Time.timeScale;
+            Time.timeScale = 0f;
+
+            if (InputManager.Instance != null)
+            {
+                previousInputContext = InputManager.Instance.CurrentContext;
+                InputManager.Instance.SetContext(InputContext.UI);
+            }
+
+            pauseStateApplied = true;
+        }
+
+        private void RestorePauseState()
+        {
+            if (!pauseStateApplied)
+                return;
+
+            Time.timeScale = previousTimeScale;
+
+            if (InputManager.Instance != null && InputManager.Instance.CurrentContext == InputContext.UI)
+                InputManager.Instance.SetContext(previousInputContext);
+
+            pauseStateApplied = false;
         }
 
         /// <summary>
