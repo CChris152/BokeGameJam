@@ -15,7 +15,7 @@ namespace BokeGameJam.Gameplay
     /// 玩家 X 从左到右越过 Anchor1 → 平滑移到 Place2；
     /// 越过 Anchor2 → Place3；反向越过则反向切换。
     /// 子物体命名：Place1 / Place2 / Place3 / Anchor1 / Anchor2（也可在 Inspector 拖引用）。
-    /// 开场 / 首次摘花 / 首次 Shift 剧情；
+    /// 开场 / 首次摘花 / 首次 Shift / 首次到达 Place2 剧情；
     /// 通关需同时满足：红黄花交付完成 + 表世界灯光（卧室亮、客厅暗、厨房亮）。
     /// </summary>
     [DefaultExecutionOrder(200)]
@@ -25,6 +25,7 @@ namespace BokeGameJam.Gameplay
         private const string DefaultIntroStoryResourcePath = "ScriptableObjects/Stories/Story1";
         private const string DefaultFirstFlowerStoryResourcePath = "ScriptableObjects/Stories/Story2";
         private const string DefaultFirstShiftStoryResourcePath = "ScriptableObjects/Stories/Story3";
+        private const string DefaultPlace2StoryResourcePath = "ScriptableObjects/Stories/Story4";
 
         [Header("Camera Places (可拖拽，留空则按子物体名查找)")]
         [SerializeField] private Transform place1;
@@ -58,6 +59,12 @@ namespace BokeGameJam.Gameplay
         [SerializeField] private string firstShiftStoryResourcePath = DefaultFirstShiftStoryResourcePath;
         [SerializeField] private bool playStoryOnFirstShift = true;
 
+        [Header("Place2 Story")]
+        [Tooltip("本关第一次到达 Place2 的 X 时播放；留空则按 Resources 路径加载。")]
+        [SerializeField] private StorySequence place2Story;
+        [SerializeField] private string place2StoryResourcePath = DefaultPlace2StoryResourcePath;
+        [SerializeField] private bool playStoryOnFirstReachPlace2 = true;
+
         [Header("Level Clear Conditions")]
         [Tooltip("红黄花交付完成后为 true；由本脚本轮询 FlowerCollector。")]
         [SerializeField] private bool flowersDelivered;
@@ -80,6 +87,7 @@ namespace BokeGameJam.Gameplay
         private Transform currentPlace;
         private bool hasPlayedFirstFlowerStory;
         private bool hasPlayedFirstShiftStory;
+        private bool hasPlayedPlace2Story;
         private bool levelAdvanceStarted;
 
         private void Awake()
@@ -191,6 +199,11 @@ namespace BokeGameJam.Gameplay
             return ResolveStory(firstShiftStory, firstShiftStoryResourcePath);
         }
 
+        private StorySequence ResolvePlace2Story()
+        {
+            return ResolveStory(place2Story, place2StoryResourcePath);
+        }
+
         /// <summary>本关第一次按 Shift（世界切换）时播放 Story3。</summary>
         private void OnWorldTogglePressed()
         {
@@ -223,6 +236,8 @@ namespace BokeGameJam.Gameplay
 
             float prevX = previousPlayerX;
             previousPlayerX = x;
+
+            TryTriggerPlace2Story(prevX, x);
 
             // Anchor1：左→右到 Place2；右→左到 Place1
             if (anchor1 != null)
@@ -293,6 +308,21 @@ namespace BokeGameJam.Gameplay
 
             hasPlayedFirstFlowerStory = true;
             PlayStoryNow(ResolveFirstFlowerStory(), "首次摘花剧情");
+        }
+
+        /// <summary>本关第一次走到 Place2 的 X 时播放 Story4。</summary>
+        private void TryTriggerPlace2Story(float prevX, float x)
+        {
+            if (!playStoryOnFirstReachPlace2 || hasPlayedPlace2Story || place2 == null)
+                return;
+
+            float place2X = place2.position.x;
+            // 从左到右越过 Place2.x 视为第一次到达。
+            if (!(prevX < place2X && x >= place2X))
+                return;
+
+            hasPlayedPlace2Story = true;
+            PlayStoryNow(ResolvePlace2Story(), "Place2剧情");
         }
 
         private bool TryGetPlayerInteractor(out PlayerInteractor interactor)
