@@ -24,6 +24,14 @@ namespace BokeGameJam.Gameplay
         [SerializeField] private Vector2 groundCheckOffset = new(0f, -0.55f);
         [SerializeField] private float groundCheckRadius = 0.16f;
 
+        [Header("Animation")]
+        [SerializeField] private Animator animator;
+        [SerializeField] private string isMovingParameter = "IsMoving";
+        [SerializeField] private string isUnderworldParameter = "IsUnderworld";
+
+        private static readonly int IsMovingHash = Animator.StringToHash("IsMoving");
+        private static readonly int IsUnderworldHash = Animator.StringToHash("IsUnderworld");
+
         private readonly Collider2D[] groundHits = new Collider2D[8];
 
         private Rigidbody2D body;
@@ -32,10 +40,22 @@ namespace BokeGameJam.Gameplay
         private float jumpBufferedTime = float.NegativeInfinity;
         private float initialScaleX;
         private bool isGrounded;
+        private int isMovingParamHash;
+        private int isUnderworldParamHash;
+        private bool wasMoving;
 
         private void Awake()
         {
             body = GetComponent<Rigidbody2D>();
+            if (animator == null)
+                animator = GetComponent<Animator>();
+
+            isMovingParamHash = string.IsNullOrEmpty(isMovingParameter)
+                ? IsMovingHash
+                : Animator.StringToHash(isMovingParameter);
+            isUnderworldParamHash = string.IsNullOrEmpty(isUnderworldParameter)
+                ? IsUnderworldHash
+                : Animator.StringToHash(isUnderworldParameter);
             initialScaleX = Mathf.Approximately(transform.localScale.x, 0f) ? 1f : transform.localScale.x;
 
             if (freezeRotation)
@@ -46,15 +66,22 @@ namespace BokeGameJam.Gameplay
         {
             EventManager.On<float>(InputEvents.PlayerMove, OnMove);
             EventManager.On(InputEvents.PlayerJumpPressed, OnJumpPressed);
+            EventManager.On<WorldId>(GameEvents.ActiveWorldChanged, OnActiveWorldChanged);
+
+            ApplyWorldAnimation(ResolveActiveWorld());
         }
 
         private void OnDisable()
         {
             EventManager.Off<float>(InputEvents.PlayerMove, OnMove);
             EventManager.Off(InputEvents.PlayerJumpPressed, OnJumpPressed);
+            EventManager.Off<WorldId>(GameEvents.ActiveWorldChanged, OnActiveWorldChanged);
 
             // 组件被禁用（例如进入编辑模式）时清空输入，避免残留速度
             moveInput = 0f;
+            wasMoving = false;
+            if (animator != null)
+                animator.SetBool(isMovingParamHash, false);
         }
 
         private void OnValidate()
@@ -71,6 +98,7 @@ namespace BokeGameJam.Gameplay
         private void Update()
         {
             UpdateFacing();
+            UpdateMoveAnimation();
         }
 
         private void FixedUpdate()
@@ -94,6 +122,11 @@ namespace BokeGameJam.Gameplay
         private void OnJumpPressed()
         {
             jumpBufferedTime = Time.time;
+        }
+
+        private void OnActiveWorldChanged(WorldId world)
+        {
+            ApplyWorldAnimation(world);
         }
 
         // ---------- 物理 ----------
@@ -168,6 +201,32 @@ namespace BokeGameJam.Gameplay
             Vector3 scale = transform.localScale;
             scale.x = Mathf.Abs(initialScaleX) * -Mathf.Sign(moveInput);
             transform.localScale = scale;
+        }
+
+        private void UpdateMoveAnimation()
+        {
+            if (animator == null)
+                return;
+
+            bool isMoving = !Mathf.Approximately(moveInput, 0f);
+            if (isMoving == wasMoving)
+                return;
+
+            wasMoving = isMoving;
+            animator.SetBool(isMovingParamHash, isMoving);
+        }
+
+        private void ApplyWorldAnimation(WorldId world)
+        {
+            if (animator == null)
+                return;
+
+            animator.SetBool(isUnderworldParamHash, world == WorldId.B);
+        }
+
+        private static WorldId ResolveActiveWorld()
+        {
+            return GameManager.Instance != null ? GameManager.Instance.ActiveWorld : WorldId.A;
         }
 
         private void OnDrawGizmosSelected()

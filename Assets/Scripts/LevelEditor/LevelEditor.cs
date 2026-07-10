@@ -16,7 +16,7 @@ namespace BokeGameJam.LevelEditor
     /// 运行时关卡编辑器：完全事件驱动，不直接读 Unity Input。
     /// 支持双世界（A/B）+ 共享层：Shift 切换 A/B。
     /// 放置目标由 prefab 上 LevelObject.LevelLayer 决定（可在面板覆盖）。
-    /// 画笔自动扫描 Assets/Prefabs/Terrians（tileId = 相对路径，如 Ground/BGround）。
+    /// 画笔自动扫描 Assets/Prefabs/Terrians（tileId = 相对路径，如 Ground/地板B）。
     ///
     /// 交互：
     ///   M 键                — 切换 编辑 / 游玩 模式
@@ -168,7 +168,7 @@ namespace BokeGameJam.LevelEditor
 
         /// <summary>
         /// 扫描 Terrians 目录下所有 prefab 作为画笔。
-        /// tileId = 相对路径（不含扩展名），例如 Ground/BGround、Interactable/PickableObject。
+        /// tileId = 相对路径（不含扩展名），例如 Ground/地板B、Interactable/PickableObject。
         /// 仅 Editor 可用（关卡编辑器本身也只在 Editor 里用）。
         /// </summary>
         private void RebuildPaletteFromFolder()
