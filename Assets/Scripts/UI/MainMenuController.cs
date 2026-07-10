@@ -97,20 +97,23 @@ namespace BokeGameJam.UI
         }
 
         /// <summary>
-        /// 开始游戏：先播黑屏加载动画，淡入到全黑后再广播开局事件。
+        /// 开始游戏：播放开场媒体序列，完成后广播开局事件进入第一关。
         /// </summary>
         public void OnStartGameClicked()
         {
             SwitchToGameplayBgm();
 
-            if (BlackScreenLoader.Instance == null)
+            BlackScreenMediaPlayer mediaPlayer = BlackScreenMediaPlayer.Instance
+                ?? BlackScreenMediaPlayer.EnsureExists();
+
+            if (mediaPlayer == null)
             {
-                Debug.LogWarning("[MainMenuController] BlackScreenLoader missing, start game immediately.", this);
+                Debug.LogWarning("[MainMenuController] BlackScreenMediaPlayer missing, start game immediately.", this);
                 EventManager.Emit(GameEvents.GameStartRequested);
                 return;
             }
 
-            BlackScreenLoader.Instance.PlayLoadingAnimation(() =>
+            mediaPlayer.Play(BlackScreenMediaPlayer.PresetStartToLevel1, () =>
             {
                 EventManager.Emit(GameEvents.GameStartRequested);
             });

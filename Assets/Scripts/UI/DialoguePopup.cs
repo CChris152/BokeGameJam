@@ -1,5 +1,5 @@
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using BokeGameJam.Input;
 using BokeGameJam.Core;
 
@@ -14,12 +14,16 @@ namespace BokeGameJam.UI
         private static DialoguePopup openInstance;
         private static int suppressInteractUntilFrame = -1;
 
+        private const string DefaultFontResourcePath = "Art/Fonts/FZFENGRSTJW-EB SDF";
+
         [Header("UI")]
         [SerializeField] private RectTransform panelRect;
-        [SerializeField] private Text speakerLabel;
-        [SerializeField] private Text bodyLabel;
-        [SerializeField] private int speakerFontSize = 22;
-        [SerializeField] private int bodyFontSize = 20;
+        [SerializeField] private TMP_Text speakerLabel;
+        [SerializeField] private TMP_Text bodyLabel;
+        [SerializeField] private TMP_FontAsset fontAsset;
+        [SerializeField] private string fontResourcePath = DefaultFontResourcePath;
+        [SerializeField] private float speakerFontSize = 22f;
+        [SerializeField] private float bodyFontSize = 20f;
 
         [Header("Follow")]
         [SerializeField] private Transform worldAnchor;
@@ -51,7 +55,7 @@ namespace BokeGameJam.UI
                 panelRect = GetComponent<RectTransform>();
 
             CacheLabels();
-            ApplyFontSizes();
+            ApplyTextStyle();
 
             originalParent = transform.parent;
             // Prefab 默认 inactive；不要在 Awake 里 SetActive(false)。
@@ -63,7 +67,7 @@ namespace BokeGameJam.UI
             if (panelRect == null)
                 panelRect = GetComponent<RectTransform>();
             CacheLabels();
-            ApplyFontSizes();
+            ApplyTextStyle();
         }
 #endif
 
@@ -73,24 +77,46 @@ namespace BokeGameJam.UI
             {
                 Transform t = transform.Find("Speaker");
                 if (t != null)
-                    speakerLabel = t.GetComponent<Text>();
+                    speakerLabel = t.GetComponent<TMP_Text>();
             }
 
             if (bodyLabel == null)
             {
                 Transform t = transform.Find("Body");
                 if (t != null)
-                    bodyLabel = t.GetComponent<Text>();
+                    bodyLabel = t.GetComponent<TMP_Text>();
             }
         }
 
-        private void ApplyFontSizes()
+        private void ApplyTextStyle()
         {
+            TMP_FontAsset font = ResolveFont();
+
             if (speakerLabel != null)
-                speakerLabel.fontSize = Mathf.Max(1, speakerFontSize);
+            {
+                if (font != null)
+                    speakerLabel.font = font;
+                speakerLabel.fontSize = Mathf.Max(1f, speakerFontSize);
+            }
 
             if (bodyLabel != null)
-                bodyLabel.fontSize = Mathf.Max(1, bodyFontSize);
+            {
+                if (font != null)
+                    bodyLabel.font = font;
+                bodyLabel.fontSize = Mathf.Max(1f, bodyFontSize);
+            }
+        }
+
+        private TMP_FontAsset ResolveFont()
+        {
+            if (fontAsset != null)
+                return fontAsset;
+
+            if (string.IsNullOrWhiteSpace(fontResourcePath))
+                return null;
+
+            fontAsset = Resources.Load<TMP_FontAsset>(fontResourcePath.Trim());
+            return fontAsset;
         }
 
         private void OnEnable()
@@ -135,7 +161,7 @@ namespace BokeGameJam.UI
                 worldAnchor = originalParent;
 
             CacheLabels();
-            ApplyFontSizes();
+            ApplyTextStyle();
 
             if (speakerLabel != null)
                 speakerLabel.text = string.IsNullOrWhiteSpace(speaker) ? string.Empty : speaker.Trim();

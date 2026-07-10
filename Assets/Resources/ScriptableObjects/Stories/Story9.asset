@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f4d05d0ebf78042b77867a97716f36, type: 3}
   m_Name: Story9
   m_EditorClassIdentifier: 
-  storyId: "9"
+  storyId: 9
   lines:
-  - "妹妹: 刚才那个……是我吗？"
-  - "妹妹: 我为什么……想不起来？"
+  - "\u6B27\u82E5\u62C9: \u521A\u624D\u90A3\u4E2A\u2026\u2026\u662F\u6211\u5417\uFF1F"
+  - "\u6B27\u82E5\u62C9: \u6211\u4E3A\u4EC0\u4E48\u2026\u2026\u60F3\u4E0D\u8D77\u6765\uFF1F"

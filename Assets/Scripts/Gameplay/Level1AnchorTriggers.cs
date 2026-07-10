@@ -16,7 +16,7 @@ namespace BokeGameJam.Gameplay
     /// 越过 Anchor2 → Place3；反向越过则反向切换。
     /// 子物体命名：Place1 / Place2 / Place3 / Anchor1 / Anchor2（也可在 Inspector 拖引用）。
     /// 开场 / 首次摘花 / 首次 Shift / 里世界首次到达 Place2 / 首次交付红黄花 / 错误交花 /
-    /// 首次与鬼魂互动 / 再次与鬼魂互动 / 灯光正确(Story9) / 通关(Story10) 剧情；
+    /// 再次与鬼魂互动 / 灯光正确(Story8) / 通关(Story9) 剧情；
     /// 通关需同时满足：红黄花交付完成 + 表世界灯光（卧室亮、客厅暗、厨房亮）。
     /// </summary>
     [DefaultExecutionOrder(200)]
@@ -30,9 +30,9 @@ namespace BokeGameJam.Gameplay
         private const string DefaultFirstFlowerDeliveryStoryResourcePath = "ScriptableObjects/Stories/Story5";
         private const string DefaultWrongFlowerDeliveryStoryResourcePath = "ScriptableObjects/Stories/Story6";
         private const string DefaultFirstGhostInteractStoryResourcePath = "ScriptableObjects/Stories/Story7";
-        private const string DefaultRepeatGhostInteractStoryResourcePath = "ScriptableObjects/Stories/Story8";
-        private const string DefaultLightsCorrectStoryResourcePath = "ScriptableObjects/Stories/Story9";
-        private const string DefaultLevelClearStoryResourcePath = "ScriptableObjects/Stories/Story10";
+        private const string DefaultRepeatGhostInteractStoryResourcePath = "ScriptableObjects/Stories/Story7";
+        private const string DefaultLightsCorrectStoryResourcePath = "ScriptableObjects/Stories/Story8";
+        private const string DefaultLevelClearStoryResourcePath = "ScriptableObjects/Stories/Story9";
 
         [Header("Camera Places (可拖拽，留空则按子物体名查找)")]
         [SerializeField] private Transform place1;
@@ -85,10 +85,10 @@ namespace BokeGameJam.Gameplay
         [SerializeField] private bool playStoryOnWrongFlowerDelivery = true;
 
         [Header("First Ghost Interact Story")]
-        [Tooltip("本关第一次在里世界与鬼魂互动时播放；留空则按 Resources 路径加载。")]
+        [Tooltip("本关第一次在里世界与鬼魂互动时播放；默认关闭。")]
         [SerializeField] private StorySequence firstGhostInteractStory;
         [SerializeField] private string firstGhostInteractStoryResourcePath = DefaultFirstGhostInteractStoryResourcePath;
-        [SerializeField] private bool playStoryOnFirstGhostInteract = true;
+        [SerializeField] private bool playStoryOnFirstGhostInteract = false;
 
         [Header("Repeat Ghost Interact Story")]
         [Tooltip("本关在里世界第二次及以后与鬼魂互动时播放（每次都触发）；留空则按 Resources 路径加载。")]
@@ -97,13 +97,13 @@ namespace BokeGameJam.Gameplay
         [SerializeField] private bool playStoryOnRepeatGhostInteract = true;
 
         [Header("Lights Correct Story")]
-        [Tooltip("三房间灯光首次达到正确状态时播放 Story9；留空则按 Resources 路径加载。")]
+        [Tooltip("三房间灯光首次达到正确状态时播放 Story8；留空则按 Resources 路径加载。")]
         [SerializeField] private StorySequence lightsCorrectStory;
         [SerializeField] private string lightsCorrectStoryResourcePath = DefaultLightsCorrectStoryResourcePath;
         [SerializeField] private bool playStoryOnLightsCorrect = true;
 
         [Header("Level Clear Story")]
-        [Tooltip("正式通关前播放 Story10，播完后进入下一关；留空则按 Resources 路径加载。")]
+        [Tooltip("正式通关前播放 Story9，播完后进入下一关；留空则按 Resources 路径加载。")]
         [SerializeField] private StorySequence levelClearStory;
         [SerializeField] private string levelClearStoryResourcePath = DefaultLevelClearStoryResourcePath;
         [SerializeField] private bool playStoryOnLevelClear = true;
@@ -537,7 +537,7 @@ namespace BokeGameJam.Gameplay
         }
 
         /// <summary>
-        /// 里世界与鬼魂互动：第一次播 Story7；第二次及以后每次播 Story8。
+        /// 里世界与鬼魂互动：第一次不播剧情；第二次及以后每次播 Story7。
         /// </summary>
         private void OnGhostInteracted()
         {
@@ -549,12 +549,9 @@ namespace BokeGameJam.Gameplay
 
             underworldGhostInteractCount++;
 
+            // 第一次只计数，不播 Story。
             if (underworldGhostInteractCount == 1)
-            {
-                if (playStoryOnFirstGhostInteract)
-                    PlayStoryNow(ResolveFirstGhostInteractStory(), "首次与鬼魂互动剧情");
                 return;
-            }
 
             if (playStoryOnRepeatGhostInteract)
                 PlayStoryNow(ResolveRepeatGhostInteractStory(), "再次与鬼魂互动剧情");
@@ -581,8 +578,8 @@ namespace BokeGameJam.Gameplay
         }
 
         /// <summary>
-        /// 灯光首次正确：播 Story9；若此时花也完成则接着播 Story10 并切关。
-        /// 花后补完成：只播 Story10 再切关。
+        /// 灯光首次正确：播 Story8；若此时花也完成则接着播 Story9 并切关。
+        /// 花后补完成：只播 Story9 再切关。
         /// </summary>
         private void EvaluateLightsAndClearStories()
         {
@@ -601,12 +598,12 @@ namespace BokeGameJam.Gameplay
                 {
                     levelAdvanceStarted = true;
                     clearSequenceRoutine = StartCoroutine(
-                        PlayClearSequenceRoutine(playStory9: true, playStory10: true, thenAdvance: true));
+                        PlayClearSequenceRoutine(playLightsStory: true, playClearStory: true, thenAdvance: true));
                 }
                 else
                 {
                     clearSequenceRoutine = StartCoroutine(
-                        PlayClearSequenceRoutine(playStory9: true, playStory10: false, thenAdvance: false));
+                        PlayClearSequenceRoutine(playLightsStory: true, playClearStory: false, thenAdvance: false));
                 }
 
                 return;
@@ -617,17 +614,17 @@ namespace BokeGameJam.Gameplay
 
             levelAdvanceStarted = true;
             clearSequenceRoutine = StartCoroutine(
-                PlayClearSequenceRoutine(playStory9: false, playStory10: true, thenAdvance: true));
+                PlayClearSequenceRoutine(playLightsStory: false, playClearStory: true, thenAdvance: true));
         }
 
-        private IEnumerator PlayClearSequenceRoutine(bool playStory9, bool playStory10, bool thenAdvance)
+        private IEnumerator PlayClearSequenceRoutine(bool playLightsStory, bool playClearStory, bool thenAdvance)
         {
             clearSequenceRunning = true;
 
-            if (playStory9 && playStoryOnLightsCorrect)
+            if (playLightsStory && playStoryOnLightsCorrect)
                 yield return PlayStoryAndWait(ResolveLightsCorrectStory(), "灯光正确剧情");
 
-            if (playStory10 && playStoryOnLevelClear)
+            if (playClearStory && playStoryOnLevelClear)
                 yield return PlayStoryAndWait(ResolveLevelClearStory(), "通关剧情");
 
             clearSequenceRunning = false;
@@ -636,23 +633,41 @@ namespace BokeGameJam.Gameplay
             if (!thenAdvance)
                 yield break;
 
-            // Story10 播完、切关前：关掉 ESC，并关闭已打开的暂停菜单。
+            // 通关剧情播完、切关前：关掉 ESC，并关闭已打开的暂停菜单。
             if (GameManager.Instance != null)
             {
                 GameManager.Instance.ClosePauseMenuIfOpen();
                 GameManager.Instance.SetPauseMenuEscEnabled(false);
             }
 
-            LevelManager manager = LevelManager.EnsureExists();
-            if (!manager.CompleteAndLoadNextLevel())
+            BlackScreenMediaPlayer mediaPlayer = BlackScreenMediaPlayer.Instance
+                ?? BlackScreenMediaPlayer.EnsureExists();
+
+            if (mediaPlayer == null)
             {
                 Debug.LogWarning(
-                    "[Level1AnchorTriggers] 通关条件已满足，但没有下一关可加载。",
+                    "[Level1AnchorTriggers] BlackScreenMediaPlayer 缺失，直接进入下一关。",
                     this);
-                levelAdvanceStarted = false;
-                if (GameManager.Instance != null)
-                    GameManager.Instance.SetPauseMenuEscEnabled(true);
+                TryLoadNextLevelAfterClear();
+                yield break;
             }
+
+            // 媒体序列播完后的回调里加载第二关（黑屏淡出前）。
+            mediaPlayer.Play(BlackScreenMediaPlayer.PresetStartToLevel2, TryLoadNextLevelAfterClear);
+        }
+
+        private void TryLoadNextLevelAfterClear()
+        {
+            LevelManager manager = LevelManager.EnsureExists();
+            if (manager.CompleteAndLoadNextLevel())
+                return;
+
+            Debug.LogWarning(
+                "[Level1AnchorTriggers] 通关条件已满足，但没有下一关可加载。",
+                this);
+            levelAdvanceStarted = false;
+            if (GameManager.Instance != null)
+                GameManager.Instance.SetPauseMenuEscEnabled(true);
         }
 
         private IEnumerator PlayStoryAndWait(StorySequence story, string storyLabel)
