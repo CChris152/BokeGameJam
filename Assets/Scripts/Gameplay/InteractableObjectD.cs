@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using BokeGameJam.Core;
 using BokeGameJam.UI;
@@ -12,6 +13,9 @@ namespace BokeGameJam.Gameplay
     public class InteractableObjectD : InteractableObject
     {
         private static InteractableObjectD activeInLevel;
+
+        /// <summary>任意鬼魂成功互动时触发（含 GhostChoice）。</summary>
+        public static event Action Interacted;
 
         [Header("Dialogue")]
         [TextArea(2, 8)]
@@ -70,7 +74,14 @@ namespace BokeGameJam.Gameplay
             if (!CanInteract(interactor))
                 return;
 
+            NotifyInteracted();
             ShowDialogue(dialogueText);
+        }
+
+        /// <summary>子类在成功进入互动流程时调用，供关卡剧情监听。</summary>
+        protected void NotifyInteracted()
+        {
+            Interacted?.Invoke();
         }
 
         /// <summary>显示对话气泡；正文为空时用省略号。</summary>

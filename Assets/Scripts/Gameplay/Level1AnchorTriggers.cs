@@ -15,7 +15,7 @@ namespace BokeGameJam.Gameplay
     /// 玩家 X 从左到右越过 Anchor1 → 平滑移到 Place2；
     /// 越过 Anchor2 → Place3；反向越过则反向切换。
     /// 子物体命名：Place1 / Place2 / Place3 / Anchor1 / Anchor2（也可在 Inspector 拖引用）。
-    /// 开场 / 首次摘花 / 首次 Shift / 首次到达 Place2 剧情；
+    /// 开场 / 首次摘花 / 首次 Shift / 里世界首次到达 Place2 / 首次交付红黄花 / 错误交花 / 首次与鬼魂互动 剧情；
     /// 通关需同时满足：红黄花交付完成 + 表世界灯光（卧室亮、客厅暗、厨房亮）。
     /// </summary>
     [DefaultExecutionOrder(200)]
@@ -26,6 +26,9 @@ namespace BokeGameJam.Gameplay
         private const string DefaultFirstFlowerStoryResourcePath = "ScriptableObjects/Stories/Story2";
         private const string DefaultFirstShiftStoryResourcePath = "ScriptableObjects/Stories/Story3";
         private const string DefaultPlace2StoryResourcePath = "ScriptableObjects/Stories/Story4";
+        private const string DefaultFirstFlowerDeliveryStoryResourcePath = "ScriptableObjects/Stories/Story5";
+        private const string DefaultWrongFlowerDeliveryStoryResourcePath = "ScriptableObjects/Stories/Story6";
+        private const string DefaultFirstGhostInteractStoryResourcePath = "ScriptableObjects/Stories/Story7";
 
         [Header("Camera Places (可拖拽，留空则按子物体名查找)")]
         [SerializeField] private Transform place1;
@@ -60,10 +63,28 @@ namespace BokeGameJam.Gameplay
         [SerializeField] private bool playStoryOnFirstShift = true;
 
         [Header("Place2 Story")]
-        [Tooltip("本关第一次到达 Place2 的 X 时播放；留空则按 Resources 路径加载。")]
+        [Tooltip("本关在里世界第一次到达 Place2 的 X 时播放；留空则按 Resources 路径加载。")]
         [SerializeField] private StorySequence place2Story;
         [SerializeField] private string place2StoryResourcePath = DefaultPlace2StoryResourcePath;
         [SerializeField] private bool playStoryOnFirstReachPlace2 = true;
+
+        [Header("First Flower Delivery Story")]
+        [Tooltip("本关第一次成功交付红花或黄花时播放；留空则按 Resources 路径加载。")]
+        [SerializeField] private StorySequence firstFlowerDeliveryStory;
+        [SerializeField] private string firstFlowerDeliveryStoryResourcePath = DefaultFirstFlowerDeliveryStoryResourcePath;
+        [SerializeField] private bool playStoryOnFirstFlowerDelivery = true;
+
+        [Header("Wrong Flower Delivery Story")]
+        [Tooltip("持有非红非黄花与交付点互动时播放（每次都触发）；留空则按 Resources 路径加载。")]
+        [SerializeField] private StorySequence wrongFlowerDeliveryStory;
+        [SerializeField] private string wrongFlowerDeliveryStoryResourcePath = DefaultWrongFlowerDeliveryStoryResourcePath;
+        [SerializeField] private bool playStoryOnWrongFlowerDelivery = true;
+
+        [Header("First Ghost Interact Story")]
+        [Tooltip("本关第一次在里世界与鬼魂互动时播放；留空则按 Resources 路径加载。")]
+        [SerializeField] private StorySequence firstGhostInteractStory;
+        [SerializeField] private string firstGhostInteractStoryResourcePath = DefaultFirstGhostInteractStoryResourcePath;
+        [SerializeField] private bool playStoryOnFirstGhostInteract = true;
 
         [Header("Level Clear Conditions")]
         [Tooltip("红黄花交付完成后为 true；由本脚本轮询 FlowerCollector。")]
@@ -88,6 +109,9 @@ namespace BokeGameJam.Gameplay
         private bool hasPlayedFirstFlowerStory;
         private bool hasPlayedFirstShiftStory;
         private bool hasPlayedPlace2Story;
+        private bool hasPlayedFirstFlowerDeliveryStory;
+        private bool hasPlayedFirstGhostInteractStory;
+        private bool flowerCollectorBound;
         private bool levelAdvanceStarted;
 
         private void Awake()
@@ -112,6 +136,9 @@ namespace BokeGameJam.Gameplay
 
             EventManager.On(InputEvents.WorldToggle, OnWorldTogglePressed);
             EventManager.On<RoomLightsInfo>(GameEvents.LightsOffChanged, OnLightsOffChanged);
+            EventManager.On<WorldId>(GameEvents.ActiveWorldChanged, OnActiveWorldChanged);
+            InteractableObjectD.Interacted += OnGhostInteracted;
+            TryBindFlowerCollector();
         }
 
         private void Start()
@@ -134,6 +161,9 @@ namespace BokeGameJam.Gameplay
         {
             EventManager.Off(InputEvents.WorldToggle, OnWorldTogglePressed);
             EventManager.Off<RoomLightsInfo>(GameEvents.LightsOffChanged, OnLightsOffChanged);
+            EventManager.Off<WorldId>(GameEvents.ActiveWorldChanged, OnActiveWorldChanged);
+            InteractableObjectD.Interacted -= OnGhostInteracted;
+            UnbindFlowerCollector();
 
             if (introStoryRoutine != null)
             {
@@ -204,6 +234,21 @@ namespace BokeGameJam.Gameplay
             return ResolveStory(place2Story, place2StoryResourcePath);
         }
 
+        private StorySequence ResolveFirstFlowerDeliveryStory()
+        {
+            return ResolveStory(firstFlowerDeliveryStory, firstFlowerDeliveryStoryResourcePath);
+        }
+
+        private StorySequence ResolveWrongFlowerDeliveryStory()
+        {
+            return ResolveStory(wrongFlowerDeliveryStory, wrongFlowerDeliveryStoryResourcePath);
+        }
+
+        private StorySequence ResolveFirstGhostInteractStory()
+        {
+            return ResolveStory(firstGhostInteractStory, firstGhostInteractStoryResourcePath);
+        }
+
         /// <summary>本关第一次按 Shift（世界切换）时播放 Story3。</summary>
         private void OnWorldTogglePressed()
         {
@@ -223,6 +268,7 @@ namespace BokeGameJam.Gameplay
                 return;
 
             TryTriggerFirstFlowerStory();
+            TryTriggerFirstFlowerDeliveryStory();
             TrySyncFlowerDeliveryCondition();
             TryAdvanceLevelIfReady();
 
@@ -310,19 +356,52 @@ namespace BokeGameJam.Gameplay
             PlayStoryNow(ResolveFirstFlowerStory(), "首次摘花剧情");
         }
 
-        /// <summary>本关第一次走到 Place2 的 X 时播放 Story4。</summary>
+        /// <summary>
+        /// 本关在里世界第一次到达 Place2 的 X 时播放 Story4。
+        /// 表世界越过不算；若已在 Place2 以右再切到里世界，也会触发一次。
+        /// </summary>
         private void TryTriggerPlace2Story(float prevX, float x)
         {
-            if (!playStoryOnFirstReachPlace2 || hasPlayedPlace2Story || place2 == null)
+            if (!CanPlayPlace2Story())
                 return;
 
             float place2X = place2.position.x;
-            // 从左到右越过 Place2.x 视为第一次到达。
             if (!(prevX < place2X && x >= place2X))
                 return;
 
+            PlayPlace2Story();
+        }
+
+        private void OnActiveWorldChanged(WorldId world)
+        {
+            if (world != WorldId.B)
+                return;
+
+            // 已站在 Place2 以右时切到里世界，也算第一次到达。
+            if (!CanPlayPlace2Story())
+                return;
+
+            if (!TryGetPlayer(out Transform playerTransform))
+                return;
+
+            if (playerTransform.position.x < place2.position.x)
+                return;
+
+            PlayPlace2Story();
+        }
+
+        private bool CanPlayPlace2Story()
+        {
+            if (!playStoryOnFirstReachPlace2 || hasPlayedPlace2Story || place2 == null)
+                return false;
+
+            return GameManager.Instance != null && GameManager.Instance.IsInUnderworld;
+        }
+
+        private void PlayPlace2Story()
+        {
             hasPlayedPlace2Story = true;
-            PlayStoryNow(ResolvePlace2Story(), "Place2剧情");
+            PlayStoryNow(ResolvePlace2Story(), "Place2里世界剧情");
         }
 
         private bool TryGetPlayerInteractor(out PlayerInteractor interactor)
@@ -352,11 +431,74 @@ namespace BokeGameJam.Gameplay
             if (flowersDelivered)
                 return;
 
-            if (flowerCollector == null)
-                flowerCollector = FindObjectOfType<InteractableObjectFlowerCollector>();
+            TryBindFlowerCollector();
 
             if (flowerCollector != null && flowerCollector.IsCompleted)
                 flowersDelivered = true;
+        }
+
+        /// <summary>本关第一次成功交付红花或黄花时播放 Story5（只一次）。</summary>
+        private void TryTriggerFirstFlowerDeliveryStory()
+        {
+            if (!playStoryOnFirstFlowerDelivery || hasPlayedFirstFlowerDeliveryStory)
+                return;
+
+            TryBindFlowerCollector();
+
+            if (flowerCollector == null)
+                return;
+
+            if (flowerCollector.CollectedRed <= 0 && flowerCollector.CollectedYellow <= 0)
+                return;
+
+            hasPlayedFirstFlowerDeliveryStory = true;
+            PlayStoryNow(ResolveFirstFlowerDeliveryStory(), "首次交付花朵剧情");
+        }
+
+        private void TryBindFlowerCollector()
+        {
+            if (flowerCollectorBound && flowerCollector != null)
+                return;
+
+            if (flowerCollector == null)
+                flowerCollector = FindObjectOfType<InteractableObjectFlowerCollector>();
+
+            if (flowerCollector == null)
+                return;
+
+            flowerCollector.WrongFlowerDeliveryAttempted -= OnWrongFlowerDeliveryAttempted;
+            flowerCollector.WrongFlowerDeliveryAttempted += OnWrongFlowerDeliveryAttempted;
+            flowerCollectorBound = true;
+        }
+
+        private void UnbindFlowerCollector()
+        {
+            if (flowerCollector != null)
+                flowerCollector.WrongFlowerDeliveryAttempted -= OnWrongFlowerDeliveryAttempted;
+
+            flowerCollectorBound = false;
+        }
+
+        /// <summary>错误交花（非红非黄）时播放 Story6（每次都触发）。</summary>
+        private void OnWrongFlowerDeliveryAttempted()
+        {
+            if (!sceneReady || !playStoryOnWrongFlowerDelivery)
+                return;
+
+            PlayStoryNow(ResolveWrongFlowerDeliveryStory(), "错误交付花朵剧情");
+        }
+
+        /// <summary>本关第一次在里世界与鬼魂互动时播放 Story7（只一次）。</summary>
+        private void OnGhostInteracted()
+        {
+            if (!sceneReady || !playStoryOnFirstGhostInteract || hasPlayedFirstGhostInteractStory)
+                return;
+
+            if (GameManager.Instance == null || !GameManager.Instance.IsInUnderworld)
+                return;
+
+            hasPlayedFirstGhostInteractStory = true;
+            PlayStoryNow(ResolveFirstGhostInteractStory(), "首次与鬼魂互动剧情");
         }
 
         /// <summary>

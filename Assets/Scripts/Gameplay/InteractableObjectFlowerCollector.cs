@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using BokeGameJam.Core;
 using BokeGameJam.Levels;
@@ -6,7 +7,8 @@ namespace BokeGameJam.Gameplay
 {
     /// <summary>
     /// 花朵收集交付处（InteractableObjectC 变体）。
-    /// 玩家持有红花 / 黄花时按 E 交付；数量达标后通关并切换到下一关。
+    /// 玩家持有红花 / 黄花时按 E 交付；持有非红非黄花时可互动但视为错误提交。
+    /// 数量达标后通关并切换到下一关。
     /// </summary>
     public class InteractableObjectFlowerCollector : InteractableObjectC
     {
@@ -22,6 +24,9 @@ namespace BokeGameJam.Gameplay
         private int collectedYellow;
         private bool levelTransitionStarted;
 
+        /// <summary>持有非红非黄花并与交付点互动时触发（不消耗花朵）。</summary>
+        public event Action WrongFlowerDeliveryAttempted;
+
         public int RequiredRedFlowers => Mathf.Max(0, requiredRedFlowers);
         public int RequiredYellowFlowers => Mathf.Max(0, requiredYellowFlowers);
         public int CollectedRed => collectedRed;
@@ -29,38 +34,46 @@ namespace BokeGameJam.Gameplay
 
         public override bool CanInteract(PlayerInteractor interactor)
         {
-            if (!base.CanInteract(interactor))
+            // 不走 InteractableObjectC 的 IsRequirementMet，以便错误花也可互动。
+            if (!isActiveAndEnabled || !gameObject.activeInHierarchy)
                 return false;
 
             if (completed)
                 return false;
 
-            return TryGetNeededHeldFlower(interactor, out _);
+            return TryGetNeededHeldFlower(interactor, out _)
+                || IsHoldingNonAcceptedFlower(interactor);
         }
 
         public override void OnInteract(PlayerInteractor interactor)
         {
-            if (!TryGetNeededHeldFlower(interactor, out FlowerColor color))
-                return;
-
-            interactor.ConsumeHeldItem();
-
-            if (color == FlowerColor.Red)
-                collectedRed++;
-            else if (color == FlowerColor.Yellow)
-                collectedYellow++;
-            else
-                return;
-
-            if (IsCollectionComplete())
+            if (TryGetNeededHeldFlower(interactor, out FlowerColor color))
             {
-                completed = true;
-                ApplyVisual(false);
-                TryAdvanceToNextLevel();
+                interactor.ConsumeHeldItem();
+
+                if (color == FlowerColor.Red)
+                    collectedRed++;
+                else if (color == FlowerColor.Yellow)
+                    collectedYellow++;
+                else
+                    return;
+
+                if (IsCollectionComplete())
+                {
+                    completed = true;
+                    ApplyVisual(false);
+                    TryAdvanceToNextLevel();
+                    return;
+                }
+
+                RefreshVisual();
                 return;
             }
 
-            RefreshVisual();
+            if (!IsHoldingNonAcceptedFlower(interactor))
+                return;
+
+            WrongFlowerDeliveryAttempted?.Invoke();
         }
 
         protected override void OnHeldItemChanged(HeldItemInfo info)
@@ -81,14 +94,16 @@ namespace BokeGameJam.Gameplay
                 return;
             }
 
-            PlayerInteractor player = Object.FindObjectOfType<PlayerInteractor>();
-            bool open = TryGetNeededHeldFlower(player, out _);
+            PlayerInteractor player = UnityEngine.Object.FindObjectOfType<PlayerInteractor>();
+            bool open = TryGetNeededHeldFlower(player, out _)
+                || IsHoldingNonAcceptedFlower(player);
             ApplyVisual(open);
         }
 
         protected override bool IsRequirementMet(PlayerInteractor interactor)
         {
-            return TryGetNeededHeldFlower(interactor, out _);
+            return TryGetNeededHeldFlower(interactor, out _)
+                || IsHoldingNonAcceptedFlower(interactor);
         }
 
         private void TryAdvanceToNextLevel()
@@ -140,6 +155,16 @@ namespace BokeGameJam.Gameplay
 
             color = flower.ColorKind;
             return NeedsColor(color);
+        }
+
+        /// <summary>持有花，但颜色不是红/黄（紫、蓝等）。</summary>
+        private static bool IsHoldingNonAcceptedFlower(PlayerInteractor interactor)
+        {
+            if (!TryGetHeldFlower(interactor, out InteractableObjectFlower flower))
+                return false;
+
+            FlowerColor color = flower.ColorKind;
+            return color != FlowerColor.Red && color != FlowerColor.Yellow;
         }
     }
 }

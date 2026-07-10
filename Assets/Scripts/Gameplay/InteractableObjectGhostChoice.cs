@@ -46,6 +46,8 @@ namespace BokeGameJam.Gameplay
             if (!CanInteract(interactor))
                 return;
 
+            NotifyInteracted();
+
             // Holding item A: options take priority over plain dialogue.
             if (HasUsableHeldItemA(interactor))
             {

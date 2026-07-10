@@ -468,6 +468,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Teach
       objectReference: {fileID: 0}
+    - target: {fileID: 4708840967146009259, guid: e78cfa9967c1d754ba048f3da988cabd, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8450807152491710103, guid: e78cfa9967c1d754ba048f3da988cabd, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -530,7 +534,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8450807152491710103, guid: e78cfa9967c1d754ba048f3da988cabd, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -3.8
+      value: -4.95
       objectReference: {fileID: 0}
     - target: {fileID: 8450807152491710103, guid: e78cfa9967c1d754ba048f3da988cabd, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -598,6 +602,25 @@ MonoBehaviour:
   firstShiftStory: {fileID: 0}
   firstShiftStoryResourcePath: ScriptableObjects/Stories/Story3
   playStoryOnFirstShift: 1
+  place2Story: {fileID: 0}
+  place2StoryResourcePath: ScriptableObjects/Stories/Story4
+  playStoryOnFirstReachPlace2: 1
+  firstFlowerDeliveryStory: {fileID: 0}
+  firstFlowerDeliveryStoryResourcePath: ScriptableObjects/Stories/Story5
+  playStoryOnFirstFlowerDelivery: 1
+  wrongFlowerDeliveryStory: {fileID: 0}
+  wrongFlowerDeliveryStoryResourcePath: ScriptableObjects/Stories/Story6
+  playStoryOnWrongFlowerDelivery: 1
+  firstGhostInteractStory: {fileID: 0}
+  firstGhostInteractStoryResourcePath: ScriptableObjects/Stories/Story7
+  playStoryOnFirstGhostInteract: 1
+  flowersDelivered: 0
+  bedroomRoomId: room_1
+  livingRoomId: room_2
+  kitchenRoomId: room_3
+  requireBedroomLightsOn: 1
+  requireLivingRoomLightsOn: 0
+  requireKitchenLightsOn: 1
 --- !u!4 &637488421
 Transform:
   m_ObjectHideFlags: 0
@@ -1252,7 +1275,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5087346128492707775, guid: 25d3d4678dec73b469ab53ea4996aaf9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.32
+      value: -1.54
       objectReference: {fileID: 0}
     - target: {fileID: 5087346128492707775, guid: 25d3d4678dec73b469ab53ea4996aaf9, type: 3}
       propertyPath: m_LocalPosition.z
