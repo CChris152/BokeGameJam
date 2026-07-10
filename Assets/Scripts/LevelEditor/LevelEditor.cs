@@ -16,7 +16,7 @@ namespace BokeGameJam.LevelEditor
     /// 运行时关卡编辑器：完全事件驱动，不直接读 Unity Input。
     /// 支持双世界（A/B）+ 共享层：Shift 切换 A/B。
     /// 放置目标由 prefab 上 LevelObject.LevelLayer 决定（可在面板覆盖）。
-    /// 画笔自动扫描 Assets/Prefabs/Terrians（tileId = 相对路径，如 Ground/地板B）。
+    /// 画笔自动扫描 Assets/Resources/Prefabs/Terrians（tileId = 相对路径，如 Ground/地板B）。
     ///
     /// 交互：
     ///   M 键                — 切换 编辑 / 游玩 模式
@@ -36,8 +36,11 @@ namespace BokeGameJam.LevelEditor
         /// <summary>Resources.Load 用的子路径（不含扩展名）。</summary>
         private const string LevelsResourcesPath = "Levels";
 
-        /// <summary>地块画笔目录（相对项目根）。</summary>
-        private const string TerrainPrefabsFolder = "Assets/Prefabs/Terrians";
+        /// <summary>地块画笔目录（相对项目根，Editor AssetDatabase 扫描用）。</summary>
+        private const string TerrainPrefabsFolder = "Assets/Resources/Prefabs/Terrians";
+
+        /// <summary>Resources.Load 路径前缀（不含扩展名），例如 Prefabs/Terrians/Ground/地板B。</summary>
+        private const string TerrainResourcesPath = "Prefabs/Terrians";
 
         /// <summary>可交互物体相对路径前缀（tileId 以该前缀开头时显示机制配置）。</summary>
         private const string InteractableFolderPrefix = "Interactable/";
@@ -169,13 +172,13 @@ namespace BokeGameJam.LevelEditor
         /// <summary>
         /// 扫描 Terrians 目录下所有 prefab 作为画笔。
         /// tileId = 相对路径（不含扩展名），例如 Ground/地板B、Interactable/PickableObject。
-        /// 仅 Editor 可用（关卡编辑器本身也只在 Editor 里用）。
+        /// Editor 用 AssetDatabase；运行时用 Resources.LoadAll。
         /// </summary>
         private void RebuildPaletteFromFolder()
         {
-#if UNITY_EDITOR
             tilePalette.Clear();
 
+#if UNITY_EDITOR
             string folderPrefix = TerrainPrefabsFolder.Replace('\\', '/') + "/";
             string[] guids = AssetDatabase.FindAssets("t:Prefab", new[] { TerrainPrefabsFolder });
             for (int i = 0; i < guids.Length; i++)
@@ -197,14 +200,54 @@ namespace BokeGameJam.LevelEditor
                     prefab = prefab,
                 });
             }
+#else
+            AddPaletteFromResourcesSubfolder("Ground");
+            AddPaletteFromResourcesSubfolder("Interactable");
+#endif
 
             tilePalette.Sort((a, b) => string.CompareOrdinal(a.tileId, b.tileId));
             currentPaletteIndex = 0;
             SyncPaintLayerFromBrush();
-            Debug.Log($"[LevelEditor] 已从 {TerrainPrefabsFolder} 加载 {tilePalette.Count} 个画笔");
-#else
-            Debug.LogWarning("[LevelEditor] 画笔扫描仅在 Unity Editor 下可用");
-#endif
+            Debug.Log($"[LevelEditor] 已从 {TerrainResourcesPath} 加载 {tilePalette.Count} 个画笔");
+        }
+
+        /// <summary>运行时从 Resources 子目录加载画笔（tileId = 子目录/资源名）。</summary>
+        private void AddPaletteFromResourcesSubfolder(string relativeFolder)
+        {
+            string resourcesPath = TerrainResourcesPath + "/" + relativeFolder;
+            GameObject[] prefabs = Resources.LoadAll<GameObject>(resourcesPath);
+            if (prefabs == null || prefabs.Length == 0)
+                return;
+
+            for (int i = 0; i < prefabs.Length; i++)
+            {
+                GameObject prefab = prefabs[i];
+                if (prefab == null)
+                    continue;
+
+                tilePalette.Add(new TilePaletteEntry
+                {
+                    tileId = relativeFolder + "/" + prefab.name,
+                    prefab = prefab,
+                });
+            }
+        }
+
+        /// <summary>按 tileId 解析 prefab：先查画笔，再回退 Resources.Load。</summary>
+        private GameObject ResolveTerrainPrefab(string tileId)
+        {
+            if (string.IsNullOrEmpty(tileId))
+                return null;
+
+            int idx = FindPaletteIndex(tileId);
+            if (idx >= 0)
+            {
+                TilePaletteEntry entry = tilePalette[idx];
+                if (entry != null && entry.prefab != null)
+                    return entry.prefab;
+            }
+
+            return Resources.Load<GameObject>(TerrainResourcesPath + "/" + tileId);
         }
 
         /// <summary>从 tileId（相对路径）取出文件夹部分；根目录返回空串。</summary>
@@ -283,7 +326,9 @@ namespace BokeGameJam.LevelEditor
             if (GameManager.Instance != null)
                 activeWorld = GameManager.Instance.ActiveWorld;
 
-            if (autoLoadOnStart && File.Exists(SaveFilePath))
+            // 编辑器可读磁盘 JSON；打包后无松散文件，由 TryLoadLevel 回退 Resources.Load。
+            // 不能只判断 File.Exists，否则正式包永远不会加载地图。
+            if (autoLoadOnStart)
                 LoadSilent();
 
             SetEditMode(false);
@@ -1083,22 +1128,19 @@ namespace BokeGameJam.LevelEditor
             string layerLabel = LayerLabel(layer);
             foreach (LevelData.TileEntry entry in entries)
             {
-                int idx = FindPaletteIndex(entry.tileId);
-                if (idx < 0)
+                GameObject prefab = ResolveTerrainPrefab(entry.tileId);
+                if (prefab == null)
                 {
-                    Debug.LogWarning($"[LevelEditor] 找不到 tileId: {entry.tileId}，跳过");
+                    Debug.LogWarning(
+                        $"[LevelEditor] 找不到 tileId: {entry.tileId}（Resources '{TerrainResourcesPath}/{entry.tileId}'），跳过");
                     continue;
                 }
-
-                TilePaletteEntry palette = tilePalette[idx];
-                if (palette == null || palette.prefab == null)
-                    continue;
 
                 Vector2Int cell = new(entry.x, entry.y);
                 if (map.TryGetValue(cell, out PlacedTile existing) && existing.instance != null)
                     Destroy(existing.instance);
 
-                GameObject instance = Instantiate(palette.prefab, CellToWorld(cell), Quaternion.identity, root);
+                GameObject instance = Instantiate(prefab, CellToWorld(cell), Quaternion.identity, root);
                 instance.name = $"Tile_{layerLabel}_{entry.tileId}_{cell.x}_{cell.y}";
                 ApplyTileEntryConfig(instance, entry, layer);
                 map[cell] = new PlacedTile { tileId = entry.tileId, instance = instance };

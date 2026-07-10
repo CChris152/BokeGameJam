@@ -538,7 +538,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8450807152491710103, guid: e78cfa9967c1d754ba048f3da988cabd, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 4.2
+      value: 5.2999997
       objectReference: {fileID: 0}
     - target: {fileID: 8450807152491710103, guid: e78cfa9967c1d754ba048f3da988cabd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -614,6 +614,15 @@ MonoBehaviour:
   firstGhostInteractStory: {fileID: 0}
   firstGhostInteractStoryResourcePath: ScriptableObjects/Stories/Story7
   playStoryOnFirstGhostInteract: 1
+  repeatGhostInteractStory: {fileID: 0}
+  repeatGhostInteractStoryResourcePath: ScriptableObjects/Stories/Story7
+  playStoryOnRepeatGhostInteract: 1
+  lightsCorrectStory: {fileID: 0}
+  lightsCorrectStoryResourcePath: ScriptableObjects/Stories/Story8
+  playStoryOnLightsCorrect: 1
+  levelClearStory: {fileID: 0}
+  levelClearStoryResourcePath: ScriptableObjects/Stories/Story9
+  playStoryOnLevelClear: 1
   flowersDelivered: 0
   bedroomRoomId: room_1
   livingRoomId: room_2

@@ -31,6 +31,12 @@ namespace BokeGameJam.UI
         [Tooltip("全黑到透明的淡出时长（秒）")]
         [SerializeField] private float loadingFadeOutDuration = 1.5f;
 
+        /// <summary>加载动画：透明→全黑时长（秒）。</summary>
+        public float LoadingFadeInDuration => loadingFadeInDuration;
+
+        /// <summary>加载动画：全黑→透明时长（秒）。</summary>
+        public float LoadingFadeOutDuration => loadingFadeOutDuration;
+
         [Header("启动淡出动画（不透明→透明）")]
         [Tooltip("开始淡出前，先保持全黑的时长（秒）")]
         [SerializeField] private float fadeOutHoldDuration = 2f;
