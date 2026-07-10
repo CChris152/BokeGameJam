@@ -13,7 +13,9 @@ namespace BokeGameJam.Input
     {
         [SerializeField] private bool simulateInEditor;
         [SerializeField] private float minButtonSize = 72f;
-        [SerializeField] private float maxButtonSize = 128f;
+        [SerializeField] private float maxButtonSize = 192f;
+        [SerializeField] private float minTouchTargetDp = 48f;
+        [SerializeField] private float fallbackDpi = 160f;
         [SerializeField] private float buttonSizeRatio = 0.14f;
         [SerializeField] private float gapRatio = 0.022f;
         [SerializeField] private float edgeRatio = 0.035f;
@@ -22,6 +24,10 @@ namespace BokeGameJam.Input
 
         private bool leftHeld;
         private bool rightHeld;
+        private bool jumpHeld;
+        private bool interactHeld;
+        private bool worldHeld;
+        private bool pauseHeld;
         private bool jumpQueued;
         private bool interactQueued;
         private bool worldToggleQueued;
@@ -34,6 +40,7 @@ namespace BokeGameJam.Input
         private Rect interactRect;
         private Rect worldRect;
         private Rect pauseRect;
+        private GUIStyle buttonStyle;
 
 #if UNITY_ANDROID && !UNITY_EDITOR
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -112,10 +119,10 @@ namespace BokeGameJam.Input
             GUIStyle style = GetButtonStyle(leftRect.height);
             DrawButton(leftRect, "Left", leftHeld, style);
             DrawButton(rightRect, "Right", rightHeld, style);
-            DrawButton(interactRect, "Use", false, style);
-            DrawButton(jumpRect, "Jump", false, style);
-            DrawButton(worldRect, "World", false, style);
-            DrawButton(pauseRect, "Pause", false, style);
+            DrawButton(interactRect, "Use", interactHeld, style);
+            DrawButton(jumpRect, "Jump", jumpHeld, style);
+            DrawButton(worldRect, "World", worldHeld, style);
+            DrawButton(pauseRect, "Pause", pauseHeld, style);
         }
 
         private bool IsEnabledForCurrentPlatform()
@@ -150,9 +157,13 @@ namespace BokeGameJam.Input
         {
             Rect safe = Screen.safeArea;
             float shortSide = Mathf.Min(Screen.width, Screen.height);
-            float size = Mathf.Clamp(shortSide * buttonSizeRatio, minButtonSize, maxButtonSize);
-            float gap = Mathf.Clamp(shortSide * gapRatio, 12f, 28f);
-            float edge = Mathf.Clamp(shortSide * edgeRatio, 18f, 40f);
+            float pixelsPerDp = GetPixelsPerDp();
+            float minimumTouchTarget = minTouchTargetDp * pixelsPerDp;
+            float minimumSize = Mathf.Max(minButtonSize, minimumTouchTarget);
+            float maximumSize = Mathf.Max(maxButtonSize, minimumSize);
+            float size = Mathf.Clamp(shortSide * buttonSizeRatio, minimumSize, maximumSize);
+            float gap = Mathf.Clamp(shortSide * gapRatio, 8f * pixelsPerDp, 28f * pixelsPerDp);
+            float edge = Mathf.Max(shortSide * edgeRatio, 24f * pixelsPerDp);
 
             float safeLeft = safe.xMin;
             float safeRight = safe.xMax;
@@ -166,13 +177,27 @@ namespace BokeGameJam.Input
             jumpRect = new Rect(safeRight - edge - size, bottomY, size, size);
             interactRect = new Rect(jumpRect.xMin - gap - size, bottomY, size, size);
             worldRect = new Rect(jumpRect.xMin, bottomY - gap - size, size, size);
-            pauseRect = new Rect(safeRight - edge - size, safeTop + edge, size, size * 0.68f);
+            float pauseHeight = Mathf.Max(size * 0.68f, minimumTouchTarget);
+            pauseRect = new Rect(safeRight - edge - size, safeTop + edge, size, pauseHeight);
+        }
+
+        private float GetPixelsPerDp()
+        {
+            float dpi = Screen.dpi;
+            if (dpi < 80f || dpi > 1000f)
+                dpi = Mathf.Max(80f, fallbackDpi);
+
+            return dpi / 160f;
         }
 
         private void PollTouchInput()
         {
             leftHeld = false;
             rightHeld = false;
+            jumpHeld = false;
+            interactHeld = false;
+            worldHeld = false;
+            pauseHeld = false;
 
             bool touched = false;
             for (int i = 0; i < UnityEngine.Input.touchCount; i++)
@@ -206,17 +231,30 @@ namespace BokeGameJam.Input
             if (rightRect.Contains(guiPosition))
                 rightHeld = true;
 
-            if (!began)
-                return;
-
             if (jumpRect.Contains(guiPosition))
-                jumpQueued = true;
+            {
+                jumpHeld = true;
+                if (began)
+                    jumpQueued = true;
+            }
             else if (interactRect.Contains(guiPosition))
-                interactQueued = true;
+            {
+                interactHeld = true;
+                if (began)
+                    interactQueued = true;
+            }
             else if (worldRect.Contains(guiPosition))
-                worldToggleQueued = true;
+            {
+                worldHeld = true;
+                if (began)
+                    worldToggleQueued = true;
+            }
             else if (pauseRect.Contains(guiPosition))
-                pauseQueued = true;
+            {
+                pauseHeld = true;
+                if (began)
+                    pauseQueued = true;
+            }
         }
 
         private static Vector2 ToGuiPosition(Vector2 screenPosition)
@@ -228,6 +266,10 @@ namespace BokeGameJam.Input
         {
             leftHeld = false;
             rightHeld = false;
+            jumpHeld = false;
+            interactHeld = false;
+            worldHeld = false;
+            pauseHeld = false;
             jumpQueued = false;
             interactQueued = false;
             worldToggleQueued = false;
@@ -251,16 +293,19 @@ namespace BokeGameJam.Input
             GUI.color = previousColor;
         }
 
-        private static GUIStyle GetButtonStyle(float size)
+        private GUIStyle GetButtonStyle(float size)
         {
-            GUIStyle style = new(GUI.skin.button)
+            if (buttonStyle == null)
             {
-                fontSize = Mathf.RoundToInt(size * 0.22f),
-                alignment = TextAnchor.MiddleCenter,
-                wordWrap = true
-            };
+                buttonStyle = new GUIStyle(GUI.skin.button)
+                {
+                    alignment = TextAnchor.MiddleCenter,
+                    wordWrap = true
+                };
+            }
 
-            return style;
+            buttonStyle.fontSize = Mathf.RoundToInt(size * 0.22f);
+            return buttonStyle;
         }
 
         private static void TogglePauseMenu()
