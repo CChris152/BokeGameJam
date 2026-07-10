@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 using BokeGameJam.Core;
 using BokeGameJam.Data;
 using BokeGameJam.Levels;
@@ -13,7 +14,7 @@ namespace BokeGameJam.Gameplay
     /// 表世界开局熄灭，按 E 切换本地小光源与亮/关灯贴图。
     /// 里世界仅作为位置标记，默认不可交互。
     /// 监听 <see cref="GameEvents.WallLampSequenceCompleted"/>：按 X 从左到右编号 1..N，
-    /// 玩家须按壁灯闪烁顺序开灯；全对则通关 Level2，错则全部灭灯。
+    /// 灯头上方以罗马数字显示编号；玩家须按壁灯闪烁顺序开灯；全对则通关 Level2，错则全部灭灯。
     /// </summary>
     public class InteractableObjectStreetLamp : InteractableObjectB
     {
@@ -23,12 +24,21 @@ namespace BokeGameJam.Gameplay
         private const string StartSceneId = "StartScene";
         private const string DefaultWrongOrderStoryPath = "ScriptableObjects/Stories/Story16";
         private const string DefaultAllLitStoryPath = "ScriptableObjects/Stories/Story17";
+        private const string DefaultNumberFontResourcePath = "Art/Fonts/FZFENGRSTJW-EB SDF";
+
+        private static readonly string[] RomanNumerals =
+        {
+            "I", "II", "III", "IV", "V", "VI",
+            "VII", "VIII", "IX", "X", "XI", "XII"
+        };
 
         [Header("Street Lamp")]
         [Tooltip("亮灯时显示的小光源物体（默认找子物体 LightGlow）。")]
         [SerializeField] private GameObject lightGlowObject;
         [Tooltip("仅在表世界（World A）可交互；里世界只作标记。")]
         [SerializeField] private bool interactOnlyInOuterWorld = true;
+        [Tooltip("灯头上方的编号（TextMeshPro）；注册时写入罗马数字。")]
+        [SerializeField] private TMP_Text numberLabel;
 
         [Header("Lamp Sprites")]
         [SerializeField] private Sprite offSprite;
@@ -70,9 +80,11 @@ namespace BokeGameJam.Gameplay
         {
             base.Awake();
             ResolveLightGlow();
+            ResolveNumberLabel();
             EnsureLampSprites();
             wasActivated = IsActivated;
             ApplyLampState();
+            RefreshNumberLabel();
         }
 
         protected override void OnEnable()
@@ -140,6 +152,7 @@ namespace BokeGameJam.Gameplay
                 lamp.lampNumber = i + 1;
                 lamp.SetActivated(false);
                 lamp.wasActivated = false;
+                lamp.RefreshNumberLabel();
                 registered.Add(lamp);
             }
 
@@ -398,6 +411,51 @@ namespace BokeGameJam.Gameplay
             Transform child = transform.Find("LightGlow");
             if (child != null)
                 lightGlowObject = child.gameObject;
+        }
+
+        private void ResolveNumberLabel()
+        {
+            if (numberLabel != null)
+                return;
+
+            Transform child = transform.Find("NumberLabel");
+            if (child != null)
+                numberLabel = child.GetComponent<TMP_Text>();
+        }
+
+        private void RefreshNumberLabel()
+        {
+            ResolveNumberLabel();
+            if (numberLabel == null)
+                return;
+
+            if (numberLabel.font == null)
+            {
+                TMP_FontAsset font = Resources.Load<TMP_FontAsset>(DefaultNumberFontResourcePath);
+                if (font != null)
+                    numberLabel.font = font;
+            }
+
+            if (lampNumber <= 0)
+            {
+                numberLabel.text = string.Empty;
+                numberLabel.gameObject.SetActive(false);
+                return;
+            }
+
+            numberLabel.text = ToRomanNumeral(lampNumber);
+            numberLabel.gameObject.SetActive(true);
+        }
+
+        private static string ToRomanNumeral(int value)
+        {
+            if (value <= 0)
+                return string.Empty;
+
+            if (value <= RomanNumerals.Length)
+                return RomanNumerals[value - 1];
+
+            return value.ToString();
         }
 
         private void EnsureLampSprites()
