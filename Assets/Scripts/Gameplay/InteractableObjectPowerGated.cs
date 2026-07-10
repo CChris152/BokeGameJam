@@ -18,23 +18,12 @@ namespace BokeGameJam.Gameplay
     /// </summary>
     public class InteractableObjectPowerGated : InteractableObject
     {
-        private const string DefaultHintPrefabResourcePath = "Prefabs/Terrians/Interactable/InteractHint";
-
         private static bool powerSwitchActivated;
 
         [Header("Power Gate")]
         [SerializeField] private PowerGatedItemKind itemKind = PowerGatedItemKind.Bear;
 
-        [Header("Interact Hint")]
-        [Tooltip("互动提示预制体；留空则尝试 Resources 路径。")]
-        [SerializeField] private GameObject interactHintPrefab;
-        [Tooltip("相对本物体的本地偏移（下方为正 Y 负值）。")]
-        [SerializeField] private Vector2 hintLocalOffset = new(0f, -0.85f);
-        [SerializeField] private string hintPrefabResourcePath = DefaultHintPrefabResourcePath;
-
         private bool unlocked;
-        private bool isInRange;
-        private GameObject hintInstance;
 
         public PowerGatedItemKind ItemKind => itemKind;
         public bool IsUnlocked => unlocked;
@@ -46,38 +35,17 @@ namespace BokeGameJam.Gameplay
 
             // 事件不会重放：若电闸已启动，补一次解锁。
             SetUnlocked(powerSwitchActivated);
-            RefreshHint();
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
             EventManager.Off(GameEvents.PowerSwitchActivated, OnPowerSwitchActivated);
-            isInRange = false;
-            SetHintVisible(false);
+            base.OnDisable();
         }
 
         public override bool CanInteract(PlayerInteractor interactor)
         {
             return unlocked && base.CanInteract(interactor);
-        }
-
-        public override void SetInInteractRange(bool inRange)
-        {
-            isInRange = inRange;
-            RefreshHint();
-        }
-
-        public override void PickUp(Transform holder)
-        {
-            base.PickUp(holder);
-            isInRange = false;
-            RefreshHint();
-        }
-
-        public override void Drop(Vector2 worldPosition)
-        {
-            base.Drop(worldPosition);
-            RefreshHint();
         }
 
         /// <summary>外部 / 调试：手动解锁（等同收到电闸启动）。</summary>
@@ -96,62 +64,12 @@ namespace BokeGameJam.Gameplay
         private void SetUnlocked(bool value)
         {
             unlocked = value;
-            RefreshHint();
+            RefreshInteractHint();
         }
 
-        private void RefreshHint()
+        protected override bool ShouldShowInteractHint()
         {
-            bool show = unlocked && isInRange && !IsHeld;
-            SetHintVisible(show);
-        }
-
-        private void SetHintVisible(bool show)
-        {
-            if (!show)
-            {
-                if (hintInstance != null)
-                    hintInstance.SetActive(false);
-                return;
-            }
-
-            EnsureHintInstance();
-            if (hintInstance == null)
-                return;
-
-            hintInstance.transform.localPosition = hintLocalOffset;
-            hintInstance.SetActive(true);
-        }
-
-        private void EnsureHintInstance()
-        {
-            if (hintInstance != null)
-                return;
-
-            Transform existing = transform.Find("InteractHint");
-            if (existing != null)
-            {
-                hintInstance = existing.gameObject;
-                return;
-            }
-
-            GameObject prefab = interactHintPrefab;
-            if (prefab == null && !string.IsNullOrWhiteSpace(hintPrefabResourcePath))
-                prefab = Resources.Load<GameObject>(hintPrefabResourcePath.Trim());
-
-            if (prefab == null)
-            {
-                Debug.LogWarning(
-                    $"[InteractableObjectPowerGated] '{name}' 缺少互动提示预制体（interactHintPrefab / Resources '{hintPrefabResourcePath}'）。",
-                    this);
-                return;
-            }
-
-            hintInstance = Instantiate(prefab, transform);
-            hintInstance.name = "InteractHint";
-            hintInstance.transform.localPosition = hintLocalOffset;
-            hintInstance.transform.localRotation = Quaternion.identity;
-            hintInstance.transform.localScale = Vector3.one;
-            hintInstance.SetActive(false);
+            return unlocked && base.ShouldShowInteractHint();
         }
     }
 }

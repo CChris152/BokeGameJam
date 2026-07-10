@@ -50,7 +50,7 @@ namespace BokeGameJam.Gameplay
             EventManager.On<WorldId>(GameEvents.ActiveWorldChanged, OnActiveWorldChanged);
         }
 
-        protected virtual void OnDisable()
+        protected override void OnDisable()
         {
             EventManager.Off<WorldId>(GameEvents.ActiveWorldChanged, OnActiveWorldChanged);
 
@@ -58,6 +58,14 @@ namespace BokeGameJam.Gameplay
                 activeInLevel = null;
 
             CloseDialogueIfOpen();
+            base.OnDisable();
+        }
+
+        private void LateUpdate()
+        {
+            // 对话关闭后 BlocksInteract 变化，需补刷提示（不会再次触发 SetInInteractRange）。
+            if (IsInInteractRange)
+                RefreshInteractHint();
         }
 
         public override bool CanInteract(PlayerInteractor interactor)
@@ -69,6 +77,11 @@ namespace BokeGameJam.Gameplay
                 && !DialoguePopup.BlocksInteract;
         }
 
+        protected override bool ShouldShowInteractHint()
+        {
+            return base.ShouldShowInteractHint() && !DialoguePopup.BlocksInteract;
+        }
+
         public override void OnInteract(PlayerInteractor interactor)
         {
             if (!CanInteract(interactor))
@@ -76,6 +89,7 @@ namespace BokeGameJam.Gameplay
 
             NotifyInteracted();
             ShowDialogue(dialogueText);
+            RefreshInteractHint();
         }
 
         /// <summary>子类在成功进入互动流程时调用，供关卡剧情监听。</summary>

@@ -71,8 +71,14 @@ namespace BokeGameJam.Gameplay
             return !unlocked && base.CanInteract(interactor);
         }
 
+        protected override bool ShouldShowInteractHint()
+        {
+            return !unlocked && base.ShouldShowInteractHint();
+        }
+
         public override void SetInInteractRange(bool inRange)
         {
+            base.SetInInteractRange(inRange);
             isInRange = inRange;
             ApplyVisualState();
         }
