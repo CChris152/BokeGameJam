@@ -1,6 +1,7 @@
 using BokeGameJam.Core;
 using BokeGameJam.Levels;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Events;
 using UnityEngine.UI;
 #if UNITY_EDITOR
@@ -38,6 +39,8 @@ namespace BokeGameJam.UI
 
         [Tooltip("退出游戏按钮")]
         [SerializeField] private Button quitButton;
+
+        private bool startGameRequested;
 
         private void Awake()
         {
@@ -110,6 +113,15 @@ namespace BokeGameJam.UI
         /// </summary>
         public void OnStartGameClicked()
         {
+            // Unity 默认 Input 的 Submit 绑定了 Space/Enter。鼠标点过按钮后它仍保持选中，
+            // 再按空格会再次触发 onClick，导致开场 CG 被 StopCurrent 后重播。
+            if (startGameRequested)
+                return;
+
+            startGameRequested = true;
+            SetMenuButtonsInteractable(false);
+            ClearUiSelection();
+
             SwitchToGameplayBgm();
 
             BlackScreenMediaPlayer mediaPlayer = BlackScreenMediaPlayer.Instance
@@ -123,6 +135,24 @@ namespace BokeGameJam.UI
             }
 
             mediaPlayer.Play(BlackScreenMediaPlayer.PresetStartToLevel1, StartLevel1);
+        }
+
+        /// <summary>禁用主菜单按钮，避免 Submit（空格）重复触发。</summary>
+        private void SetMenuButtonsInteractable(bool interactable)
+        {
+            if (startButton != null)
+                startButton.interactable = interactable;
+            if (settingsButton != null)
+                settingsButton.interactable = interactable;
+            if (quitButton != null)
+                quitButton.interactable = interactable;
+        }
+
+        /// <summary>清除 EventSystem 当前选中，避免键盘 Submit 打到已点过的按钮。</summary>
+        private static void ClearUiSelection()
+        {
+            if (EventSystem.current != null)
+                EventSystem.current.SetSelectedGameObject(null);
         }
 
         /// <summary>确保管理器在场后，按 Catalog 加载第一关。</summary>

@@ -3053,11 +3053,31 @@
             "sequenceIndex": 0,
             "dialogueText": "",
             "roomId": ""
+        },
+        {
+            "x": 75,
+            "y": -3,
+            "tileId": "Interactable/壁灯组",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 0,
+            "y": 12,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
         }
     ],
     "tilesShared": [
         {
-            "x": 39,
+            "x": 38,
             "y": -4,
             "tileId": "Interactable/StreetLamp",
             "mechanismId": "",
@@ -3077,7 +3097,7 @@
             "roomId": ""
         },
         {
-            "x": 16,
+            "x": 22,
             "y": -4,
             "tileId": "Interactable/StreetLamp",
             "mechanismId": "",
@@ -3087,7 +3107,7 @@
             "roomId": ""
         },
         {
-            "x": 7,
+            "x": 6,
             "y": -4,
             "tileId": "Interactable/StreetLamp",
             "mechanismId": "",
@@ -3110,16 +3130,6 @@
             "x": -2,
             "y": -4,
             "tileId": "Interactable/StreetLamp",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 75,
-            "y": -3,
-            "tileId": "Interactable/壁灯组",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
