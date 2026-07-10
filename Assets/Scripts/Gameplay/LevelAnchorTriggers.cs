@@ -11,19 +11,22 @@ using UnityEngine.SceneManagement;
 namespace BokeGameJam.Gameplay
 {
     /// <summary>
-    /// Level1 分段相机：Start 固定到 Place1；
-    /// 玩家 X 从左到右越过 Anchor1 → 平滑移到 Place2；
-    /// 越过 Anchor2 → Place3；反向越过则反向切换。
-    /// 子物体命名：Place1 / Place2 / Place3 / Anchor1 / Anchor2（也可在 Inspector 拖引用）。
-    /// 开场可播放配置的剧情字幕。
+    /// 分段相机：Start 固定到 places[0]；
+    /// 玩家 X 越过 anchors[i] 左→右 → places[i+1]；右→左 → places[i]。
+    /// 要求 places.Length == anchors.Length + 1。
+    /// 子物体可命名 Place1..N / Anchor1..N-1（也可在 Inspector 拖引用）。
+    /// 可选：开场 / 首次摘花 / 首次 Shift 剧情字幕。
     /// </summary>
     [DefaultExecutionOrder(200)]
     public sealed class LevelAnchorTriggers : MonoBehaviour
     {
-        private const string TargetSceneName = "Level1";
         private const string DefaultIntroStoryResourcePath = "ScriptableObjects/Stories/Story1";
         private const string DefaultFirstFlowerStoryResourcePath = "ScriptableObjects/Stories/Story2";
         private const string DefaultFirstShiftStoryResourcePath = "ScriptableObjects/Stories/Story3";
+
+        [Header("Scene Gate")]
+        [Tooltip("仅在该场景名下启用；留空则任意场景都启用")]
+        [SerializeField] private string targetSceneName;
 
         [Header("Camera Places (从左到右)")]
         [SerializeField] private Transform[] places;
@@ -88,7 +91,7 @@ namespace BokeGameJam.Gameplay
 
         private void OnEnable()
         {
-            if (SceneManager.GetActiveScene().name != TargetSceneName)
+            if (!IsTargetSceneActive())
                 return;
 
             EventManager.On(InputEvents.WorldToggle, OnWorldTogglePressed);
@@ -103,8 +106,7 @@ namespace BokeGameJam.Gameplay
             if (CameraManager.Instance != null)
                 CameraManager.Instance.SetFollowTarget(null);
 
-            SnapCameraTo(place1);
-            currentPlace = place1;
+            SnapCameraTo(places[0]);
 
             if (playIntroStoryOnStart)
                 introStoryRoutine = StartCoroutine(PlayStoryNextFrame(ResolveIntroStory(), "开场剧情"));
@@ -121,6 +123,12 @@ namespace BokeGameJam.Gameplay
             }
         }
 
+        private bool IsTargetSceneActive()
+        {
+            return string.IsNullOrEmpty(targetSceneName)
+                || SceneManager.GetActiveScene().name == targetSceneName;
+        }
+
         /// <summary>等一帧，确保 GameManager 已加载 CameraTopBanner 后再播剧情。</summary>
         private IEnumerator PlayStoryNextFrame(StorySequence story, string storyLabel)
         {
@@ -133,7 +141,7 @@ namespace BokeGameJam.Gameplay
         {
             if (story == null || !story.HasLines)
             {
-                Debug.LogWarning($"[Level1AnchorTriggers] {storyLabel}配置缺失或为空。", this);
+                Debug.LogWarning($"[LevelAnchorTriggers] {storyLabel}配置缺失或为空。", this);
                 return;
             }
 
@@ -144,7 +152,7 @@ namespace BokeGameJam.Gameplay
             if (banner == null)
             {
                 Debug.LogWarning(
-                    $"[Level1AnchorTriggers] CameraTopBannerUI 未找到，无法播放{storyLabel}。",
+                    $"[LevelAnchorTriggers] CameraTopBannerUI 未找到，无法播放{storyLabel}。",
                     this);
                 return;
             }
@@ -178,7 +186,7 @@ namespace BokeGameJam.Gameplay
             return ResolveStory(firstShiftStory, firstShiftStoryResourcePath);
         }
 
-        /// <summary>本关第一次按 Shift（世界切换）时播放 Story3。</summary>
+        /// <summary>本关第一次按 Shift（世界切换）时播放剧情。</summary>
         private void OnWorldTogglePressed()
         {
             if (!sceneReady || !playStoryOnFirstShift || hasPlayedFirstShiftStory)
@@ -298,7 +306,7 @@ namespace BokeGameJam.Gameplay
             return true;
         }
 
-        /// <summary>本关第一次捡到红花或黄花时播放 Story2。</summary>
+        /// <summary>本关第一次捡到红花或黄花时播放剧情。</summary>
         private void TryTriggerFirstFlowerStory()
         {
             if (!playStoryOnFirstFlowerPickup || hasPlayedFirstFlowerStory)
