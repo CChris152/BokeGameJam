@@ -104,9 +104,16 @@ namespace BokeGameJam.UI
         /// </summary>
         public void PlayStory(IList<string> lines)
         {
+            PlayStory(lines, onComplete: null);
+        }
+
+        /// <summary>播放剧情字幕，全部结束后调用 <paramref name="onComplete"/>。</summary>
+        public void PlayStory(IList<string> lines, System.Action onComplete)
+        {
             if (lines == null || lines.Count == 0)
             {
                 Debug.LogWarning("[CameraTopBannerUI] PlayStory 收到空列表。", this);
+                onComplete?.Invoke();
                 return;
             }
 
@@ -120,16 +127,16 @@ namespace BokeGameJam.UI
             if (storyRoutine != null)
                 StopCoroutine(storyRoutine);
 
-            storyRoutine = StartCoroutine(PlayStoryRoutine(copy, interruptCurrent: isPlayingStory));
+            storyRoutine = StartCoroutine(PlayStoryRoutine(copy, interruptCurrent: isPlayingStory, onComplete));
         }
 
         /// <summary>params 重载，便于直接传多句。</summary>
         public void PlayStory(params string[] lines)
         {
-            PlayStory((IList<string>)lines);
+            PlayStory((IList<string>)lines, onComplete: null);
         }
 
-        private IEnumerator PlayStoryRoutine(List<string> lines, bool interruptCurrent)
+        private IEnumerator PlayStoryRoutine(List<string> lines, bool interruptCurrent, System.Action onComplete)
         {
             isPlayingStory = true;
 
@@ -163,6 +170,7 @@ namespace BokeGameJam.UI
             SetLabelAlpha(1f);
             isPlayingStory = false;
             storyRoutine = null;
+            onComplete?.Invoke();
         }
 
         private void StopStoryInternal(bool clearText)

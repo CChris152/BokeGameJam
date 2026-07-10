@@ -107,14 +107,14 @@ namespace BokeGameJam.Gameplay
 
             if (!isCorrect)
             {
-                PlayFeedback(failureSfxOverride, failureSfxId);
+                PlayFailureFeedback();
                 return false;
             }
 
             unlocked = true;
             isInRange = false;
             ApplyVisualState();
-            PlayFeedback(successSfxOverride, successSfxId);
+            PlayFeedback(successSfxOverride, successSfxId, GameSfxPaths.PuzzleSuccess);
             onUnlocked?.Invoke();
             EventManager.Emit(PasswordLockEvents.Unlocked, this);
             Debug.Log($"[PasswordLock] '{name}' unlocked successfully.", this);
@@ -123,12 +123,12 @@ namespace BokeGameJam.Gameplay
 
         public void NotifyDigitPressed()
         {
-            PlayFeedback(digitSfxOverride, digitSfxId);
+            PlayFeedback(digitSfxOverride, digitSfxId, GameSfxPaths.UiConfirm);
         }
 
         public void NotifyErasePressed()
         {
-            PlayFeedback(eraseSfxOverride, eraseSfxId);
+            PlayFeedback(eraseSfxOverride, eraseSfxId, GameSfxPaths.UiBack);
         }
 
         public void ResetLock()
@@ -174,7 +174,7 @@ namespace BokeGameJam.Gameplay
             }
         }
 
-        private void PlayFeedback(AudioClip clipOverride, string resourceId)
+        private void PlayFeedback(AudioClip clipOverride, string resourceId, string fallbackResourcePath = null)
         {
             if (clipOverride != null)
             {
@@ -193,7 +193,30 @@ namespace BokeGameJam.Gameplay
             }
 
             if (!string.IsNullOrWhiteSpace(resourceId) && GameAudioManager.Instance != null)
+            {
                 GameAudioManager.Instance.PlaySFXById(resourceId.Trim());
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(fallbackResourcePath) && GameAudioManager.Instance != null)
+                GameAudioManager.Instance.PlaySFXByResourcePath(fallbackResourcePath);
+        }
+
+        private void PlayFailureFeedback()
+        {
+            if (failureSfxOverride != null || !string.IsNullOrWhiteSpace(failureSfxId))
+            {
+                PlayFeedback(failureSfxOverride, failureSfxId);
+                return;
+            }
+
+            if (GameAudioManager.Instance == null)
+                return;
+
+            GameAudioManager.Instance.PlayRandomSFXByResourcePaths(
+                1f,
+                GameSfxPaths.PuzzleFailure1,
+                GameSfxPaths.PuzzleFailure3);
         }
 
         private static string KeepDigits(string value)

@@ -120,6 +120,10 @@ namespace BokeGameJam.Gameplay
 
             consecutiveFailedDeliveries = 0;
             interactor.ConsumeHeldItem();
+
+            if (GameAudioManager.Instance != null)
+                GameAudioManager.Instance.PlaySFXByResourcePath(GameSfxPaths.ClockHourBell);
+
             PlayBannerStory(ResolveCandySuccessStory(), "交付糖果成功剧情");
             // 广播「拿到糖」；本物体通过监听该事件消失（也供其他系统订阅）。
             EventManager.Emit(GameEvents.CandyReceived);

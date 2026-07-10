@@ -112,10 +112,14 @@ namespace BokeGameJam.UI
             if (fontAsset != null)
                 return fontAsset;
 
-            if (string.IsNullOrWhiteSpace(fontResourcePath))
-                return null;
+            string path = string.IsNullOrWhiteSpace(fontResourcePath)
+                ? DefaultFontResourcePath
+                : fontResourcePath.Trim();
 
-            fontAsset = Resources.Load<TMP_FontAsset>(fontResourcePath.Trim());
+            fontAsset = Resources.Load<TMP_FontAsset>(path);
+            if (fontAsset == null && path != DefaultFontResourcePath)
+                fontAsset = Resources.Load<TMP_FontAsset>(DefaultFontResourcePath);
+
             return fontAsset;
         }
 

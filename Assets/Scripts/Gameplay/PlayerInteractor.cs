@@ -93,7 +93,7 @@ namespace BokeGameJam.Gameplay
             InteractableObjectD ghost = FindNearestGhost();
             if (ghost != null)
             {
-                ghost.OnInteract(this);
+                TryInteractWith(ghost);
                 return;
             }
 
@@ -102,7 +102,7 @@ namespace BokeGameJam.Gameplay
                 InteractableObjectC delivery = FindNearestDelivery();
                 if (delivery != null)
                 {
-                    delivery.OnInteract(this);
+                    TryInteractWith(delivery);
                     return;
                 }
 
@@ -317,6 +317,11 @@ namespace BokeGameJam.Gameplay
             bool interacted = interactable.Interact(this);
             if (!interacted)
                 return false;
+
+            bool hasDedicatedInteractionAudio = interactable is InteractableObjectLightSwitch
+                || interactable is InteractableObjectStreetLamp;
+            if (!hasDedicatedInteractionAudio && GameAudioManager.Instance != null)
+                GameAudioManager.Instance.PlaySFXByResourcePath(GameSfxPaths.InteractionConfirm);
 
             // 仅在对象销毁/失活时移出 nearby；busy 等临时不可互动仍保留，冷却后可再按。
             if (!IsTrackableInteractable(interactable))

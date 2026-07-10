@@ -20,6 +20,7 @@ namespace BokeGameJam.Gameplay
         private const string OffSpriteResourcePath = "Art/Pictures/关灯";
         private const string OnSpriteResourcePath = "Art/Pictures/亮灯";
         private const string Level2Id = "level_2";
+        private const string StartSceneId = "StartScene";
         private const string DefaultWrongOrderStoryPath = "ScriptableObjects/Stories/Story16";
         private const string DefaultAllLitStoryPath = "ScriptableObjects/Stories/Story17";
 
@@ -57,8 +58,8 @@ namespace BokeGameJam.Gameplay
         private static bool puzzleCompleted;
         private static int lastRegisterFrame = -1;
         private static bool hasPlayedAllLitStory;
+        private static bool hasStartedEndingMedia;
 
-        private static AudioClip fallbackBeepClip;
         private static Sprite cachedOffSprite;
         private static Sprite cachedOnSprite;
 
@@ -148,6 +149,7 @@ namespace BokeGameJam.Gameplay
             progress = 0;
             puzzleCompleted = false;
             hasPlayedAllLitStory = false;
+            hasStartedEndingMedia = false;
             puzzleArmed = expectedOrder.Length > 0 && registered.Count > 0;
 
             if (!puzzleArmed)
@@ -230,6 +232,7 @@ namespace BokeGameJam.Gameplay
                 TurnOffAllRegistered();
                 progress = 0;
                 PlayBannerStory(ResolveWrongOrderStory(), "路灯错序剧情");
+                PlaySequenceFailureAudio();
                 return;
             }
 
@@ -279,7 +282,7 @@ namespace BokeGameJam.Gameplay
                 return;
 
             hasPlayedAllLitStory = true;
-            PlayBannerStory(ResolveAllLitStory(), "路灯全亮剧情");
+            PlayBannerStory(ResolveAllLitStory(), "路灯全亮剧情", StartLevel2EndingMedia);
         }
 
         private StorySequence ResolveWrongOrderStory()
@@ -303,11 +306,12 @@ namespace BokeGameJam.Gameplay
             return Resources.Load<StorySequence>(resourcePath.Trim());
         }
 
-        private void PlayBannerStory(StorySequence story, string storyLabel)
+        private void PlayBannerStory(StorySequence story, string storyLabel, System.Action onComplete = null)
         {
             if (story == null || !story.HasLines)
             {
                 Debug.LogWarning($"[InteractableObjectStreetLamp] {storyLabel}配置缺失或为空。", this);
+                onComplete?.Invoke();
                 return;
             }
 
@@ -317,10 +321,52 @@ namespace BokeGameJam.Gameplay
                 Debug.LogWarning(
                     $"[InteractableObjectStreetLamp] CameraTopBannerUI 未找到，无法播放{storyLabel}。",
                     this);
+                onComplete?.Invoke();
                 return;
             }
 
-            banner.PlayStory(story.CreateLineList());
+            banner.PlayStory(story.CreateLineList(), onComplete);
+        }
+
+        /// <summary>Story17 播完后：黑屏媒体序列，结束后回主菜单。</summary>
+        private void StartLevel2EndingMedia()
+        {
+            if (hasStartedEndingMedia)
+                return;
+
+            hasStartedEndingMedia = true;
+
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.ClosePauseMenuIfOpen();
+                GameManager.Instance.SetPauseMenuEscEnabled(false);
+            }
+
+            BlackScreenMediaPlayer mediaPlayer = BlackScreenMediaPlayer.Instance
+                ?? BlackScreenMediaPlayer.EnsureExists();
+
+            if (mediaPlayer == null)
+            {
+                Debug.LogWarning(
+                    "[InteractableObjectStreetLamp] BlackScreenMediaPlayer 缺失，直接回主菜单。",
+                    this);
+                ReturnToMainMenu();
+                return;
+            }
+
+            mediaPlayer.Play(BlackScreenMediaPlayer.PresetLevel2ToMainMenu, ReturnToMainMenu);
+        }
+
+        private static void ReturnToMainMenu()
+        {
+            if (GameSceneManager.Instance != null)
+            {
+                GameSceneManager.Instance.LoadSceneById(StartSceneId);
+                return;
+            }
+
+            Debug.LogError("[InteractableObjectStreetLamp] GameSceneManager missing, cannot return to main menu.");
+            UnityEngine.SceneManagement.SceneManager.LoadScene(StartSceneId);
         }
 
         private static CameraTopBannerUI EnsureTopBanner()
@@ -404,7 +450,18 @@ namespace BokeGameJam.Gameplay
                 return;
             }
 
-            localAudioSource.PlayOneShot(GetFallbackBeepClip());
+            // LevelCompleted event supplies the approved completion cue.
+        }
+
+        private static void PlaySequenceFailureAudio()
+        {
+            if (GameAudioManager.Instance == null)
+                return;
+
+            GameAudioManager.Instance.PlayRandomSFXByResourcePaths(
+                1f,
+                GameSfxPaths.PuzzleFailure1,
+                GameSfxPaths.PuzzleFailure3);
         }
 
         private void EnsureLocalAudioSource()
@@ -418,28 +475,6 @@ namespace BokeGameJam.Gameplay
                 localAudioSource = gameObject.AddComponent<AudioSource>();
                 localAudioSource.playOnAwake = false;
             }
-        }
-
-        private static AudioClip GetFallbackBeepClip()
-        {
-            if (fallbackBeepClip != null)
-                return fallbackBeepClip;
-
-            const int sampleRate = 44100;
-            const float duration = 0.18f;
-            int sampleCount = Mathf.CeilToInt(sampleRate * duration);
-            float[] samples = new float[sampleCount];
-
-            for (int i = 0; i < sampleCount; i++)
-            {
-                float t = i / (float)sampleRate;
-                float envelope = 1f - (t / duration);
-                samples[i] = Mathf.Sin(2f * Mathf.PI * 880f * t) * envelope * 0.35f;
-            }
-
-            fallbackBeepClip = AudioClip.Create("StreetLampSequenceBeep", sampleCount, 1, sampleRate, false);
-            fallbackBeepClip.SetData(samples, 0);
-            return fallbackBeepClip;
         }
 
         private static bool IsInUnderworld()
