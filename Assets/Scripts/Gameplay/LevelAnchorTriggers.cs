@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using BokeGameJam.CameraSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,24 +7,23 @@ using UnityEngine.SceneManagement;
 namespace BokeGameJam.Gameplay
 {
     /// <summary>
-    /// Level1 分段相机：Start 固定到 Place1；
-    /// 玩家 X 从左到右越过 Anchor1 → 平滑移到 Place2；
-    /// 越过 Anchor2 → Place3；反向越过则反向切换。
-    /// 子物体命名：Place1 / Place2 / Place3 / Anchor1 / Anchor2（也可在 Inspector 拖引用）。
+    /// 分段相机：Start 固定到 places[0]；
+    /// 玩家 X 越过 anchors[i] 左→右 → places[i+1]；右→左 → places[i]。
+    /// 要求 places.Length == anchors.Length + 1。
+    /// 子物体可命名 Place1..N / Anchor1..N-1（也可在 Inspector 拖引用）。
     /// </summary>
     [DefaultExecutionOrder(200)]
-    public sealed class Level1AnchorTriggers : MonoBehaviour
+    public sealed class LevelAnchorTriggers : MonoBehaviour
     {
-        private const string TargetSceneName = "Level1";
+        [Header("Scene Gate")]
+        [Tooltip("仅在该场景名下启用；留空则任意场景都启用")]
+        [SerializeField] private string targetSceneName;
 
-        [Header("Camera Places (可拖拽，留空则按子物体名查找)")]
-        [SerializeField] private Transform place1;
-        [SerializeField] private Transform place2;
-        [SerializeField] private Transform place3;
+        [Header("Camera Places (从左到右)")]
+        [SerializeField] private Transform[] places;
 
-        [Header("X Cross Anchors")]
-        [SerializeField] private Transform anchor1;
-        [SerializeField] private Transform anchor2;
+        [Header("X Cross Anchors (从左到右，数量应为 Places-1)")]
+        [SerializeField] private Transform[] anchors;
 
         [Header("Move")]
         [SerializeField] private float cameraMoveDuration = 0.6f;
@@ -39,30 +39,35 @@ namespace BokeGameJam.Gameplay
 
         private void Awake()
         {
-            sceneReady = SceneManager.GetActiveScene().name == TargetSceneName;
+            sceneReady = string.IsNullOrEmpty(targetSceneName)
+                || SceneManager.GetActiveScene().name == targetSceneName;
             if (!sceneReady)
             {
                 Debug.LogWarning(
-                    $"[Level1AnchorTriggers] 当前场景不是 {TargetSceneName}，组件已禁用。",
+                    $"[LevelAnchorTriggers] 当前场景不是 {targetSceneName}，组件已禁用。",
                     this);
                 enabled = false;
                 return;
             }
 
             ResolveReferences();
+            if (!ValidateLayout())
+            {
+                enabled = false;
+                sceneReady = false;
+            }
         }
 
         private void Start()
         {
-            if (!sceneReady)
+            if (!sceneReady || places == null || places.Length == 0)
                 return;
 
             // 停掉跟随，避免与分段固定相机抢控制权。
             if (CameraManager.Instance != null)
                 CameraManager.Instance.SetFollowTarget(null);
 
-            SnapCameraTo(place1);
-            currentPlace = place1;
+            SnapCameraTo(places[0]);
         }
 
         private void Update()
@@ -84,46 +89,80 @@ namespace BokeGameJam.Gameplay
             float prevX = previousPlayerX;
             previousPlayerX = x;
 
-            // Anchor1：左→右到 Place2；右→左到 Place1
-            if (anchor1 != null)
+            for (int i = 0; i < anchors.Length; i++)
             {
-                float a1 = anchor1.position.x;
-                if (prevX < a1 && x >= a1)
-                    MoveCameraTo(place2);
-                else if (prevX > a1 && x <= a1)
-                    MoveCameraTo(place1);
-            }
+                Transform anchor = anchors[i];
+                if (anchor == null)
+                    continue;
 
-            // Anchor2：左→右到 Place3；右→左到 Place2
-            if (anchor2 != null)
-            {
-                float a2 = anchor2.position.x;
-                if (prevX < a2 && x >= a2)
-                    MoveCameraTo(place3);
-                else if (prevX > a2 && x <= a2)
-                    MoveCameraTo(place2);
+                float ax = anchor.position.x;
+                if (prevX < ax && x >= ax)
+                    MoveCameraTo(places[i + 1]);
+                else if (prevX > ax && x <= ax)
+                    MoveCameraTo(places[i]);
             }
         }
 
         private void ResolveReferences()
         {
-            if (place1 == null)
-                place1 = transform.Find("Place1");
-            if (place2 == null)
-                place2 = transform.Find("Place2");
-            if (place3 == null)
-                place3 = transform.Find("Place3");
-            if (anchor1 == null)
-                anchor1 = transform.Find("Anchor1");
-            if (anchor2 == null)
-                anchor2 = transform.Find("Anchor2");
+            if (places == null || places.Length == 0)
+                places = FindNumberedChildren("Place");
+            if (anchors == null || anchors.Length == 0)
+                anchors = FindNumberedChildren("Anchor");
+        }
 
-            if (place1 == null || place2 == null || place3 == null || anchor1 == null || anchor2 == null)
+        private Transform[] FindNumberedChildren(string prefix)
+        {
+            var list = new List<Transform>();
+            for (int i = 1; i <= 32; i++)
+            {
+                Transform child = transform.Find(prefix + i);
+                if (child == null)
+                    break;
+                list.Add(child);
+            }
+
+            return list.ToArray();
+        }
+
+        private bool ValidateLayout()
+        {
+            if (places == null || places.Length == 0)
+            {
+                Debug.LogWarning("[LevelAnchorTriggers] places 为空，请配置 Place 或子物体 Place1..N。", this);
+                return false;
+            }
+
+            if (anchors == null)
+                anchors = System.Array.Empty<Transform>();
+
+            if (places.Length != anchors.Length + 1)
             {
                 Debug.LogWarning(
-                    "[Level1AnchorTriggers] 缺少 Place1/2/3 或 Anchor1/2，请检查子物体或 Inspector 引用。",
+                    $"[LevelAnchorTriggers] 数量不匹配：places={places.Length}，anchors={anchors.Length}，应为 places == anchors + 1。",
                     this);
+                return false;
             }
+
+            for (int i = 0; i < places.Length; i++)
+            {
+                if (places[i] == null)
+                {
+                    Debug.LogWarning($"[LevelAnchorTriggers] places[{i}] 为空。", this);
+                    return false;
+                }
+            }
+
+            for (int i = 0; i < anchors.Length; i++)
+            {
+                if (anchors[i] == null)
+                {
+                    Debug.LogWarning($"[LevelAnchorTriggers] anchors[{i}] 为空。", this);
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private bool TryGetPlayer(out Transform playerTransform)
@@ -215,11 +254,24 @@ namespace BokeGameJam.Gameplay
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-            DrawPlaceGizmo(place1 != null ? place1 : transform.Find("Place1"), Color.cyan);
-            DrawPlaceGizmo(place2 != null ? place2 : transform.Find("Place2"), Color.green);
-            DrawPlaceGizmo(place3 != null ? place3 : transform.Find("Place3"), Color.yellow);
-            DrawAnchorLine(anchor1 != null ? anchor1 : transform.Find("Anchor1"), Color.magenta);
-            DrawAnchorLine(anchor2 != null ? anchor2 : transform.Find("Anchor2"), Color.red);
+            Transform[] drawPlaces = places != null && places.Length > 0
+                ? places
+                : FindNumberedChildren("Place");
+            Transform[] drawAnchors = anchors != null && anchors.Length > 0
+                ? anchors
+                : FindNumberedChildren("Anchor");
+
+            for (int i = 0; i < drawPlaces.Length; i++)
+            {
+                float t = drawPlaces.Length <= 1 ? 0f : i / (float)(drawPlaces.Length - 1);
+                DrawPlaceGizmo(drawPlaces[i], Color.Lerp(Color.cyan, Color.yellow, t));
+            }
+
+            for (int i = 0; i < drawAnchors.Length; i++)
+            {
+                float t = drawAnchors.Length <= 1 ? 0f : i / (float)(drawAnchors.Length - 1);
+                DrawAnchorLine(drawAnchors[i], Color.Lerp(Color.magenta, Color.red, t));
+            }
         }
 
         private static void DrawPlaceGizmo(Transform t, Color color)
