@@ -4,1298 +4,8 @@
     "tilesA": [
         {
             "x": -9,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": 5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": 4,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": 3,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": 2,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": 1,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": 0,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": -1,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": -2,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": -3,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": -4,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
             "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 48,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 48,
-            "y": 5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 48,
-            "y": 4,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 48,
-            "y": 3,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 48,
-            "y": 2,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 48,
-            "y": 1,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 48,
-            "y": 0,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 48,
-            "y": -1,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 48,
-            "y": -2,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 48,
-            "y": -3,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 48,
-            "y": -4,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 48,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 47,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 46,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 45,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 44,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 43,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 42,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 41,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 40,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 39,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 38,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 37,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 36,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 35,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 34,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 33,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 32,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 31,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 30,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 29,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 28,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 27,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 26,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 25,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 24,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 23,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 22,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 21,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 20,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 19,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 18,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 17,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 16,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 15,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 14,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 13,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 12,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 11,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 10,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 9,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 8,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 7,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 6,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 5,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 4,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 3,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 2,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 1,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 0,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -1,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -2,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -3,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -4,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -5,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -6,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -7,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -8,
-            "y": 6,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 8,
-            "y": 5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 8,
-            "y": 4,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 8,
-            "y": 3,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 8,
-            "y": 2,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 8,
-            "y": 1,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 8,
-            "y": 0,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 8,
-            "y": -1,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 29,
-            "y": 5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 29,
-            "y": 4,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 29,
-            "y": 2,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 29,
-            "y": 3,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 29,
-            "y": 1,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 29,
-            "y": 0,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 29,
-            "y": -1,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 29,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 28,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 27,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 26,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 25,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 23,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 22,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 21,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 20,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 18,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 17,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 16,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 19,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 15,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 14,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 13,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 12,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 11,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 10,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 9,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 8,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 7,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 6,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 5,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 4,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 3,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 2,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 1,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 0,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -1,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -2,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -3,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -4,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -5,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -6,
-            "y": -5,
-            "tileId": "Ground/地板A",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -7,
-            "y": -5,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/Ground",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1305,7 +15,317 @@
         {
             "x": -8,
             "y": -5,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": -7,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": -6,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": -5,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": -4,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": -3,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": -2,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": -1,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 0,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 1,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 2,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 3,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 4,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 5,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 6,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 7,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 8,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 9,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 10,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 11,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 12,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 13,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 14,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 15,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 16,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 17,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 18,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 19,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 20,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 21,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 22,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 23,
+            "y": -5,
+            "tileId": "Ground/Ground",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1315,7 +335,57 @@
         {
             "x": 24,
             "y": -5,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 25,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 26,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 27,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 28,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 29,
+            "y": -5,
+            "tileId": "Ground/Ground",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1325,7 +395,7 @@
         {
             "x": 30,
             "y": -5,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/Ground",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1335,7 +405,7 @@
         {
             "x": 31,
             "y": -5,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/Ground",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1345,7 +415,7 @@
         {
             "x": 32,
             "y": -5,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/Ground",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1355,7 +425,7 @@
         {
             "x": 33,
             "y": -5,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/Ground",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1365,7 +435,7 @@
         {
             "x": 34,
             "y": -5,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/Ground",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1375,7 +445,7 @@
         {
             "x": 35,
             "y": -5,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/Ground",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1385,7 +455,7 @@
         {
             "x": 36,
             "y": -5,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/Ground",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1395,7 +465,7 @@
         {
             "x": 37,
             "y": -5,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/Ground",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1405,7 +475,7 @@
         {
             "x": 38,
             "y": -5,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/Ground",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1415,7 +485,7 @@
         {
             "x": 39,
             "y": -5,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/Ground",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1425,7 +495,7 @@
         {
             "x": 40,
             "y": -5,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/Ground",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1435,7 +505,7 @@
         {
             "x": 41,
             "y": -5,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/Ground",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1445,7 +515,7 @@
         {
             "x": 42,
             "y": -5,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/Ground",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1455,7 +525,7 @@
         {
             "x": 43,
             "y": -5,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/Ground",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1465,7 +535,7 @@
         {
             "x": 44,
             "y": -5,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/Ground",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1475,7 +545,7 @@
         {
             "x": 45,
             "y": -5,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/Ground",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1485,7 +555,7 @@
         {
             "x": 46,
             "y": -5,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/Ground",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1495,7 +565,837 @@
         {
             "x": 47,
             "y": -5,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 48,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 49,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 50,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 51,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 52,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 53,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 54,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 55,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 56,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 57,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 58,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 59,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 60,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 61,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 62,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 63,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 64,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 65,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 66,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 67,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 68,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 69,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 70,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 71,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 78,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 77,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 76,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 79,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 80,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 81,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 82,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 83,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 84,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 85,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 86,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 87,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 88,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 89,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 90,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 91,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 92,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 93,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 94,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 95,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 96,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 97,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 98,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 99,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 100,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 101,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 102,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 103,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 104,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 105,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 106,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 107,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 108,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 109,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 110,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 111,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 112,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 72,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 73,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 74,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 75,
+            "y": -5,
+            "tileId": "Ground/Ground",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 58,
+            "y": 5,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 58,
+            "y": 4,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": -8,
+            "y": -2,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 58,
+            "y": 3,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 58,
+            "y": 2,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 58,
+            "y": 1,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 58,
+            "y": 0,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 58,
+            "y": -1,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 58,
+            "y": -2,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 58,
+            "y": -3,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 58,
+            "y": -4,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": -8,
+            "y": -1,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": -8,
+            "y": 0,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": -8,
+            "y": 1,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": -8,
+            "y": 2,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": -8,
+            "y": 3,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": -8,
+            "y": 4,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": -8,
+            "y": 5,
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1505,9 +1405,9 @@
     ],
     "tilesB": [
         {
-            "x": 11,
-            "y": 5,
-            "tileId": "Ground/地板B",
+            "x": 112,
+            "y": -5,
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1515,9 +1415,9 @@
             "roomId": ""
         },
         {
-            "x": 11,
-            "y": 3,
-            "tileId": "Ground/地板B",
+            "x": 111,
+            "y": -5,
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1525,9 +1425,9 @@
             "roomId": ""
         },
         {
-            "x": 11,
-            "y": -1,
-            "tileId": "Ground/地板B",
+            "x": 110,
+            "y": -5,
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1535,9 +1435,9 @@
             "roomId": ""
         },
         {
-            "x": 34,
-            "y": 4,
-            "tileId": "Ground/地板B",
+            "x": 109,
+            "y": -5,
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1545,9 +1445,609 @@
             "roomId": ""
         },
         {
-            "x": 33,
-            "y": 4,
-            "tileId": "Ground/地板B",
+            "x": 108,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 107,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 106,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 105,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 104,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 103,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 102,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 101,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 100,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 99,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 98,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 97,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 96,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 95,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 94,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 93,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 92,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 91,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 90,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 89,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 88,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 87,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 86,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 85,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 84,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 83,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 82,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 81,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 80,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 79,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 78,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 77,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 76,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 75,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 74,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 73,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 72,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 71,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 70,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 69,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 68,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 67,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 66,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 65,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 64,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 63,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 62,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 61,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 60,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 59,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 58,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 57,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 56,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 55,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 54,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 53,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 52,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 51,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 50,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 49,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 48,
+            "y": -5,
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1557,247 +2057,7 @@
         {
             "x": 47,
             "y": -5,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 29,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 29,
-            "y": 5,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 29,
-            "y": 4,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 29,
-            "y": 3,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 29,
-            "y": 2,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 29,
-            "y": 1,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 29,
-            "y": 0,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 29,
-            "y": -1,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 30,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 31,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 32,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 33,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 34,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 35,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 36,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 37,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 38,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 39,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 40,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 41,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 42,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 43,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 44,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 45,
-            "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1806,728 +2066,8 @@
         },
         {
             "x": 46,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 47,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 48,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 48,
-            "y": 5,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 48,
-            "y": 4,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 48,
-            "y": 3,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 48,
-            "y": 2,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 48,
-            "y": 1,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 48,
-            "y": 0,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 48,
-            "y": -1,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 48,
-            "y": -2,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 48,
-            "y": -3,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 48,
-            "y": -4,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 48,
             "y": -5,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": -5,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": -4,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": -3,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": -2,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": -1,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": 0,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": 1,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": 2,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": 3,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": 4,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": 5,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -8,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -7,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -6,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -5,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -4,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -3,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -2,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -1,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 0,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 1,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 2,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 3,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 4,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 5,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 6,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 7,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 8,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 8,
-            "y": 5,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 8,
-            "y": 4,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 8,
-            "y": 3,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 8,
-            "y": 2,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 8,
-            "y": 1,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 8,
-            "y": 0,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 8,
-            "y": -1,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 9,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 10,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 11,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 12,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 13,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 14,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 15,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 16,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 17,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 18,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 19,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 20,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 21,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 22,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 23,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 24,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 25,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 26,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 27,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 28,
-            "y": 6,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 26,
-            "y": -5,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 27,
-            "y": -5,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 46,
-            "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2537,7 +2077,7 @@
         {
             "x": 45,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2547,7 +2087,7 @@
         {
             "x": 44,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2557,7 +2097,7 @@
         {
             "x": 43,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2567,7 +2107,7 @@
         {
             "x": 42,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2577,7 +2117,7 @@
         {
             "x": 41,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2587,7 +2127,7 @@
         {
             "x": 40,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2597,7 +2137,7 @@
         {
             "x": 39,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2607,7 +2147,7 @@
         {
             "x": 38,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2617,7 +2157,7 @@
         {
             "x": 37,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2627,7 +2167,7 @@
         {
             "x": 36,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2637,7 +2177,7 @@
         {
             "x": 35,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2647,7 +2187,7 @@
         {
             "x": 34,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2657,7 +2197,7 @@
         {
             "x": 33,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2667,7 +2207,7 @@
         {
             "x": 32,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2677,7 +2217,7 @@
         {
             "x": 31,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2687,7 +2227,7 @@
         {
             "x": 30,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2697,7 +2237,7 @@
         {
             "x": 29,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2707,7 +2247,27 @@
         {
             "x": 28,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 27,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 26,
+            "y": -5,
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2717,7 +2277,7 @@
         {
             "x": 25,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2727,7 +2287,7 @@
         {
             "x": 24,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2737,7 +2297,7 @@
         {
             "x": 23,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2747,7 +2307,7 @@
         {
             "x": 22,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2757,7 +2317,7 @@
         {
             "x": 21,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2767,7 +2327,7 @@
         {
             "x": 20,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2777,7 +2337,7 @@
         {
             "x": 19,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2787,7 +2347,7 @@
         {
             "x": 18,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2797,7 +2357,7 @@
         {
             "x": 17,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2807,7 +2367,7 @@
         {
             "x": 16,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2817,7 +2377,7 @@
         {
             "x": 15,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2827,7 +2387,7 @@
         {
             "x": 14,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2837,7 +2397,7 @@
         {
             "x": 13,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2847,7 +2407,7 @@
         {
             "x": 12,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2857,7 +2417,7 @@
         {
             "x": 11,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2867,7 +2427,7 @@
         {
             "x": 10,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2877,7 +2437,7 @@
         {
             "x": 9,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2887,7 +2447,7 @@
         {
             "x": 8,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2897,7 +2457,7 @@
         {
             "x": 7,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2907,7 +2467,7 @@
         {
             "x": 6,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2917,7 +2477,7 @@
         {
             "x": 5,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2927,7 +2487,7 @@
         {
             "x": 4,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2937,7 +2497,7 @@
         {
             "x": 3,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2947,7 +2507,7 @@
         {
             "x": 2,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2957,7 +2517,7 @@
         {
             "x": 1,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2967,7 +2527,7 @@
         {
             "x": 0,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2977,7 +2537,7 @@
         {
             "x": -1,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2987,7 +2547,7 @@
         {
             "x": -2,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2997,7 +2557,7 @@
         {
             "x": -3,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -3007,7 +2567,7 @@
         {
             "x": -4,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -3017,7 +2577,7 @@
         {
             "x": -5,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -3027,7 +2587,7 @@
         {
             "x": -6,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -3037,7 +2597,7 @@
         {
             "x": -7,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -3047,7 +2607,207 @@
         {
             "x": -8,
             "y": -5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": -9,
+            "y": -5,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": -8,
+            "y": 5,
+            "tileId": "Ground/墙壁B",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 57,
+            "y": -4,
+            "tileId": "Interactable/GhostObject",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 58,
+            "y": 5,
+            "tileId": "Ground/墙壁B",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 58,
+            "y": 4,
+            "tileId": "Ground/墙壁B",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 58,
+            "y": 3,
+            "tileId": "Ground/墙壁B",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 58,
+            "y": 2,
+            "tileId": "Ground/墙壁B",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 58,
+            "y": 1,
+            "tileId": "Ground/墙壁B",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 58,
+            "y": 0,
+            "tileId": "Ground/墙壁B",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 58,
+            "y": -1,
+            "tileId": "Ground/墙壁B",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 58,
+            "y": -2,
+            "tileId": "Ground/墙壁B",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 58,
+            "y": -3,
+            "tileId": "Ground/墙壁B",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 58,
+            "y": -4,
+            "tileId": "Ground/墙壁B",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": -8,
+            "y": 4,
+            "tileId": "Ground/墙壁B",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": -8,
+            "y": 3,
+            "tileId": "Ground/墙壁B",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": -8,
+            "y": 2,
+            "tileId": "Ground/墙壁B",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": -8,
+            "y": 1,
+            "tileId": "Ground/墙壁B",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": -8,
+            "y": 0,
+            "tileId": "Ground/墙壁B",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": -8,
+            "y": -1,
+            "tileId": "Ground/墙壁B",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": -8,
+            "y": -2,
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -3057,90 +2817,60 @@
     ],
     "tilesShared": [
         {
-            "x": -2,
-            "y": -2,
-            "tileId": "Interactable/YellowFlower",
-            "mechanismId": "0",
+            "x": 5,
+            "y": -4,
+            "tileId": "Interactable/StreetLamp",
+            "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
             "dialogueText": "",
             "roomId": ""
         },
         {
-            "x": 1,
-            "y": -2,
-            "tileId": "Interactable/RedFlower",
-            "mechanismId": "0",
+            "x": -4,
+            "y": -4,
+            "tileId": "Interactable/StreetLamp",
+            "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
             "dialogueText": "",
             "roomId": ""
         },
         {
-            "x": 7,
-            "y": -1,
-            "tileId": "Interactable/LightSwitch",
-            "mechanismId": "0",
+            "x": 50,
+            "y": -4,
+            "tileId": "Interactable/StreetLamp",
+            "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
             "dialogueText": "",
-            "roomId": "room_1"
-        },
-        {
-            "x": 28,
-            "y": -1,
-            "tileId": "Interactable/LightSwitch",
-            "mechanismId": "0",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": "room_2"
+            "roomId": ""
         },
         {
             "x": 30,
-            "y": -1,
-            "tileId": "Interactable/LightSwitch",
-            "mechanismId": "0",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": "room_3"
-        },
-        {
-            "x": 19,
-            "y": 0,
-            "tileId": "Interactable/FlowerCollector",
-            "mechanismId": "0",
+            "y": -4,
+            "tileId": "Interactable/StreetLamp",
+            "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
             "dialogueText": "",
             "roomId": ""
         },
         {
-            "x": 24,
-            "y": -2,
-            "tileId": "Interactable/RedFlower",
-            "mechanismId": "0",
+            "x": 14,
+            "y": -4,
+            "tileId": "Interactable/StreetLamp",
+            "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
             "dialogueText": "",
             "roomId": ""
         },
         {
-            "x": 36,
-            "y": -2,
-            "tileId": "Interactable/YellowFlower",
-            "mechanismId": "0",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 41,
-            "y": -2,
-            "tileId": "Interactable/RedFlower",
-            "mechanismId": "0",
+            "x": 39,
+            "y": -4,
+            "tileId": "Interactable/StreetLamp",
+            "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
             "dialogueText": "",
