@@ -5,7 +5,7 @@
         {
             "x": 8,
             "y": 5,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -15,7 +15,7 @@
         {
             "x": 48,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -25,7 +25,7 @@
         {
             "x": 48,
             "y": 5,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -35,7 +35,7 @@
         {
             "x": 48,
             "y": 4,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -45,7 +45,7 @@
         {
             "x": 48,
             "y": 3,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -55,7 +55,7 @@
         {
             "x": 48,
             "y": 2,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -65,7 +65,7 @@
         {
             "x": 48,
             "y": 1,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -75,7 +75,7 @@
         {
             "x": 48,
             "y": 0,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -85,7 +85,7 @@
         {
             "x": 48,
             "y": -1,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -95,7 +95,7 @@
         {
             "x": 48,
             "y": -2,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -105,7 +105,7 @@
         {
             "x": 48,
             "y": -3,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -125,7 +125,7 @@
         {
             "x": 47,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -135,7 +135,7 @@
         {
             "x": 46,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -145,7 +145,7 @@
         {
             "x": 45,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -155,7 +155,7 @@
         {
             "x": 44,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -165,7 +165,7 @@
         {
             "x": 43,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -175,7 +175,7 @@
         {
             "x": 42,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -185,7 +185,7 @@
         {
             "x": 41,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -195,7 +195,7 @@
         {
             "x": 40,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -205,7 +205,7 @@
         {
             "x": 39,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -215,7 +215,7 @@
         {
             "x": 38,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -225,7 +225,7 @@
         {
             "x": 37,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -235,7 +235,7 @@
         {
             "x": 36,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -245,7 +245,7 @@
         {
             "x": 35,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -255,7 +255,7 @@
         {
             "x": 34,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -265,7 +265,7 @@
         {
             "x": 33,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -275,7 +275,7 @@
         {
             "x": 32,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -285,7 +285,7 @@
         {
             "x": 31,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -295,7 +295,7 @@
         {
             "x": 30,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -305,7 +305,7 @@
         {
             "x": 29,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -315,7 +315,7 @@
         {
             "x": 28,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -325,7 +325,7 @@
         {
             "x": 27,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -335,7 +335,7 @@
         {
             "x": 26,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -345,7 +345,7 @@
         {
             "x": 25,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -355,7 +355,7 @@
         {
             "x": 24,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -365,7 +365,7 @@
         {
             "x": 23,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -375,7 +375,7 @@
         {
             "x": 22,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -385,7 +385,7 @@
         {
             "x": 21,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -395,7 +395,7 @@
         {
             "x": 20,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -405,7 +405,7 @@
         {
             "x": 19,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -415,7 +415,7 @@
         {
             "x": 18,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -425,7 +425,7 @@
         {
             "x": 17,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -435,7 +435,7 @@
         {
             "x": 16,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -445,7 +445,7 @@
         {
             "x": 15,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -455,7 +455,7 @@
         {
             "x": 14,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -465,7 +465,7 @@
         {
             "x": 13,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -475,7 +475,7 @@
         {
             "x": 12,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -485,7 +485,7 @@
         {
             "x": 11,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -495,7 +495,7 @@
         {
             "x": 10,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -505,7 +505,7 @@
         {
             "x": 9,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -515,7 +515,7 @@
         {
             "x": 8,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -525,7 +525,7 @@
         {
             "x": 7,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -535,7 +535,7 @@
         {
             "x": 6,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -545,7 +545,7 @@
         {
             "x": 5,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -555,7 +555,7 @@
         {
             "x": 4,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -565,7 +565,7 @@
         {
             "x": 3,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -575,7 +575,7 @@
         {
             "x": 2,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -585,7 +585,7 @@
         {
             "x": 1,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -595,7 +595,7 @@
         {
             "x": 0,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -605,7 +605,7 @@
         {
             "x": -1,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -615,7 +615,7 @@
         {
             "x": -2,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -625,7 +625,7 @@
         {
             "x": -3,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -635,7 +635,7 @@
         {
             "x": -4,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -645,7 +645,7 @@
         {
             "x": -5,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -655,7 +655,7 @@
         {
             "x": -6,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -665,7 +665,7 @@
         {
             "x": -7,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -675,7 +675,7 @@
         {
             "x": -8,
             "y": 6,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -755,7 +755,7 @@
         {
             "x": 29,
             "y": 5,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -765,7 +765,7 @@
         {
             "x": 29,
             "y": 4,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -775,7 +775,7 @@
         {
             "x": 29,
             "y": 2,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -785,7 +785,7 @@
         {
             "x": 29,
             "y": 3,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -795,7 +795,7 @@
         {
             "x": 29,
             "y": 1,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -805,7 +805,7 @@
         {
             "x": 29,
             "y": 0,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -815,7 +815,7 @@
         {
             "x": 29,
             "y": -1,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -995,7 +995,7 @@
         {
             "x": -8,
             "y": -2,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1005,7 +1005,7 @@
         {
             "x": -8,
             "y": -1,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1015,7 +1015,7 @@
         {
             "x": -8,
             "y": 0,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1025,7 +1025,7 @@
         {
             "x": -8,
             "y": 1,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1035,7 +1035,7 @@
         {
             "x": -8,
             "y": 2,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1045,7 +1045,7 @@
         {
             "x": -8,
             "y": 3,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1055,7 +1055,7 @@
         {
             "x": -8,
             "y": 4,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1065,7 +1065,7 @@
         {
             "x": -8,
             "y": 5,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1075,7 +1075,7 @@
         {
             "x": 8,
             "y": -1,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1085,7 +1085,7 @@
         {
             "x": 8,
             "y": 0,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1095,7 +1095,7 @@
         {
             "x": 8,
             "y": 1,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1105,7 +1105,7 @@
         {
             "x": 8,
             "y": 2,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1115,7 +1115,7 @@
         {
             "x": 8,
             "y": 3,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1125,7 +1125,7 @@
         {
             "x": 8,
             "y": 4,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1155,7 +1155,7 @@
         {
             "x": -8,
             "y": -3,
-            "tileId": "Ground/地板A",
+            "tileId": "Ground/墙壁A",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1465,49 +1465,9 @@
     ],
     "tilesB": [
         {
-            "x": 11,
-            "y": 5,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 11,
-            "y": 3,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 11,
-            "y": -1,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 34,
-            "y": 4,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": 33,
-            "y": 4,
-            "tileId": "Ground/地板B",
+            "x": 0,
+            "y": 23,
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1517,7 +1477,7 @@
         {
             "x": 29,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1527,7 +1487,7 @@
         {
             "x": 29,
             "y": 5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1537,7 +1497,7 @@
         {
             "x": 29,
             "y": 4,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1547,7 +1507,7 @@
         {
             "x": 29,
             "y": 3,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1557,7 +1517,7 @@
         {
             "x": 29,
             "y": 2,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1567,7 +1527,7 @@
         {
             "x": 29,
             "y": 1,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1577,7 +1537,7 @@
         {
             "x": 29,
             "y": 0,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1587,7 +1547,7 @@
         {
             "x": 29,
             "y": -1,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1597,7 +1557,7 @@
         {
             "x": 30,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1607,7 +1567,7 @@
         {
             "x": 31,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1617,7 +1577,7 @@
         {
             "x": 32,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1627,7 +1587,7 @@
         {
             "x": 33,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1637,7 +1597,7 @@
         {
             "x": 34,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1647,7 +1607,7 @@
         {
             "x": 35,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1657,7 +1617,7 @@
         {
             "x": 36,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1667,7 +1627,7 @@
         {
             "x": 37,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1677,7 +1637,7 @@
         {
             "x": 38,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1687,7 +1647,7 @@
         {
             "x": 39,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1697,7 +1657,7 @@
         {
             "x": 40,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1707,7 +1667,7 @@
         {
             "x": 41,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1717,7 +1677,7 @@
         {
             "x": 42,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1727,7 +1687,7 @@
         {
             "x": 43,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1737,7 +1697,7 @@
         {
             "x": 44,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1747,7 +1707,7 @@
         {
             "x": 45,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1757,7 +1717,7 @@
         {
             "x": 46,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1767,7 +1727,7 @@
         {
             "x": 47,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1777,7 +1737,7 @@
         {
             "x": 48,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1787,7 +1747,7 @@
         {
             "x": 48,
             "y": 5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1797,7 +1757,7 @@
         {
             "x": 48,
             "y": 4,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1807,7 +1767,7 @@
         {
             "x": 48,
             "y": 3,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1817,7 +1777,7 @@
         {
             "x": 48,
             "y": 2,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1827,7 +1787,7 @@
         {
             "x": 48,
             "y": 1,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1837,7 +1797,7 @@
         {
             "x": 48,
             "y": 0,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1847,7 +1807,7 @@
         {
             "x": 48,
             "y": -1,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1857,7 +1817,7 @@
         {
             "x": 48,
             "y": -2,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1867,7 +1827,7 @@
         {
             "x": 48,
             "y": -3,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1887,96 +1847,6 @@
         {
             "x": 27,
             "y": -4,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": -2,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": -1,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": 0,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": 1,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": 2,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": 3,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": 4,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": 5,
-            "tileId": "Ground/地板B",
-            "mechanismId": "",
-            "sequenceGroupId": "",
-            "sequenceIndex": 0,
-            "dialogueText": "",
-            "roomId": ""
-        },
-        {
-            "x": -9,
-            "y": 6,
             "tileId": "Ground/地板B",
             "mechanismId": "",
             "sequenceGroupId": "",
@@ -1987,7 +1857,7 @@
         {
             "x": -8,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -1997,7 +1867,7 @@
         {
             "x": -7,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2007,7 +1877,7 @@
         {
             "x": -6,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2017,7 +1887,7 @@
         {
             "x": -5,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2027,7 +1897,7 @@
         {
             "x": -4,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2037,7 +1907,7 @@
         {
             "x": -3,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2047,7 +1917,7 @@
         {
             "x": -2,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2057,7 +1927,7 @@
         {
             "x": -1,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2067,7 +1937,7 @@
         {
             "x": 0,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2077,7 +1947,7 @@
         {
             "x": 1,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2087,7 +1957,7 @@
         {
             "x": 2,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2097,7 +1967,7 @@
         {
             "x": 3,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2107,7 +1977,7 @@
         {
             "x": 4,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2117,7 +1987,7 @@
         {
             "x": 5,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2127,7 +1997,7 @@
         {
             "x": 6,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2137,7 +2007,7 @@
         {
             "x": 7,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2147,7 +2017,7 @@
         {
             "x": 8,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2157,7 +2027,7 @@
         {
             "x": 8,
             "y": 5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2167,7 +2037,7 @@
         {
             "x": 8,
             "y": 4,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2177,7 +2047,7 @@
         {
             "x": 8,
             "y": 3,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2187,7 +2057,7 @@
         {
             "x": 8,
             "y": 2,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2197,7 +2067,7 @@
         {
             "x": 8,
             "y": 1,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2207,7 +2077,7 @@
         {
             "x": 8,
             "y": 0,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2217,7 +2087,7 @@
         {
             "x": 8,
             "y": -1,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2227,7 +2097,7 @@
         {
             "x": 9,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2237,7 +2107,7 @@
         {
             "x": 10,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2247,7 +2117,7 @@
         {
             "x": 11,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2257,7 +2127,7 @@
         {
             "x": 12,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2267,7 +2137,7 @@
         {
             "x": 13,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2277,7 +2147,7 @@
         {
             "x": 14,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2287,7 +2157,7 @@
         {
             "x": 15,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2297,7 +2167,7 @@
         {
             "x": 16,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2307,7 +2177,7 @@
         {
             "x": 17,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2317,7 +2187,7 @@
         {
             "x": 18,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2327,7 +2197,7 @@
         {
             "x": 19,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2337,7 +2207,7 @@
         {
             "x": 20,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2347,7 +2217,7 @@
         {
             "x": 21,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2357,7 +2227,7 @@
         {
             "x": 22,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2367,7 +2237,7 @@
         {
             "x": 23,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2377,7 +2247,7 @@
         {
             "x": 24,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2387,7 +2257,7 @@
         {
             "x": 25,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2397,7 +2267,7 @@
         {
             "x": 26,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2407,7 +2277,7 @@
         {
             "x": 27,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2417,7 +2287,7 @@
         {
             "x": 28,
             "y": 6,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2977,7 +2847,7 @@
         {
             "x": -8,
             "y": 5,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2987,7 +2857,7 @@
         {
             "x": -8,
             "y": 4,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2997,7 +2867,7 @@
         {
             "x": -8,
             "y": 3,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -3007,7 +2877,7 @@
         {
             "x": -8,
             "y": 2,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -3017,7 +2887,7 @@
         {
             "x": -8,
             "y": 1,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -3027,7 +2897,7 @@
         {
             "x": -8,
             "y": 0,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -3037,7 +2907,7 @@
         {
             "x": -8,
             "y": -1,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -3047,7 +2917,7 @@
         {
             "x": -8,
             "y": -2,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -3057,7 +2927,7 @@
         {
             "x": -8,
             "y": -3,
-            "tileId": "Ground/地板B",
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -3065,9 +2935,9 @@
             "roomId": ""
         },
         {
-            "x": 30,
-            "y": 3,
-            "tileId": "Ground/地板B",
+            "x": 25,
+            "y": 23,
+            "tileId": "Ground/BGround",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -3075,9 +2945,19 @@
             "roomId": ""
         },
         {
-            "x": 30,
-            "y": 2,
-            "tileId": "Ground/地板B",
+            "x": 40,
+            "y": 11,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 47,
+            "y": -3,
+            "tileId": "Interactable/GhostObject",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
