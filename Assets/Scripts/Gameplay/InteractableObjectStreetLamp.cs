@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using BokeGameJam.Core;
+using BokeGameJam.Data;
 using BokeGameJam.Levels;
+using BokeGameJam.UI;
 
 namespace BokeGameJam.Gameplay
 {
@@ -17,6 +19,8 @@ namespace BokeGameJam.Gameplay
         private const string OffSpriteResourcePath = "Art/Pictures/关灯";
         private const string OnSpriteResourcePath = "Art/Pictures/亮灯";
         private const string Level2Id = "level_2";
+        private const string DefaultWrongOrderStoryPath = "ScriptableObjects/Stories/Story16";
+        private const string DefaultAllLitStoryPath = "ScriptableObjects/Stories/Story17";
 
         [Header("Street Lamp")]
         [Tooltip("亮灯时显示的小光源物体（默认找子物体 LightGlow）。")]
@@ -33,6 +37,14 @@ namespace BokeGameJam.Gameplay
         [Tooltip("可选：走 GameAudioManager 的 SFX id；优先使用上面的 AudioClip。")]
         [SerializeField] private string sequenceSuccessSfxId;
 
+        [Header("Puzzle Stories")]
+        [Tooltip("错序灭灯时播放；留空则按 Resources 路径加载。")]
+        [SerializeField] private StorySequence wrongOrderStory;
+        [SerializeField] private string wrongOrderStoryResourcePath = DefaultWrongOrderStoryPath;
+        [Tooltip("全亮通关时播放；留空则按 Resources 路径加载。")]
+        [SerializeField] private StorySequence allLitStory;
+        [SerializeField] private string allLitStoryResourcePath = DefaultAllLitStoryPath;
+
         private bool wasActivated;
         private AudioSource localAudioSource;
         private int lampNumber;
@@ -43,6 +55,7 @@ namespace BokeGameJam.Gameplay
         private static bool puzzleArmed;
         private static bool puzzleCompleted;
         private static int lastRegisterFrame = -1;
+        private static bool hasPlayedAllLitStory;
 
         private static AudioClip fallbackBeepClip;
         private static Sprite cachedOffSprite;
@@ -64,11 +77,13 @@ namespace BokeGameJam.Gameplay
         {
             base.OnEnable();
             EventManager.On<int[]>(GameEvents.WallLampSequenceCompleted, OnWallLampSequenceCompleted);
+            EventManager.On<string>(GameEvents.LevelCompleted, OnLevelCompleted);
         }
 
         protected override void OnDisable()
         {
             EventManager.Off<int[]>(GameEvents.WallLampSequenceCompleted, OnWallLampSequenceCompleted);
+            EventManager.Off<string>(GameEvents.LevelCompleted, OnLevelCompleted);
             registered.Remove(this);
             base.OnDisable();
         }
@@ -85,6 +100,15 @@ namespace BokeGameJam.Gameplay
         private void OnWallLampSequenceCompleted(int[] flashOrder)
         {
             RegisterPuzzleFromFlashOrder(flashOrder);
+        }
+
+        /// <summary>Level2 通关事件触发 Story17（路灯全亮剧情）。</summary>
+        private void OnLevelCompleted(string levelId)
+        {
+            if (!string.Equals(levelId, Level2Id, System.StringComparison.Ordinal))
+                return;
+
+            TryPlayAllLitStory();
         }
 
         private static void RegisterPuzzleFromFlashOrder(int[] flashOrder)
@@ -115,6 +139,7 @@ namespace BokeGameJam.Gameplay
                 : System.Array.Empty<int>();
             progress = 0;
             puzzleCompleted = false;
+            hasPlayedAllLitStory = false;
             puzzleArmed = expectedOrder.Length > 0 && registered.Count > 0;
 
             if (!puzzleArmed)
@@ -196,6 +221,7 @@ namespace BokeGameJam.Gameplay
             {
                 TurnOffAllRegistered();
                 progress = 0;
+                PlayBannerStory(ResolveWrongOrderStory(), "路灯错序剧情");
                 return;
             }
 
@@ -237,6 +263,69 @@ namespace BokeGameJam.Gameplay
                 EventManager.Emit(GameEvents.LevelCompleted, Level2Id);
 
             Debug.Log("[InteractableObjectStreetLamp] Street lamp sequence correct — Level2 completed.", this);
+        }
+
+        private void TryPlayAllLitStory()
+        {
+            if (hasPlayedAllLitStory)
+                return;
+
+            hasPlayedAllLitStory = true;
+            PlayBannerStory(ResolveAllLitStory(), "路灯全亮剧情");
+        }
+
+        private StorySequence ResolveWrongOrderStory()
+        {
+            return ResolveStory(wrongOrderStory, wrongOrderStoryResourcePath);
+        }
+
+        private StorySequence ResolveAllLitStory()
+        {
+            return ResolveStory(allLitStory, allLitStoryResourcePath);
+        }
+
+        private static StorySequence ResolveStory(StorySequence assigned, string resourcePath)
+        {
+            if (assigned != null)
+                return assigned;
+
+            if (string.IsNullOrWhiteSpace(resourcePath))
+                return null;
+
+            return Resources.Load<StorySequence>(resourcePath.Trim());
+        }
+
+        private void PlayBannerStory(StorySequence story, string storyLabel)
+        {
+            if (story == null || !story.HasLines)
+            {
+                Debug.LogWarning($"[InteractableObjectStreetLamp] {storyLabel}配置缺失或为空。", this);
+                return;
+            }
+
+            CameraTopBannerUI banner = EnsureTopBanner();
+            if (banner == null)
+            {
+                Debug.LogWarning(
+                    $"[InteractableObjectStreetLamp] CameraTopBannerUI 未找到，无法播放{storyLabel}。",
+                    this);
+                return;
+            }
+
+            banner.PlayStory(story.CreateLineList());
+        }
+
+        private static CameraTopBannerUI EnsureTopBanner()
+        {
+            CameraTopBannerUI banner = CameraTopBannerUI.Instance;
+            if (banner != null)
+                return banner;
+
+            if (UIManager.Instance == null)
+                return null;
+
+            GameObject go = UIManager.Instance.Load(CameraTopBannerUI.ResourceId);
+            return go != null ? go.GetComponent<CameraTopBannerUI>() : null;
         }
 
         protected override void ApplyVisual()

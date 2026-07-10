@@ -369,6 +369,15 @@ MonoBehaviour:
   - {fileID: 1005761077}
   cameraMoveDuration: 0.6
   cameraYOffset: 0
+  introStory: {fileID: 0}
+  introStoryResourcePath: ScriptableObjects/Stories/Story10
+  playIntroStoryOnStart: 1
+  place3Story: {fileID: 0}
+  place3StoryResourcePath: ScriptableObjects/Stories/Story11
+  playStoryOnFirstReachPlace3: 1
+  place5Story: {fileID: 0}
+  place5StoryResourcePath: ScriptableObjects/Stories/Story14
+  playStoryOnFirstReachPlace5: 1
 --- !u!4 &334770836
 Transform:
   m_ObjectHideFlags: 0

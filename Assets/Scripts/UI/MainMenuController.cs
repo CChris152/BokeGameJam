@@ -15,7 +15,7 @@ namespace BokeGameJam.UI
     public class MainMenuController : MonoBehaviour
     {
         /// <summary>主菜单「开始游戏」进入的关卡 id（对应 LevelCatalog）。</summary>
-        private const string StartLevelId = "level_1";
+        private const string StartLevelId = "level_2";
 
         /// <summary>主菜单循环 BGM 资源 id（对应 ResourceDefinitionDatabase）。</summary>
         private const string MainMenuBgmId = "scene1_background";
