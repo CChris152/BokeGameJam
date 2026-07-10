@@ -10,10 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 52f4d05d0ebf78042b77867a97716f36, type: 3}
-  m_Name: Level1Intro
+  m_Name: Story3
   m_EditorClassIdentifier: 
-  storyId: Level1Intro
+  storyId: "3"
   lines:
-  - "\u7B2C\u4E00\u53E5"
-  - "\u7B2C\u4E8C\u5C40"
-  - "\u7B2C\u4E09\u5C40"
+  - "???: 那时候，这里还是好好的。"

@@ -590,7 +590,7 @@ MonoBehaviour:
   cameraMoveDuration: 0.6
   cameraYOffset: 0
   introStory: {fileID: 0}
-  introStoryResourcePath: ScriptableObjects/Stories/Level1Intro
+  introStoryResourcePath: ScriptableObjects/Stories/Story1
   playIntroStoryOnStart: 1
 --- !u!4 &637488421
 Transform:
