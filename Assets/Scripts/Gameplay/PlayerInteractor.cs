@@ -16,6 +16,7 @@ namespace BokeGameJam.Gameplay
         [SerializeField] private bool faceAwareDrop = true;
 
         private readonly HashSet<IInteractable> nearby = new();
+        private readonly Dictionary<IInteractable, int> contactCounts = new();
         private readonly List<IInteractable> removeBuffer = new();
         private InteractableObject held;
 
@@ -38,6 +39,7 @@ namespace BokeGameJam.Gameplay
             }
 
             nearby.Clear();
+            contactCounts.Clear();
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -46,6 +48,13 @@ namespace BokeGameJam.Gameplay
             if (!IsValidInteractable(interactable))
                 return;
 
+            if (contactCounts.TryGetValue(interactable, out int count))
+            {
+                contactCounts[interactable] = count + 1;
+                return;
+            }
+
+            contactCounts[interactable] = 1;
             if (nearby.Add(interactable))
                 interactable.SetInInteractRange(true);
         }
@@ -56,6 +65,16 @@ namespace BokeGameJam.Gameplay
             if (interactable == null)
                 return;
 
+            if (!contactCounts.TryGetValue(interactable, out int count))
+                return;
+
+            if (count > 1)
+            {
+                contactCounts[interactable] = count - 1;
+                return;
+            }
+
+            contactCounts.Remove(interactable);
             if (nearby.Remove(interactable))
                 interactable.SetInInteractRange(false);
         }
@@ -100,6 +119,7 @@ namespace BokeGameJam.Gameplay
                 return false;
 
             nearby.Remove(item);
+            contactCounts.Remove(item);
             held = item;
             item.SetInInteractRange(false);
             item.PickUp(transform);
@@ -123,11 +143,25 @@ namespace BokeGameJam.Gameplay
             if (held == null)
                 return;
 
+            InteractableObject item = ReleaseHeldItem();
+            Destroy(item.gameObject);
+        }
+
+        /// <summary>
+        /// Removes the current item from the hand without destroying or dropping it.
+        /// Delivery systems can then hide it, return it to an origin, or animate it.
+        /// </summary>
+        public InteractableObject ReleaseHeldItem()
+        {
+            if (held == null)
+                return null;
+
             InteractableObject item = held;
             held = null;
             nearby.Remove(item);
-            Destroy(item.gameObject);
+            contactCounts.Remove(item);
             EmitHeldChanged();
+            return item;
         }
 
         private IInteractable FindNearestTarget(bool allowPickups = true)
@@ -159,7 +193,10 @@ namespace BokeGameJam.Gameplay
             }
 
             for (int i = 0; i < removeBuffer.Count; i++)
+            {
                 nearby.Remove(removeBuffer[i]);
+                contactCounts.Remove(removeBuffer[i]);
+            }
 
             return best;
         }
@@ -194,7 +231,10 @@ namespace BokeGameJam.Gameplay
             }
 
             for (int i = 0; i < removeBuffer.Count; i++)
+            {
                 nearby.Remove(removeBuffer[i]);
+                contactCounts.Remove(removeBuffer[i]);
+            }
 
             return best;
         }
@@ -240,6 +280,7 @@ namespace BokeGameJam.Gameplay
                 if (IsUnityObjectAlive(interactable))
                     interactable.SetInInteractRange(false);
                 nearby.Remove(interactable);
+                contactCounts.Remove(interactable);
             }
 
             return true;

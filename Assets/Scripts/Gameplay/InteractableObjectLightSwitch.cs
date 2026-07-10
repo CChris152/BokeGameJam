@@ -5,7 +5,7 @@ namespace BokeGameJam.Gameplay
 {
     /// <summary>
     /// 灯开关（InteractableObjectB 变体）：可反复拨动。
-    /// 向下 = 开灯（on），向上 = 关灯（off）；状态通过
+    /// 开灯时激活「开关开」，关灯时激活「开关关」；状态通过
     /// <see cref="GameEvents.LightsOffChanged"/> 广播，并与 <see cref="roomId"/> 绑定。
     /// </summary>
     public class InteractableObjectLightSwitch : InteractableObjectB
@@ -13,16 +13,14 @@ namespace BokeGameJam.Gameplay
         [Header("Light Switch")]
         [Tooltip("所属房间 id；须与该房间背景 BackgroundSpriteSwitcher.roomId 一致。")]
         [SerializeField] private string roomId = "room_1";
-        [Tooltip("开局是否开灯（向下）。")]
+        [Tooltip("开局是否开灯。")]
         [SerializeField] private bool startLightsOn = true;
 
-        [Header("Lever Visual")]
-        [Tooltip("关灯时（向上）的本地 Z 旋转。")]
-        [SerializeField] private float offAngleZ = 0f;
-        [Tooltip("开灯时（向下）的本地 Z 旋转。")]
-        [SerializeField] private float onAngleZ = 180f;
-        [SerializeField] private Sprite lightsOnSprite;
-        [SerializeField] private Sprite lightsOffSprite;
+        [Header("Switch Visual")]
+        [Tooltip("开灯时显示的物体（默认找子物体「开关开」）。")]
+        [SerializeField] private GameObject switchOnObject;
+        [Tooltip("关灯时显示的物体（默认找子物体「开关关」）。")]
+        [SerializeField] private GameObject switchOffObject;
 
         private bool lightsOn;
         private bool initialized;
@@ -35,12 +33,13 @@ namespace BokeGameJam.Gameplay
         {
             base.Awake();
             lightsOn = startLightsOn;
+            ResolveVisualObjects();
         }
 
         private void Start()
         {
             initialized = true;
-            ApplyLeverVisual();
+            ApplySwitchVisual();
             EmitLightsState();
         }
 
@@ -69,12 +68,12 @@ namespace BokeGameJam.Gameplay
         {
             if (lightsOn == on && initialized)
             {
-                ApplyLeverVisual();
+                ApplySwitchVisual();
                 return;
             }
 
             lightsOn = on;
-            ApplyLeverVisual();
+            ApplySwitchVisual();
             EmitLightsState();
         }
 
@@ -93,18 +92,27 @@ namespace BokeGameJam.Gameplay
             EventManager.Emit(GameEvents.LightsOffChanged, new RoomLightsInfo(id, off));
         }
 
-        private void ApplyLeverVisual()
+        private void ResolveVisualObjects()
         {
-            Vector3 euler = transform.localEulerAngles;
-            euler.z = lightsOn ? onAngleZ : offAngleZ;
-            transform.localEulerAngles = euler;
+            if (switchOnObject == null)
+                switchOnObject = FindChildByName("开关开");
+            if (switchOffObject == null)
+                switchOffObject = FindChildByName("开关关");
+        }
 
-            if (SpriteRenderer == null)
-                return;
+        private GameObject FindChildByName(string childName)
+        {
+            Transform child = transform.Find(childName);
+            return child != null ? child.gameObject : null;
+        }
 
-            Sprite sprite = lightsOn ? lightsOnSprite : lightsOffSprite;
-            if (sprite != null)
-                SpriteRenderer.sprite = sprite;
+        private void ApplySwitchVisual()
+        {
+            if (switchOnObject != null)
+                switchOnObject.SetActive(lightsOn);
+
+            if (switchOffObject != null)
+                switchOffObject.SetActive(!lightsOn);
         }
     }
 }
