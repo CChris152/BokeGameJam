@@ -81,7 +81,7 @@ namespace BokeGameJam.Gameplay
 
         private void OnInteractPressed()
         {
-            // 对话框打开/刚关闭：由 DialoguePopup 处理关闭，避免同帧误交互
+            // 对话框 / 选项面板打开或刚关闭：避免同帧误交互
             if (DialoguePopup.BlocksInteract)
                 return;
 

@@ -240,13 +240,13 @@ namespace BokeGameJam.Gameplay
             return string.IsNullOrWhiteSpace(mechanismId) ? null : mechanismId.Trim();
         }
 
-        private void SetActivated(bool value)
+        protected void SetActivated(bool value)
         {
             activated = value;
             ApplyVisual();
         }
 
-        private void ApplyVisual()
+        protected virtual void ApplyVisual()
         {
             if (SpriteRenderer == null)
                 return;

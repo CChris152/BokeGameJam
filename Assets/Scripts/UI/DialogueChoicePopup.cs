@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using BokeGameJam.Input;
@@ -6,20 +7,21 @@ using BokeGameJam.Core;
 namespace BokeGameJam.UI
 {
     /// <summary>
-    /// Screen Space 对话框：挂到 UI 层，用世界坐标转屏幕坐标跟随目标。
-    /// 按 E / 鼠标左键 / Esc 关闭。
+    /// 鬼魂互动选项面板：持有物品 A 时优先弹出，按钮点击后回调。
+    /// 按 E / Esc 关闭且不执行选项。
     /// </summary>
-    public sealed class DialoguePopup : MonoBehaviour
+    public sealed class DialogueChoicePopup : MonoBehaviour
     {
-        private static DialoguePopup openInstance;
+        private static DialogueChoicePopup openInstance;
         private static int suppressInteractUntilFrame = -1;
 
         [Header("UI")]
         [SerializeField] private RectTransform panelRect;
-        [SerializeField] private Text speakerLabel;
-        [SerializeField] private Text bodyLabel;
-        [SerializeField] private int speakerFontSize = 22;
-        [SerializeField] private int bodyFontSize = 20;
+        [SerializeField] private Text titleLabel;
+        [SerializeField] private Button primaryButton;
+        [SerializeField] private Text primaryButtonLabel;
+        [SerializeField] private Button secondaryButton;
+        [SerializeField] private Text secondaryButtonLabel;
 
         [Header("Follow")]
         [SerializeField] private Transform worldAnchor;
@@ -30,14 +32,14 @@ namespace BokeGameJam.UI
         private bool isOpen;
         private Canvas rootCanvas;
         private Camera uiCamera;
+        private Action onPrimary;
+        private Action onSecondary;
 
         public static bool IsOpen => openInstance != null && openInstance.isOpen;
 
         /// <summary>打开中，或本帧刚关闭（防止 E 关掉又立刻打开）。</summary>
         public static bool BlocksInteract =>
-            IsOpen
-            || DialogueChoicePopup.BlocksInteract
-            || Time.frameCount <= suppressInteractUntilFrame;
+            IsOpen || Time.frameCount <= suppressInteractUntilFrame;
 
         public static void Hide()
         {
@@ -50,11 +52,8 @@ namespace BokeGameJam.UI
             if (panelRect == null)
                 panelRect = GetComponent<RectTransform>();
 
-            CacheLabels();
-            ApplyFontSizes();
-
+            CacheRefs();
             originalParent = transform.parent;
-            // Prefab 默认 inactive；不要在 Awake 里 SetActive(false)。
         }
 
 #if UNITY_EDITOR
@@ -62,45 +61,62 @@ namespace BokeGameJam.UI
         {
             if (panelRect == null)
                 panelRect = GetComponent<RectTransform>();
-            CacheLabels();
-            ApplyFontSizes();
+            CacheRefs();
         }
 #endif
 
-        private void CacheLabels()
+        private void CacheRefs()
         {
-            if (speakerLabel == null)
+            if (titleLabel == null)
             {
-                Transform t = transform.Find("Speaker");
+                Transform t = transform.Find("Title");
                 if (t != null)
-                    speakerLabel = t.GetComponent<Text>();
+                    titleLabel = t.GetComponent<Text>();
             }
 
-            if (bodyLabel == null)
+            if (primaryButton == null)
             {
-                Transform t = transform.Find("Body");
+                Transform t = transform.Find("ButtonPrimary");
                 if (t != null)
-                    bodyLabel = t.GetComponent<Text>();
+                    primaryButton = t.GetComponent<Button>();
             }
-        }
 
-        private void ApplyFontSizes()
-        {
-            if (speakerLabel != null)
-                speakerLabel.fontSize = Mathf.Max(1, speakerFontSize);
+            if (primaryButtonLabel == null && primaryButton != null)
+            {
+                Transform label = primaryButton.transform.Find("Label");
+                if (label != null)
+                    primaryButtonLabel = label.GetComponent<Text>();
+                else
+                    primaryButtonLabel = primaryButton.GetComponentInChildren<Text>(true);
+            }
 
-            if (bodyLabel != null)
-                bodyLabel.fontSize = Mathf.Max(1, bodyFontSize);
+            if (secondaryButton == null)
+            {
+                Transform t = transform.Find("ButtonSecondary");
+                if (t != null)
+                    secondaryButton = t.GetComponent<Button>();
+            }
+
+            if (secondaryButtonLabel == null && secondaryButton != null)
+            {
+                Transform label = secondaryButton.transform.Find("Label");
+                if (label != null)
+                    secondaryButtonLabel = label.GetComponent<Text>();
+                else
+                    secondaryButtonLabel = secondaryButton.GetComponentInChildren<Text>(true);
+            }
         }
 
         private void OnEnable()
         {
             EventManager.On(InputEvents.PlayerInteractPressed, OnInteractOrClose);
+            WireButtons();
         }
 
         private void OnDisable()
         {
             EventManager.Off(InputEvents.PlayerInteractPressed, OnInteractOrClose);
+            UnwireButtons();
             if (openInstance == this)
             {
                 isOpen = false;
@@ -113,8 +129,7 @@ namespace BokeGameJam.UI
             if (!isOpen)
                 return;
 
-            if (UnityEngine.Input.GetKeyDown(KeyCode.Escape)
-                || UnityEngine.Input.GetMouseButtonDown(0))
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Escape))
             {
                 Close();
                 return;
@@ -123,25 +138,40 @@ namespace BokeGameJam.UI
             UpdateScreenPosition();
         }
 
-        /// <summary>显示对话，并跟随世界锚点投影到 UI。</summary>
-        public void Show(string speaker, string body, Transform anchor = null)
+        /// <summary>
+        /// 显示双选项面板。primary / secondary 为按钮文案；回调在关闭面板后执行。
+        /// </summary>
+        public void Show(
+            string title,
+            string primaryLabel,
+            string secondaryLabel,
+            Action primaryAction,
+            Action secondaryAction,
+            Transform anchor = null)
         {
             if (openInstance != null && openInstance != this)
                 openInstance.Close();
+
+            if (DialoguePopup.IsOpen)
+                DialoguePopup.Hide();
 
             if (anchor != null)
                 worldAnchor = anchor;
             else if (worldAnchor == null && originalParent != null)
                 worldAnchor = originalParent;
 
-            CacheLabels();
-            ApplyFontSizes();
+            CacheRefs();
+            onPrimary = primaryAction;
+            onSecondary = secondaryAction;
 
-            if (speakerLabel != null)
-                speakerLabel.text = string.IsNullOrWhiteSpace(speaker) ? string.Empty : speaker.Trim();
+            if (titleLabel != null)
+                titleLabel.text = string.IsNullOrWhiteSpace(title) ? string.Empty : title.Trim();
 
-            if (bodyLabel != null)
-                bodyLabel.text = body ?? string.Empty;
+            if (primaryButtonLabel != null)
+                primaryButtonLabel.text = string.IsNullOrWhiteSpace(primaryLabel) ? "确认" : primaryLabel.Trim();
+
+            if (secondaryButtonLabel != null)
+                secondaryButtonLabel.text = string.IsNullOrWhiteSpace(secondaryLabel) ? "取消" : secondaryLabel.Trim();
 
             AttachToUiRoot();
             isOpen = true;
@@ -156,9 +186,48 @@ namespace BokeGameJam.UI
             if (openInstance == this)
                 openInstance = null;
 
+            onPrimary = null;
+            onSecondary = null;
             suppressInteractUntilFrame = Time.frameCount;
             RestoreOriginalParent();
             gameObject.SetActive(false);
+        }
+
+        private void WireButtons()
+        {
+            if (primaryButton != null)
+            {
+                primaryButton.onClick.RemoveListener(OnPrimaryClicked);
+                primaryButton.onClick.AddListener(OnPrimaryClicked);
+            }
+
+            if (secondaryButton != null)
+            {
+                secondaryButton.onClick.RemoveListener(OnSecondaryClicked);
+                secondaryButton.onClick.AddListener(OnSecondaryClicked);
+            }
+        }
+
+        private void UnwireButtons()
+        {
+            if (primaryButton != null)
+                primaryButton.onClick.RemoveListener(OnPrimaryClicked);
+            if (secondaryButton != null)
+                secondaryButton.onClick.RemoveListener(OnSecondaryClicked);
+        }
+
+        private void OnPrimaryClicked()
+        {
+            Action action = onPrimary;
+            Close();
+            action?.Invoke();
+        }
+
+        private void OnSecondaryClicked()
+        {
+            Action action = onSecondary;
+            Close();
+            action?.Invoke();
         }
 
         private void OnInteractOrClose()
@@ -172,7 +241,7 @@ namespace BokeGameJam.UI
             Transform uiRoot = UIManager.Instance != null ? UIManager.Instance.UIRoot : null;
             if (uiRoot == null)
             {
-                Debug.LogWarning("[DialoguePopup] UIManager.UIRoot 未找到，对话框留在原父节点。", this);
+                Debug.LogWarning("[DialogueChoicePopup] UIManager.UIRoot 未找到，选项面板留在原父节点。", this);
                 rootCanvas = GetComponentInParent<Canvas>();
                 uiCamera = null;
                 return;
@@ -222,7 +291,6 @@ namespace BokeGameJam.UI
             Vector3 worldPos = worldAnchor.position + worldOffset;
             Vector3 screenPos = worldCam.WorldToScreenPoint(worldPos);
 
-            // 在相机后方则移出屏幕
             if (screenPos.z < 0f)
             {
                 panelRect.anchoredPosition = new Vector2(-99999f, -99999f);
