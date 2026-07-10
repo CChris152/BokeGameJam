@@ -6,7 +6,7 @@ namespace BokeGameJam.Gameplay
     /// <summary>
     /// 收到 <see cref="GameEvents.CandyReceived"/> 后隐藏自身（用于可消失墙壁等）。
     /// </summary>
-    public sealed class CandyReceivedDespawn : MonoBehaviour
+    public sealed class CandyReceivedDespawn : LevelObject
     {
         private void OnEnable()
         {

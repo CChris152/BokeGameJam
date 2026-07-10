@@ -48,7 +48,8 @@ namespace BokeGameJam.Gameplay
         private void OnTriggerEnter2D(Collider2D other)
         {
             IInteractable interactable = FindInteractable(other);
-            if (!IsValidInteractable(interactable))
+            // 用 trackable 而非 CanInteract：busy/冷却中进入范围也应登记，结束后可直接再按。
+            if (!IsTrackableInteractable(interactable))
                 return;
 
             if (contactCounts.TryGetValue(interactable, out int count))
@@ -161,7 +162,7 @@ namespace BokeGameJam.Gameplay
 
             foreach (IInteractable interactable in nearby)
             {
-                if (!IsValidInteractable(interactable))
+                if (!IsTrackableInteractable(interactable))
                     removeBuffer.Add(interactable);
             }
 
@@ -211,13 +212,17 @@ namespace BokeGameJam.Gameplay
 
             foreach (IInteractable interactable in nearby)
             {
-                if (!IsValidInteractable(interactable))
+                if (!IsTrackableInteractable(interactable))
                 {
                     if (IsUnityObjectAlive(interactable))
                         interactable.SetInInteractRange(false);
                     removeBuffer.Add(interactable);
                     continue;
                 }
+
+                // busy/冷却等临时不可互动：保留在 nearby，只是本帧不选中。
+                if (!interactable.CanInteract(this))
+                    continue;
 
                 if (!allowPickups && interactable is InteractableObject { Mode: InteractMode.PickUp })
                     continue;
@@ -313,7 +318,8 @@ namespace BokeGameJam.Gameplay
             if (!interacted)
                 return false;
 
-            if (!IsValidInteractable(interactable))
+            // 仅在对象销毁/失活时移出 nearby；busy 等临时不可互动仍保留，冷却后可再按。
+            if (!IsTrackableInteractable(interactable))
             {
                 if (IsUnityObjectAlive(interactable))
                     interactable.SetInInteractRange(false);
@@ -345,7 +351,11 @@ namespace BokeGameJam.Gameplay
             return fallback;
         }
 
-        private bool IsValidInteractable(IInteractable interactable)
+        /// <summary>
+        /// 仍在场景中、可继续跟踪重叠的交互物（含 busy/冷却中）。
+        /// 切世界失活、销毁的对象不算。
+        /// </summary>
+        private static bool IsTrackableInteractable(IInteractable interactable)
         {
             if (!IsUnityObjectAlive(interactable))
                 return false;
@@ -355,7 +365,13 @@ namespace BokeGameJam.Gameplay
                 && (!behaviour.isActiveAndEnabled || !behaviour.gameObject.activeInHierarchy))
                 return false;
 
-            return interactable.CanInteract(this);
+            return true;
+        }
+
+        /// <summary>当前帧可以真正执行交互（trackable 且 CanInteract）。</summary>
+        private bool IsValidInteractable(IInteractable interactable)
+        {
+            return IsTrackableInteractable(interactable) && interactable.CanInteract(this);
         }
 
         private static bool IsUnityObjectAlive(IInteractable interactable)

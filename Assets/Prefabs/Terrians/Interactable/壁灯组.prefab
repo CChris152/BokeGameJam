@@ -387,7 +387,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efd570e90daf3b4459d43b24f94de26f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelLayer: 2
+  levelLayer: 1
   mechanismId: 
   displayName: "\u58C1\u706F\u7EC4"
   iconOverride: {fileID: 0}
