@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7946795793989703701}
   - component: {fileID: 1759048207514214113}
-  - component: {fileID: 2815474704739889366}
   - component: {fileID: 618232828875682597}
+  - component: {fileID: 1107889490438774346}
   m_Layer: 0
   m_Name: "\u7CD6\u679C"
   m_TagString: Untagged
@@ -86,23 +86,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2815474704739889366
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2306232251166648960}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1d2e3f4a5b6478890a1b2c3d4e5f607, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  levelLayer: 2
-  mechanismId: 
-  displayName: 
-  iconOverride: {fileID: 21300000, guid: f6ea113ac2e6d4842b54e0db8649348a, type: 3}
-  holdLocalOffset: {x: 0.35, y: 0.15}
 --- !u!58 &618232828875682597
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -138,3 +121,24 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.79
+--- !u!114 &1107889490438774346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2306232251166648960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b187b494de3e7b74c856bcd6ef57d318, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelLayer: 2
+  mechanismId: 
+  displayName: 
+  iconOverride: {fileID: 21300000, guid: f6ea113ac2e6d4842b54e0db8649348a, type: 3}
+  holdLocalOffset: {x: 0.35, y: 0.15}
+  itemKind: 2
+  interactHintPrefab: {fileID: 4770831128431962299, guid: d2b49c00d94d4c749a0aacac450eb690, type: 3}
+  hintLocalOffset: {x: 0, y: -0.85}
+  hintPrefabResourcePath: Prefabs/Interactable/InteractHint

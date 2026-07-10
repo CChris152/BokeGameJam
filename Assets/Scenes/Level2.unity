@@ -122,7 +122,38 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &230586427
+--- !u!1 &240573524
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 240573525}
+  m_Layer: 0
+  m_Name: Anchor1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &240573525
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 240573524}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 14.6, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 334770836}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &299779495
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -132,19 +163,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 357827097634753109, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
       propertyPath: m_Name
-      value: "\u8854\u63A52"
+      value: "\u540E\u8854\u63A5"
       objectReference: {fileID: 0}
     - target: {fileID: 3281336027739035581, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 6f8ee6dcdba698e408442f744d98bbaa, type: 3}
+      objectReference: {fileID: 21300000, guid: 71d0224e0cbaab34fa45d91e965dbac0, type: 3}
+    - target: {fileID: 4340439550777877636, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
+      propertyPath: underworldSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6ea456d03e313864c838cb853f2e9ac8, type: 3}
     - target: {fileID: 4340439550777877636, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
       propertyPath: livingWorldSprite
       value: 
-      objectReference: {fileID: 21300000, guid: 6f8ee6dcdba698e408442f744d98bbaa, type: 3}
+      objectReference: {fileID: 21300000, guid: 71d0224e0cbaab34fa45d91e965dbac0, type: 3}
     - target: {fileID: 6219774574562559890, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 58.18
+      value: 55.61
       objectReference: {fileID: 0}
     - target: {fileID: 6219774574562559890, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
       propertyPath: m_LocalPosition.y
@@ -187,37 +222,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
---- !u!1 &240573524
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 240573525}
-  m_Layer: 0
-  m_Name: Anchor1
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &240573525
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 240573524}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 14.6, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 334770836}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &332428861
 GameObject:
   m_ObjectHideFlags: 0
@@ -290,15 +294,6 @@ MonoBehaviour:
   - {fileID: 1184250249}
   cameraMoveDuration: 0.6
   cameraYOffset: 0
-  introStory: {fileID: 0}
-  introStoryResourcePath: ScriptableObjects/Stories/Story1
-  playIntroStoryOnStart: 0
-  firstFlowerStory: {fileID: 0}
-  firstFlowerStoryResourcePath: ScriptableObjects/Stories/Story2
-  playStoryOnFirstFlowerPickup: 0
-  firstShiftStory: {fileID: 0}
-  firstShiftStoryResourcePath: ScriptableObjects/Stories/Story3
-  playStoryOnFirstShift: 0
 --- !u!4 &334770836
 Transform:
   m_ObjectHideFlags: 0
@@ -950,6 +945,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: "\u540E\u8857\u9053"
       objectReference: {fileID: 0}
+    - target: {fileID: 3281336027739035581, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
+      propertyPath: m_SortingOrder
+      value: -1094
+      objectReference: {fileID: 0}
     - target: {fileID: 6219774574562559890, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 41.47
@@ -1293,5 +1292,5 @@ SceneRoots:
   - {fileID: 683829766}
   - {fileID: 1216365234}
   - {fileID: 926376296}
-  - {fileID: 230586427}
+  - {fileID: 299779495}
   - {fileID: 334770836}

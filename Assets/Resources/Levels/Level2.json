@@ -1491,6 +1491,126 @@
             "sequenceIndex": 0,
             "dialogueText": "",
             "roomId": ""
+        },
+        {
+            "x": 29,
+            "y": 10,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 29,
+            "y": 9,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 49,
+            "y": 5,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 49,
+            "y": 4,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 49,
+            "y": 3,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 49,
+            "y": 2,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 49,
+            "y": 1,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 49,
+            "y": 0,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 49,
+            "y": -1,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 49,
+            "y": -2,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 49,
+            "y": -3,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 49,
+            "y": -4,
+            "tileId": "Ground/墙壁A",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
         }
     ],
     "tilesB": [
@@ -2895,9 +3015,9 @@
             "roomId": ""
         },
         {
-            "x": 64,
-            "y": -4,
-            "tileId": "Interactable/GhostChoiceObject",
+            "x": 31,
+            "y": 5,
+            "tileId": "Ground/墙壁B",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
@@ -2993,6 +3113,26 @@
             "sequenceIndex": 0,
             "dialogueText": "",
             "roomId": ""
+        },
+        {
+            "x": 46,
+            "y": -4,
+            "tileId": "Interactable/GhostChoiceObject",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 53,
+            "y": 12,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
         }
     ],
     "tilesShared": [
@@ -3017,7 +3157,7 @@
             "roomId": ""
         },
         {
-            "x": 48,
+            "x": 45,
             "y": -4,
             "tileId": "Interactable/StreetLamp",
             "mechanismId": "",
@@ -3047,7 +3187,7 @@
             "roomId": ""
         },
         {
-            "x": 39,
+            "x": 38,
             "y": -4,
             "tileId": "Interactable/StreetLamp",
             "mechanismId": "",
@@ -3090,6 +3230,16 @@
             "x": 1,
             "y": -1,
             "tileId": "Interactable/花",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 60,
+            "y": -2,
+            "tileId": "Interactable/电闸",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
