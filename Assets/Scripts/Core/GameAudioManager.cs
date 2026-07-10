@@ -10,6 +10,8 @@ namespace BokeGameJam.Core
     /// </summary>
     public class GameAudioManager : MonoBehaviour
     {
+        private const string SfxResourceRoot = "Audio/SFX";
+
         public static GameAudioManager Instance { get; private set; }
 
         [Header("音量")]
@@ -59,6 +61,7 @@ namespace BokeGameJam.Core
             sfxOneShotSource = CreateChildSource("SFX_OneShot", loop: false);
 
             bgmActiveSource = bgmSourceA;
+            PreloadResourceSfx();
             ApplyVolumes();
         }
 
@@ -417,11 +420,15 @@ namespace BokeGameJam.Core
 
             string normalizedPath = resourcePath.Trim();
             if (resourcePathClips.TryGetValue(normalizedPath, out AudioClip cachedClip))
+            {
+                EnsureAudioDataLoaded(cachedClip);
                 return cachedClip;
+            }
 
             AudioClip clip = Resources.Load<AudioClip>(normalizedPath);
             if (clip != null)
             {
+                EnsureAudioDataLoaded(clip);
                 resourcePathClips[normalizedPath] = clip;
                 missingResourcePaths.Remove(normalizedPath);
                 return clip;
@@ -431,6 +438,29 @@ namespace BokeGameJam.Core
                 Debug.LogWarning($"[GameAudioManager] Missing SFX at Resources/{normalizedPath}");
 
             return null;
+        }
+
+        /// <summary>
+        /// 启动时一次性加载 SFX，避免首次触发时才进行 Resources 查找和音频解码。
+        /// </summary>
+        private void PreloadResourceSfx()
+        {
+            AudioClip[] clips = Resources.LoadAll<AudioClip>(SfxResourceRoot);
+            for (int i = 0; i < clips.Length; i++)
+            {
+                AudioClip clip = clips[i];
+                if (clip == null)
+                    continue;
+
+                EnsureAudioDataLoaded(clip);
+                resourcePathClips[$"{SfxResourceRoot}/{clip.name}"] = clip;
+            }
+        }
+
+        private static void EnsureAudioDataLoaded(AudioClip clip)
+        {
+            if (clip != null && clip.loadState == AudioDataLoadState.Unloaded)
+                clip.LoadAudioData();
         }
 
         private static string GetResourceLoopKey(string resourcePath)
