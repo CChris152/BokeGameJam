@@ -326,7 +326,9 @@ namespace BokeGameJam.LevelEditor
             if (GameManager.Instance != null)
                 activeWorld = GameManager.Instance.ActiveWorld;
 
-            if (autoLoadOnStart && File.Exists(SaveFilePath))
+            // 编辑器可读磁盘 JSON；打包后无松散文件，由 TryLoadLevel 回退 Resources.Load。
+            // 不能只判断 File.Exists，否则正式包永远不会加载地图。
+            if (autoLoadOnStart)
                 LoadSilent();
 
             SetEditMode(false);
