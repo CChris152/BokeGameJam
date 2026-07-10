@@ -17,13 +17,13 @@ namespace BokeGameJam.Core
         /// </summary>
         public static class Keys
         {
-            /// <summary>BGM 与 SFX 共用的主音量（0-1）。</summary>
+            /// <summary>旧版共用主音量（0-1）。新流程已拆为 BgmVolume / SfxVolume，仅作迁移回退。</summary>
             public const string MasterVolume = "MasterVolume";
 
-            /// <summary>BGM 音量（预留，当前主流程使用 MasterVolume）。</summary>
+            /// <summary>BGM / 音乐音量（0-1）。</summary>
             public const string BgmVolume = "BgmVolume";
 
-            /// <summary>SFX 音量（预留，当前主流程使用 MasterVolume）。</summary>
+            /// <summary>SFX / 音效音量（0-1）。</summary>
             public const string SfxVolume = "SfxVolume";
         }
 

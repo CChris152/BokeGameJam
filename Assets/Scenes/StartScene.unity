@@ -514,8 +514,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "2D\u6A2A\u677F\u8DF3\u8DC3\u6E38\u620F"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f10ccaad2afc21f4ca683ba3cb178520, type: 2}
-  m_sharedMaterial: {fileID: 6019520913453184873, guid: f10ccaad2afc21f4ca683ba3cb178520, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: f809cf5b21a4b58489166c1657a71121, type: 2}
+  m_sharedMaterial: {fileID: -2087841283807870798, guid: f809cf5b21a4b58489166c1657a71121, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1117,10 +1117,10 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.92, g: 0.78, b: 0.42, a: 1}
-    m_HighlightedColor: {r: 1, g: 0.86, b: 0.5, a: 1}
-    m_PressedColor: {r: 0.78, g: 0.6, b: 0.28, a: 1}
-    m_SelectedColor: {r: 1, g: 0.86, b: 0.5, a: 1}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_PressedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -1222,10 +1222,10 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.92, g: 0.78, b: 0.42, a: 1}
-    m_HighlightedColor: {r: 1, g: 0.86, b: 0.5, a: 1}
-    m_PressedColor: {r: 0.78, g: 0.6, b: 0.28, a: 1}
-    m_SelectedColor: {r: 1, g: 0.86, b: 0.5, a: 1}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_PressedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -1266,10 +1266,10 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.92, g: 0.78, b: 0.42, a: 1}
-    m_HighlightedColor: {r: 1, g: 0.86, b: 0.5, a: 1}
-    m_PressedColor: {r: 0.78, g: 0.6, b: 0.28, a: 1}
-    m_SelectedColor: {r: 1, g: 0.86, b: 0.5, a: 1}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_PressedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -1474,8 +1474,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2995244eab1a68547965a5db90bf460b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scaleTarget: {fileID: 0}
   hoverScale: 1.08
   duration: 0.12
+  tintOnHover: 0
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverColor: {r: 1, g: 0.95, b: 0.75, a: 1}
+  tintTargets: []
 --- !u!1001 &5623513678812892400
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1690,8 +1695,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2995244eab1a68547965a5db90bf460b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scaleTarget: {fileID: 0}
   hoverScale: 1.08
   duration: 0.12
+  tintOnHover: 0
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverColor: {r: 1, g: 0.95, b: 0.75, a: 1}
+  tintTargets: []
 --- !u!224 &8575063050790270278
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1745,8 +1755,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2995244eab1a68547965a5db90bf460b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scaleTarget: {fileID: 0}
   hoverScale: 1.08
   duration: 0.12
+  tintOnHover: 0
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverColor: {r: 1, g: 0.95, b: 0.75, a: 1}
+  tintTargets: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
