@@ -768,7 +768,7 @@ namespace BokeGameJam.Core
         public const string PauseToggle = Root + "暂停";
         public const string LevelCompleted = Root + "关卡完成-找到本关记忆";
         public const string FireplaceLoop = Root + "木材在火炉里燃烧_耳聆网_[声音ID：10744]";
-        public const string LightSwitch = Root + "开灯-拉绳灯";
+        public const string LightSwitch = Root + "开灯关灯声";
         public const string ClockTickLoop = Root + "钟表-滴答滴答";
         public const string ClockHourBell = Root + "完成谜题-钟声到整点提示音";
     }
