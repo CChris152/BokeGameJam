@@ -46,4 +46,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bgmVolume: 0.6
   sfxVolume: 1
-  defaultBgmFadeDuration: 0.5
+  defaultBgmFadeOutDuration: 1.5
+  defaultBgmFadeInDuration: 1.5

@@ -46,6 +46,9 @@ namespace BokeGameJam.LevelEditor
             /// <summary>Interactable D：对话正文。</summary>
             public string dialogueText;
 
+            /// <summary>灯开关 / 房间背景：房间绑定 id。</summary>
+            public string roomId;
+
             public TileEntry(int x, int y, string tileId)
             {
                 this.x = x;
@@ -55,6 +58,7 @@ namespace BokeGameJam.LevelEditor
                 this.sequenceGroupId = null;
                 this.sequenceIndex = 0;
                 this.dialogueText = null;
+                this.roomId = null;
             }
 
             public TileEntry(
@@ -64,7 +68,8 @@ namespace BokeGameJam.LevelEditor
                 string mechanismId,
                 string sequenceGroupId,
                 int sequenceIndex,
-                string dialogueText = null)
+                string dialogueText = null,
+                string roomId = null)
             {
                 this.x = x;
                 this.y = y;
@@ -73,6 +78,7 @@ namespace BokeGameJam.LevelEditor
                 this.sequenceGroupId = sequenceGroupId;
                 this.sequenceIndex = sequenceIndex;
                 this.dialogueText = dialogueText;
+                this.roomId = roomId;
             }
 
             public Vector2Int Position => new(x, y);

@@ -133,7 +133,7 @@ MonoBehaviour:
   loadingFadeInDuration: 1
   loadingHoldDuration: 0.5
   loadingFadeOutDuration: 1.5
-  fadeOutHoldDuration: 1
+  fadeOutHoldDuration: 2
   fadeOutDuration: 1.5
 --- !u!223 &8867886549256044823
 Canvas:

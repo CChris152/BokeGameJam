@@ -1,4 +1,6 @@
+using System.Collections;
 using BokeGameJam.Core;
+using BokeGameJam.Input;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,6 +25,19 @@ namespace BokeGameJam.UI
         [Header("音量")]
         [Tooltip("主音量滑条（BGM 与 SFX 共用，逻辑与设置面板一致）")]
         [SerializeField] private Slider volumeSlider;
+
+        [Header("打开动画")]
+        [Tooltip("中间内容面板（通常是 Panel）")]
+        [SerializeField] private RectTransform contentPanel;
+
+        [Tooltip("打开动画时长（秒）")]
+        [SerializeField] private float openDuration = 0.35f;
+
+        private CanvasGroup contentCanvasGroup;
+        private Coroutine openRoutine;
+        private float previousTimeScale = 1f;
+        private InputContext previousInputContext = InputContext.Gameplay;
+        private bool pauseStateApplied;
 
         private void Awake()
         {
@@ -58,16 +73,33 @@ namespace BokeGameJam.UI
             {
                 Debug.LogWarning("[PauseMenuController] Volume slider is missing.", this);
             }
+
+            ResolveContentPanel();
         }
 
         private void OnEnable()
         {
+            ApplyPauseState();
             // 每次显示时从存档同步滑条与运行时音量
             SyncVolumeFromSavedData();
+            PlayOpenAnimation();
+        }
+
+        private void OnDisable()
+        {
+            if (openRoutine != null)
+            {
+                StopCoroutine(openRoutine);
+                openRoutine = null;
+            }
+
+            RestorePauseState();
         }
 
         private void OnDestroy()
         {
+            RestorePauseState();
+
             if (returnToMainMenuButton != null)
                 returnToMainMenuButton.onClick.RemoveListener(OnReturnToMainMenuClicked);
 
@@ -76,6 +108,36 @@ namespace BokeGameJam.UI
 
             if (volumeSlider != null)
                 volumeSlider.onValueChanged.RemoveListener(OnVolumeChanged);
+        }
+
+        private void ApplyPauseState()
+        {
+            if (pauseStateApplied)
+                return;
+
+            previousTimeScale = Time.timeScale;
+            Time.timeScale = 0f;
+
+            if (InputManager.Instance != null)
+            {
+                previousInputContext = InputManager.Instance.CurrentContext;
+                InputManager.Instance.SetContext(InputContext.UI);
+            }
+
+            pauseStateApplied = true;
+        }
+
+        private void RestorePauseState()
+        {
+            if (!pauseStateApplied)
+                return;
+
+            Time.timeScale = previousTimeScale;
+
+            if (InputManager.Instance != null && InputManager.Instance.CurrentContext == InputContext.UI)
+                InputManager.Instance.SetContext(previousInputContext);
+
+            pauseStateApplied = false;
         }
 
         /// <summary>
@@ -141,7 +203,8 @@ namespace BokeGameJam.UI
         }
 
         /// <summary>
-        /// 退回主菜单：先关闭本弹窗，再切换到 StartScene。
+        /// 退回主菜单：先关闭本弹窗，再播加载过渡（透明→全黑→透明），
+        /// 在全黑时切换到 StartScene。
         /// </summary>
         private void OnReturnToMainMenuClicked()
         {
@@ -153,7 +216,23 @@ namespace BokeGameJam.UI
                 return;
             }
 
-            GameSceneManager.Instance.LoadSceneById(StartSceneId);
+            if (BlackScreenLoader.Instance == null)
+            {
+                Debug.LogWarning("[PauseMenuController] BlackScreenLoader missing, return to main menu immediately.", this);
+                GameSceneManager.Instance.LoadSceneById(StartSceneId);
+                return;
+            }
+
+            BlackScreenLoader.Instance.PlayLoadingAnimation(() =>
+            {
+                if (GameSceneManager.Instance == null)
+                {
+                    Debug.LogError("[PauseMenuController] GameSceneManager instance is missing during return.", this);
+                    return;
+                }
+
+                GameSceneManager.Instance.LoadSceneById(StartSceneId);
+            });
         }
 
         /// <summary>关闭按钮回调。</summary>
@@ -173,6 +252,64 @@ namespace BokeGameJam.UI
             }
 
             UIManager.Instance.Close(ResourceId);
+        }
+
+        /// <summary>播放打开淡入动画。</summary>
+        private void PlayOpenAnimation()
+        {
+            ResolveContentPanel();
+            if (contentPanel == null)
+                return;
+
+            if (openRoutine != null)
+                StopCoroutine(openRoutine);
+
+            EnsureContentCanvasGroup();
+            openRoutine = StartCoroutine(FadeInRoutine());
+        }
+
+        private IEnumerator FadeInRoutine()
+        {
+            float duration = Mathf.Max(0.01f, openDuration);
+            contentCanvasGroup.alpha = 0f;
+            contentCanvasGroup.interactable = false;
+            contentCanvasGroup.blocksRaycasts = false;
+
+            float elapsed = 0f;
+            while (elapsed < duration)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                float t = Mathf.Clamp01(elapsed / duration);
+                // Smoothstep：中间更快、两端更柔
+                t = t * t * (3f - 2f * t);
+                contentCanvasGroup.alpha = t;
+                yield return null;
+            }
+
+            contentCanvasGroup.alpha = 1f;
+            contentCanvasGroup.interactable = true;
+            contentCanvasGroup.blocksRaycasts = true;
+            openRoutine = null;
+        }
+
+        private void ResolveContentPanel()
+        {
+            if (contentPanel != null)
+                return;
+
+            Transform panel = transform.Find("Panel");
+            if (panel != null)
+                contentPanel = panel as RectTransform;
+        }
+
+        private void EnsureContentCanvasGroup()
+        {
+            if (contentPanel == null)
+                return;
+
+            contentCanvasGroup = contentPanel.GetComponent<CanvasGroup>();
+            if (contentCanvasGroup == null)
+                contentCanvasGroup = contentPanel.gameObject.AddComponent<CanvasGroup>();
         }
     }
 }
