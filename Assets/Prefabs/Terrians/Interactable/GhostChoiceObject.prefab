@@ -583,19 +583,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelLayer: 1
   mechanismId: 
-  displayName: Ghost
+  displayName: "\u5C0F\u5B69"
   iconOverride: {fileID: 0}
   holdLocalOffset: {x: 0.35, y: 0.15}
-  dialogueText: ......
+  dialogueText: "\u5403\u7CD6\u5403\u7CD6\u5403\u7CD6"
   popupPanel: {fileID: 7781779827279737575}
   choicePanel: {fileID: 4177274766796017296}
-  choiceTitle: What will you do?
-  giveOptionLabel: Give item
-  talkOptionLabel: Just talk
-  giveSuccessDialogue: Thank you...
-  requireMatchingMechanismId: 1
-  emitMechanismSatisfiedOnGive: 1
-  giveOnlyOnce: 1
+  choiceTitle: "\u4F60\u8981\u505A\u4EC0\u4E48\uFF1F"
+  giveOptionLabel: "\u7ED9\u4ED6\u7CD6\u679C"
+  talkOptionLabel: "\u53EA\u662F\u8DEF\u8FC7"
 --- !u!1 &6917543355015675312
 GameObject:
   m_ObjectHideFlags: 0
