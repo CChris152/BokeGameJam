@@ -160,6 +160,15 @@ namespace BokeGameJam.Core
             EventManager.Emit(GameEvents.ActiveWorldChanged, activeWorld);
         }
 
+        /// <summary>
+        /// 还原为表世界（阳间）。关卡结束黑屏回调 / 回主菜单时调用，
+        /// 避免切关或回菜单时仍停在里世界造成突兀。
+        /// </summary>
+        public void ResetToLivingWorld()
+        {
+            SetWorld(WorldId.A);
+        }
+
         /// <summary>主菜单点开始：确保 LevelManager 在场，再广播 LevelSelected 进入正式开局流。</summary>
         private void OnGameStartRequested()
         {
@@ -241,7 +250,7 @@ namespace BokeGameJam.Core
                     SetEscPauseEnabled(false);
                     CloseLevelPlayingUIs();
                     // 回主菜单时还原为表世界，避免下次进关仍停留在里世界。
-                    SetWorld(WorldId.A);
+                    ResetToLivingWorld();
                     break;
 
                 case GameState.LevelPlaying:

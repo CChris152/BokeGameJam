@@ -128,6 +128,10 @@ namespace BokeGameJam.Levels
                 return false;
             }
 
+            // 黑屏回调中切关前还原表世界，避免带着里世界状态进入下一关。
+            if (GameManager.Instance != null)
+                GameManager.Instance.ResetToLivingWorld();
+
             LoadLevelById(next.levelId);
             return true;
         }

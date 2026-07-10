@@ -375,6 +375,10 @@ namespace BokeGameJam.Gameplay
 
         private static void ReturnToMainMenu()
         {
+            // 黑屏回调中先还原表世界（与暂停回主菜单 / MainMenu 状态一致），再切场景。
+            if (GameManager.Instance != null)
+                GameManager.Instance.ResetToLivingWorld();
+
             if (GameSceneManager.Instance != null)
             {
                 GameSceneManager.Instance.LoadSceneById(StartSceneId);
