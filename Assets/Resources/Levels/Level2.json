@@ -3123,6 +3123,16 @@
             "sequenceIndex": 0,
             "dialogueText": "",
             "roomId": ""
+        },
+        {
+            "x": 53,
+            "y": 12,
+            "tileId": "Ground/BGround",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
         }
     ],
     "tilesShared": [
@@ -3220,6 +3230,16 @@
             "x": 1,
             "y": -1,
             "tileId": "Interactable/花",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 60,
+            "y": -2,
+            "tileId": "Interactable/电闸",
             "mechanismId": "",
             "sequenceGroupId": "",
             "sequenceIndex": 0,
