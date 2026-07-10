@@ -5,16 +5,23 @@ namespace BokeGameJam.Gameplay
 {
     /// <summary>
     /// 路灯（InteractableObjectB 变体）。
-    /// 表世界开局熄灭，按 E 点亮本地小光源；同组顺序全部正确时播放提示音。
+    /// 表世界开局熄灭，按 E 切换本地小光源与亮/关灯贴图；同组顺序全部正确时播放提示音。
     /// 里世界仅作为位置标记，默认不可交互。
     /// </summary>
     public class InteractableObjectStreetLamp : InteractableObjectB
     {
+        private const string OffSpriteResourcePath = "Art/Pictures/关灯";
+        private const string OnSpriteResourcePath = "Art/Pictures/亮灯";
+
         [Header("Street Lamp")]
         [Tooltip("亮灯时显示的小光源物体（默认找子物体 LightGlow）。")]
         [SerializeField] private GameObject lightGlowObject;
         [Tooltip("仅在表世界（World A）可交互；里世界只作标记。")]
         [SerializeField] private bool interactOnlyInOuterWorld = true;
+
+        [Header("Lamp Sprites")]
+        [SerializeField] private Sprite offSprite;
+        [SerializeField] private Sprite onSprite;
 
         [Header("Sequence Success Audio")]
         [SerializeField] private AudioClip sequenceSuccessClip;
@@ -24,13 +31,16 @@ namespace BokeGameJam.Gameplay
         private bool wasActivated;
         private AudioSource localAudioSource;
         private static AudioClip fallbackBeepClip;
+        private static Sprite cachedOffSprite;
+        private static Sprite cachedOnSprite;
 
         protected override void Awake()
         {
             base.Awake();
             ResolveLightGlow();
+            EnsureLampSprites();
             wasActivated = IsActivated;
-            ApplyLightGlow();
+            ApplyLampState();
         }
 
         private void LateUpdate()
@@ -39,13 +49,17 @@ namespace BokeGameJam.Gameplay
                 return;
 
             wasActivated = IsActivated;
-            ApplyLightGlow();
+            ApplyLampState();
         }
 
         public override bool CanInteract(PlayerInteractor interactor)
         {
             if (interactOnlyInOuterWorld && IsInUnderworld())
                 return false;
+
+            // Already on: allow E to turn off (toggle).
+            if (IsActivated)
+                return true;
 
             return base.CanInteract(interactor);
         }
@@ -55,12 +69,25 @@ namespace BokeGameJam.Gameplay
             if (!CanInteract(interactor))
                 return;
 
+            if (IsActivated)
+            {
+                SetActivated(false);
+                wasActivated = false;
+                ApplyLampState();
+                return;
+            }
+
             base.OnInteract(interactor);
             wasActivated = IsActivated;
-            ApplyLightGlow();
+            ApplyLampState();
 
             if (IsActivated && AreAllLampsInSequenceGroupActivated())
                 PlaySequenceSuccessAudio();
+        }
+
+        protected override void ApplyVisual()
+        {
+            ApplyLampState();
         }
 
         private bool AreAllLampsInSequenceGroupActivated()
@@ -98,12 +125,41 @@ namespace BokeGameJam.Gameplay
                 lightGlowObject = child.gameObject;
         }
 
-        private void ApplyLightGlow()
+        private void EnsureLampSprites()
         {
-            if (lightGlowObject == null)
-                return;
+            if (offSprite == null)
+            {
+                if (cachedOffSprite == null)
+                    cachedOffSprite = Resources.Load<Sprite>(OffSpriteResourcePath);
+                offSprite = cachedOffSprite;
+            }
 
-            lightGlowObject.SetActive(IsActivated);
+            if (onSprite == null)
+            {
+                if (cachedOnSprite == null)
+                    cachedOnSprite = Resources.Load<Sprite>(OnSpriteResourcePath);
+                onSprite = cachedOnSprite;
+            }
+
+            if (offSprite == null)
+                Debug.LogError($"[InteractableObjectStreetLamp] Missing sprite at Resources/{OffSpriteResourcePath}", this);
+            if (onSprite == null)
+                Debug.LogError($"[InteractableObjectStreetLamp] Missing sprite at Resources/{OnSpriteResourcePath}", this);
+        }
+
+        private void ApplyLampState()
+        {
+            EnsureLampSprites();
+
+            if (SpriteRenderer != null)
+            {
+                Sprite target = IsActivated ? onSprite : offSprite;
+                if (target != null)
+                    SpriteRenderer.sprite = target;
+            }
+
+            if (lightGlowObject != null)
+                lightGlowObject.SetActive(IsActivated);
         }
 
         private void PlaySequenceSuccessAudio()

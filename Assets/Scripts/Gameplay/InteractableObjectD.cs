@@ -13,8 +13,8 @@ namespace BokeGameJam.Gameplay
 
         [Header("Dialogue")]
         [TextArea(2, 8)]
-        [SerializeField] private string dialogueText = "……";
-        [SerializeField] private DialoguePopup popupPanel;
+        [SerializeField] protected string dialogueText = "……";
+        [SerializeField] protected DialoguePopup popupPanel;
 
         public override InteractMode Mode => InteractMode.Trigger;
         public string DialogueText => dialogueText != null ? dialogueText : string.Empty;
@@ -31,7 +31,7 @@ namespace BokeGameJam.Gameplay
             EnsurePopupPanel();
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             if (activeInLevel != null && activeInLevel != this)
             {
@@ -43,7 +43,7 @@ namespace BokeGameJam.Gameplay
             activeInLevel = this;
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             if (activeInLevel == this)
                 activeInLevel = null;
@@ -62,6 +62,12 @@ namespace BokeGameJam.Gameplay
             if (!CanInteract(interactor))
                 return;
 
+            ShowDialogue(dialogueText);
+        }
+
+        /// <summary>显示对话气泡；正文为空时用省略号。</summary>
+        protected void ShowDialogue(string body)
+        {
             EnsurePopupPanel();
             if (popupPanel == null)
             {
@@ -70,11 +76,11 @@ namespace BokeGameJam.Gameplay
             }
 
             string speaker = DisplayName;
-            string body = string.IsNullOrWhiteSpace(dialogueText) ? "……" : dialogueText.Trim();
-            popupPanel.Show(speaker, body, transform);
+            string text = string.IsNullOrWhiteSpace(body) ? "……" : body.Trim();
+            popupPanel.Show(speaker, text, transform);
         }
 
-        private void EnsurePopupPanel()
+        protected void EnsurePopupPanel()
         {
             if (popupPanel != null)
                 return;

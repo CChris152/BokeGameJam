@@ -2875,6 +2875,46 @@
             "sequenceIndex": 0,
             "dialogueText": "",
             "roomId": ""
+        },
+        {
+            "x": 12,
+            "y": -1,
+            "tileId": "Interactable/熊",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 46,
+            "y": -1,
+            "tileId": "Interactable/相机",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 34,
+            "y": -1,
+            "tileId": "Interactable/糖果",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
+        },
+        {
+            "x": 1,
+            "y": -1,
+            "tileId": "Interactable/花",
+            "mechanismId": "",
+            "sequenceGroupId": "",
+            "sequenceIndex": 0,
+            "dialogueText": "",
+            "roomId": ""
         }
     ],
     "tiles": []
