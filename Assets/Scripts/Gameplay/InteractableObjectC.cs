@@ -38,10 +38,11 @@ namespace BokeGameJam.Gameplay
             RefreshVisual();
         }
 
-        protected virtual void OnDisable()
+        protected override void OnDisable()
         {
             EventManager.Off<HeldItemInfo>(GameEvents.HeldItemChanged, OnHeldItemChanged);
             EventManager.Off<string>(GameEvents.MechanismSatisfied, OnMechanismSatisfied);
+            base.OnDisable();
         }
 
         public override bool CanInteract(PlayerInteractor interactor)

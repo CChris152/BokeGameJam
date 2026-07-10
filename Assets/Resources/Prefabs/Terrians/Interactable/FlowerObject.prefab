@@ -170,5 +170,9 @@ MonoBehaviour:
   displayName: "\u82B1"
   iconOverride: {fileID: 0}
   holdLocalOffset: {x: 0.35, y: 0.15}
+  interactHintPrefab: {fileID: 4770831128431962299, guid: d2b49c00d94d4c749a0aacac450eb690, type: 3}
+  hintLocalOffset: {x: 0, y: -0.85}
+  hintPrefabResourcePath: Prefabs/Terrians/Interactable/InteractHint
   flowerColor: 0
   respawnDelaySeconds: 5
+  discardFadeDuration: 0.25

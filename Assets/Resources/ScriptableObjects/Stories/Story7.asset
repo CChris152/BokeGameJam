@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f4d05d0ebf78042b77867a97716f36, type: 3}
   m_Name: Story7
   m_EditorClassIdentifier: 
-  storyId: "7"
+  storyId: 7
   lines:
-  - "残响: 客厅，留给夜色吧。"
-  - "残响: 家，本来就该是这个样子。"
+  - "\u6B8B\u54CD: \u5BA2\u5385\uFF0C\u7559\u7ED9\u591C\u8272\u5427\u3002"

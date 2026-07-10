@@ -13,20 +13,34 @@ namespace BokeGameJam.Gameplay
     /// mechanismId 用于把同一机制下的 A/B/C 绑在一起，避免多机制交叉。
     /// 所属层级由 <see cref="LevelObject.LevelLayer"/> 决定（Shared / A / B）。
     /// Prefab 结构：根节点挂交互脚本；子物体 Image 挂 SpriteRenderer + Collider2D。
+    /// 进入交互范围且 <see cref="ShouldShowInteractHint"/> 为真时显示 InteractHint。
     /// </summary>
     public class InteractableObject : LevelObject, IInteractable
     {
         private const string ImageChildName = "Image";
+        private const string InteractHintChildName = "InteractHint";
+        private const string DefaultHintPrefabResourcePath = "Prefabs/Terrians/Interactable/InteractHint";
 
         [SerializeField] private string mechanismId;
         [SerializeField] private string displayName;
         [SerializeField] private Sprite iconOverride;
         [SerializeField] private Vector2 holdLocalOffset = new(0.35f, 0.15f);
 
+        [Header("Interact Hint")]
+        [Tooltip("互动提示预制体；留空则尝试 Resources 路径。")]
+        [SerializeField] private GameObject interactHintPrefab;
+        [Tooltip("相对本物体的本地偏移（下方为正 Y 负值）。")]
+        [SerializeField] private Vector2 hintLocalOffset = new(0f, -0.85f);
+        [Tooltip("互动提示本地缩放。")]
+        [SerializeField] private Vector3 hintLocalScale = Vector3.one;
+        [SerializeField] private string hintPrefabResourcePath = DefaultHintPrefabResourcePath;
+
         private Collider2D col;
         private SpriteRenderer spriteRenderer;
         private Vector3 originalLocalScale;
         private bool isHeld;
+        private bool isInInteractRange;
+        private GameObject hintInstance;
 
         public bool IsHeld => isHeld;
         public virtual InteractMode Mode => InteractMode.PickUp;
@@ -39,6 +53,7 @@ namespace BokeGameJam.Gameplay
 
         protected Collider2D Col => col;
         protected SpriteRenderer SpriteRenderer => spriteRenderer;
+        protected bool IsInInteractRange => isInInteractRange;
 
         /// <summary>关卡编辑器写入配置；子类可覆盖以处理序列字段。</summary>
         public virtual void ApplyEditorConfig(string newMechanismId, string sequenceGroupId = null, int sequenceIndex = 0)
@@ -50,6 +65,12 @@ namespace BokeGameJam.Gameplay
         {
             ResolveVisualAndCollider();
             originalLocalScale = transform.localScale;
+        }
+
+        protected virtual void OnDisable()
+        {
+            isInInteractRange = false;
+            SetHintVisible(false);
         }
 
         /// <summary>
@@ -86,6 +107,8 @@ namespace BokeGameJam.Gameplay
 
         public virtual void SetInInteractRange(bool inRange)
         {
+            isInInteractRange = inRange;
+            RefreshInteractHint();
         }
 
         public virtual bool Interact(PlayerInteractor interactor)
@@ -130,6 +153,9 @@ namespace BokeGameJam.Gameplay
 
             if (col != null)
                 col.enabled = false;
+
+            isInInteractRange = false;
+            RefreshInteractHint();
         }
 
         public virtual void Drop(Vector2 worldPosition)
@@ -141,6 +167,82 @@ namespace BokeGameJam.Gameplay
 
             if (col != null)
                 col.enabled = true;
+
+            RefreshInteractHint();
+        }
+
+        /// <summary>是否显示互动提示；子类可叠加解锁 / 持有物等条件。</summary>
+        protected virtual bool ShouldShowInteractHint()
+        {
+            return isInInteractRange
+                && !isHeld
+                && isActiveAndEnabled
+                && gameObject.activeInHierarchy;
+        }
+
+        /// <summary>按 <see cref="ShouldShowInteractHint"/> 刷新提示显隐。</summary>
+        protected void RefreshInteractHint()
+        {
+            SetHintVisible(ShouldShowInteractHint());
+        }
+
+        private void SetHintVisible(bool show)
+        {
+            if (!show)
+            {
+                // Instantiate 复制出的物体可能带着已激活的 InteractHint，但 hintInstance 字段为空。
+                if (hintInstance == null)
+                {
+                    Transform existing = transform.Find(InteractHintChildName);
+                    if (existing != null)
+                        hintInstance = existing.gameObject;
+                }
+
+                if (hintInstance != null)
+                    hintInstance.SetActive(false);
+                return;
+            }
+
+            EnsureHintInstance();
+            if (hintInstance == null)
+                return;
+
+            hintInstance.transform.localPosition = hintLocalOffset;
+            hintInstance.transform.localScale = hintLocalScale;
+            hintInstance.SetActive(true);
+        }
+
+        private void EnsureHintInstance()
+        {
+            if (hintInstance != null)
+                return;
+
+            Transform existing = transform.Find(InteractHintChildName);
+            if (existing != null)
+            {
+                hintInstance = existing.gameObject;
+                hintInstance.transform.localScale = hintLocalScale;
+                return;
+            }
+
+            GameObject prefab = interactHintPrefab;
+            if (prefab == null && !string.IsNullOrWhiteSpace(hintPrefabResourcePath))
+                prefab = Resources.Load<GameObject>(hintPrefabResourcePath.Trim());
+
+            if (prefab == null)
+            {
+                Debug.LogWarning(
+                    $"[InteractableObject] '{name}' 缺少互动提示预制体（interactHintPrefab / Resources '{hintPrefabResourcePath}'）。",
+                    this);
+                return;
+            }
+
+            hintInstance = Instantiate(prefab, transform);
+            hintInstance.name = InteractHintChildName;
+            hintInstance.transform.localPosition = hintLocalOffset;
+            hintInstance.transform.localRotation = Quaternion.identity;
+            hintInstance.transform.localScale = hintLocalScale;
+            hintInstance.SetActive(false);
         }
     }
 }

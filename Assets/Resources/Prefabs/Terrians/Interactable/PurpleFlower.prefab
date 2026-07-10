@@ -48,8 +48,12 @@ MonoBehaviour:
   levelLayer: 0
   mechanismId: 
   displayName: "\u7D2B\u82B1"
-  iconOverride: {fileID: 21300000, guid: 40b4e86b8fa641f4f84c100d63e77a81, type: 3}
+  iconOverride: {fileID: 21300000, guid: 01f272f681fd3ac45b902e4b8904ed06, type: 3}
   holdLocalOffset: {x: 0.35, y: 0.15}
+  interactHintPrefab: {fileID: 4770831128431962299, guid: d2b49c00d94d4c749a0aacac450eb690, type: 3}
+  hintLocalOffset: {x: 0, y: -0.85}
+  hintLocalScale: {x: 1, y: 1, z: 1}
+  hintPrefabResourcePath: Prefabs/Terrians/Interactable/InteractHint
   flowerColor: 2
   respawnDelaySeconds: 5
   discardFadeDuration: 0.25
@@ -80,7 +84,7 @@ Transform:
   m_GameObject: {fileID: 2933725045221405296}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.55, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -127,7 +131,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 40b4e86b8fa641f4f84c100d63e77a81, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 01f272f681fd3ac45b902e4b8904ed06, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

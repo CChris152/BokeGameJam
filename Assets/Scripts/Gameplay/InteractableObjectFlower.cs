@@ -63,7 +63,7 @@ namespace BokeGameJam.Gameplay
                 discardFadeRoutine = StartCoroutine(DiscardFadeAndDestroy());
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
             if (respawnRoutine != null)
             {
@@ -76,6 +76,8 @@ namespace BokeGameJam.Gameplay
                 StopCoroutine(discardFadeRoutine);
                 discardFadeRoutine = null;
             }
+
+            base.OnDisable();
         }
 
         private void OnDestroy()
@@ -98,6 +100,15 @@ namespace BokeGameJam.Gameplay
             return !isDepleted && !IsHeld;
         }
 
+        protected override bool ShouldShowInteractHint()
+        {
+            // 枯萎中不显示；拿在身上时由基类 !IsHeld 隐藏。
+            if (isDiscarding || isDepleted)
+                return false;
+
+            return base.ShouldShowInteractHint();
+        }
+
         public override bool Interact(PlayerInteractor interactor)
         {
             if (!CanInteract(interactor))
@@ -113,6 +124,8 @@ namespace BokeGameJam.Gameplay
             InteractableObjectFlower cut = Instantiate(this, transform.position, transform.rotation);
             cut.PrepareAsHeldCopy();
             cut.name = name + "_Held";
+            // 复制体会带上已显示的 E 键，立刻关掉（拿在身上不应再显示）。
+            cut.RefreshInteractHint();
 
             BeginDepleted();
 
@@ -211,6 +224,8 @@ namespace BokeGameJam.Gameplay
             if (SpriteRenderer != null)
                 SpriteRenderer.enabled = false;
 
+            RefreshInteractHint();
+
             if (respawnRoutine != null)
                 StopCoroutine(respawnRoutine);
 
@@ -232,6 +247,8 @@ namespace BokeGameJam.Gameplay
 
             if (SpriteRenderer != null)
                 SpriteRenderer.enabled = true;
+
+            RefreshInteractHint();
         }
 
         private IEnumerator RespawnAfterDelay()
@@ -249,6 +266,7 @@ namespace BokeGameJam.Gameplay
                 SpriteRenderer.enabled = true;
 
             respawnRoutine = null;
+            RefreshInteractHint();
         }
     }
 }

@@ -105,6 +105,7 @@ namespace BokeGameJam.Gameplay
 
             allActive.Remove(this);
             UnregisterFromGroup();
+            base.OnDisable();
         }
 
         public override bool CanInteract(PlayerInteractor interactor)
@@ -119,6 +120,17 @@ namespace BokeGameJam.Gameplay
                 return false;
 
             return IsNextInSequence();
+        }
+
+        protected override bool ShouldShowInteractHint()
+        {
+            if (activated)
+                return false;
+
+            if (!string.IsNullOrWhiteSpace(sequenceGroupId) && pendingResetGroups.Contains(sequenceGroupId))
+                return false;
+
+            return base.ShouldShowInteractHint() && IsNextInSequence();
         }
 
         public override void OnInteract(PlayerInteractor interactor)
@@ -247,6 +259,7 @@ namespace BokeGameJam.Gameplay
         {
             activated = value;
             ApplyVisual();
+            RefreshInteractHint();
         }
 
         protected virtual void ApplyVisual()

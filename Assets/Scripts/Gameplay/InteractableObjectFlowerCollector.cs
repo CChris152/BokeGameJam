@@ -7,8 +7,8 @@ namespace BokeGameJam.Gameplay
 {
     /// <summary>
     /// 花朵收集交付处（InteractableObjectC 变体）。
-    /// 玩家持有红花 / 黄花时按 E 交付；持有非红非黄花时可互动但视为错误提交。
-    /// 数量达标后通关并切换到下一关。
+    /// 本体不显示多边形；玩家持花靠近时只显示 E 提示，按 E 交付。
+    /// 持有红花 / 黄花时交付计数；持有非红非黄花时可互动但视为错误提交。
     /// </summary>
     public class InteractableObjectFlowerCollector : InteractableObjectC
     {
@@ -45,6 +45,16 @@ namespace BokeGameJam.Gameplay
                 || IsHoldingNonAcceptedFlower(interactor);
         }
 
+        protected override bool ShouldShowInteractHint()
+        {
+            if (!base.ShouldShowInteractHint() || completed)
+                return false;
+
+            PlayerInteractor player = UnityEngine.Object.FindObjectOfType<PlayerInteractor>();
+            return TryGetNeededHeldFlower(player, out _)
+                || IsHoldingNonAcceptedFlower(player);
+        }
+
         public override void OnInteract(PlayerInteractor interactor)
         {
             if (TryGetNeededHeldFlower(interactor, out FlowerColor color))
@@ -61,12 +71,12 @@ namespace BokeGameJam.Gameplay
                 if (IsCollectionComplete())
                 {
                     completed = true;
-                    ApplyVisual(false);
+                    RefreshInteractHint();
                     TryAdvanceToNextLevel();
                     return;
                 }
 
-                RefreshVisual();
+                RefreshInteractHint();
                 return;
             }
 
@@ -78,7 +88,7 @@ namespace BokeGameJam.Gameplay
 
         protected override void OnHeldItemChanged(HeldItemInfo info)
         {
-            RefreshVisual();
+            RefreshInteractHint();
         }
 
         protected override void OnMechanismSatisfied(string mechanismId)
@@ -88,16 +98,20 @@ namespace BokeGameJam.Gameplay
 
         protected override void RefreshVisual()
         {
-            if (completed)
-            {
-                ApplyVisual(false);
-                return;
-            }
+            // 交付点本体不显示多边形，只靠 InteractHint + 碰撞触发。
+            HideBodyVisual();
+        }
 
-            PlayerInteractor player = UnityEngine.Object.FindObjectOfType<PlayerInteractor>();
-            bool open = TryGetNeededHeldFlower(player, out _)
-                || IsHoldingNonAcceptedFlower(player);
-            ApplyVisual(open);
+        protected override void Awake()
+        {
+            base.Awake();
+            HideBodyVisual();
+        }
+
+        private void HideBodyVisual()
+        {
+            if (SpriteRenderer != null)
+                SpriteRenderer.enabled = false;
         }
 
         protected override bool IsRequirementMet(PlayerInteractor interactor)

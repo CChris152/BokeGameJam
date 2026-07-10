@@ -67,6 +67,7 @@ namespace BokeGameJam.Gameplay
             if (HasHeldCandy(interactor))
             {
                 ShowChoiceOptions(interactor);
+                RefreshInteractHint();
                 return;
             }
 
@@ -78,6 +79,7 @@ namespace BokeGameJam.Gameplay
             }
 
             ShowDialogue(dialogueText);
+            RefreshInteractHint();
         }
 
         private void ShowChoiceOptions(PlayerInteractor interactor)
