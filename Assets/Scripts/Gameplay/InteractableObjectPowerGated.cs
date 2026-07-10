@@ -13,21 +13,34 @@ namespace BokeGameJam.Gameplay
 
     /// <summary>
     /// 电闸锁定的可拾取物（熊 / 相机 / 糖果 / 花共用）。
-    /// 开局不可互动；收到 <see cref="GameEvents.PowerSwitchActivated"/> 后才可捡起。
+    /// 开局不可互动；收到 <see cref="GameEvents.PowerSwitchActivated"/> 后才可捡起，并开启本地光源。
     /// 解锁且玩家进入交互范围时，在物体下方显示互动提示。
     /// </summary>
     public class InteractableObjectPowerGated : InteractableObject
     {
+        private const string LightGlowChildName = "LightGlow";
+
         private static bool powerSwitchActivated;
 
         [Header("Power Gate")]
         [SerializeField] private PowerGatedItemKind itemKind = PowerGatedItemKind.Bear;
+
+        [Header("Power Light")]
+        [Tooltip("电闸启动后开启的光源（默认找子物体 LightGlow）。")]
+        [SerializeField] private GameObject lightGlowObject;
 
         private bool unlocked;
 
         public PowerGatedItemKind ItemKind => itemKind;
         public bool IsUnlocked => unlocked;
         public static bool IsPowerSwitchActivated => powerSwitchActivated;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            ResolveLightGlow();
+            ApplyLightState(powerSwitchActivated);
+        }
 
         private void OnEnable()
         {
@@ -64,7 +77,25 @@ namespace BokeGameJam.Gameplay
         private void SetUnlocked(bool value)
         {
             unlocked = value;
+            ApplyLightState(value);
             RefreshInteractHint();
+        }
+
+        private void ResolveLightGlow()
+        {
+            if (lightGlowObject != null)
+                return;
+
+            Transform child = transform.Find(LightGlowChildName);
+            if (child != null)
+                lightGlowObject = child.gameObject;
+        }
+
+        private void ApplyLightState(bool on)
+        {
+            ResolveLightGlow();
+            if (lightGlowObject != null)
+                lightGlowObject.SetActive(on);
         }
 
         protected override bool ShouldShowInteractHint()
