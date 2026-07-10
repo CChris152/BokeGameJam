@@ -1,17 +1,22 @@
+using System.Collections.Generic;
 using UnityEngine;
 using BokeGameJam.Core;
+using BokeGameJam.Levels;
 
 namespace BokeGameJam.Gameplay
 {
     /// <summary>
     /// 路灯（InteractableObjectB 变体）。
-    /// 表世界开局熄灭，按 E 切换本地小光源与亮/关灯贴图；同组顺序全部正确时播放提示音。
+    /// 表世界开局熄灭，按 E 切换本地小光源与亮/关灯贴图。
     /// 里世界仅作为位置标记，默认不可交互。
+    /// 监听 <see cref="GameEvents.WallLampSequenceCompleted"/>：按 X 从左到右编号 1..N，
+    /// 玩家须按壁灯闪烁顺序开灯；全对则通关 Level2，错则全部灭灯。
     /// </summary>
     public class InteractableObjectStreetLamp : InteractableObjectB
     {
         private const string OffSpriteResourcePath = "Art/Pictures/关灯";
         private const string OnSpriteResourcePath = "Art/Pictures/亮灯";
+        private const string Level2Id = "level_2";
 
         [Header("Street Lamp")]
         [Tooltip("亮灯时显示的小光源物体（默认找子物体 LightGlow）。")]
@@ -30,9 +35,21 @@ namespace BokeGameJam.Gameplay
 
         private bool wasActivated;
         private AudioSource localAudioSource;
+        private int lampNumber;
+
+        private static readonly List<InteractableObjectStreetLamp> registered = new();
+        private static int[] expectedOrder = System.Array.Empty<int>();
+        private static int progress;
+        private static bool puzzleArmed;
+        private static bool puzzleCompleted;
+        private static int lastRegisterFrame = -1;
+
         private static AudioClip fallbackBeepClip;
         private static Sprite cachedOffSprite;
         private static Sprite cachedOnSprite;
+
+        /// <summary>按 X 从左到右的 1-based 编号；未注册时为 0。</summary>
+        public int LampNumber => lampNumber;
 
         protected override void Awake()
         {
@@ -41,6 +58,19 @@ namespace BokeGameJam.Gameplay
             EnsureLampSprites();
             wasActivated = IsActivated;
             ApplyLampState();
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            EventManager.On<int[]>(GameEvents.WallLampSequenceCompleted, OnWallLampSequenceCompleted);
+        }
+
+        protected override void OnDisable()
+        {
+            EventManager.Off<int[]>(GameEvents.WallLampSequenceCompleted, OnWallLampSequenceCompleted);
+            registered.Remove(this);
+            base.OnDisable();
         }
 
         private void LateUpdate()
@@ -52,6 +82,67 @@ namespace BokeGameJam.Gameplay
             ApplyLampState();
         }
 
+        private void OnWallLampSequenceCompleted(int[] flashOrder)
+        {
+            RegisterPuzzleFromFlashOrder(flashOrder);
+        }
+
+        private static void RegisterPuzzleFromFlashOrder(int[] flashOrder)
+        {
+            // 每个路灯都会收到同一事件；同帧只注册一次。
+            if (Time.frameCount == lastRegisterFrame)
+                return;
+            lastRegisterFrame = Time.frameCount;
+
+            InteractableObjectStreetLamp[] lamps = Object.FindObjectsOfType<InteractableObjectStreetLamp>();
+            System.Array.Sort(lamps, CompareByXThenId);
+
+            registered.Clear();
+            for (int i = 0; i < lamps.Length; i++)
+            {
+                InteractableObjectStreetLamp lamp = lamps[i];
+                if (lamp == null)
+                    continue;
+
+                lamp.lampNumber = i + 1;
+                lamp.SetActivated(false);
+                lamp.wasActivated = false;
+                registered.Add(lamp);
+            }
+
+            expectedOrder = flashOrder != null && flashOrder.Length > 0
+                ? (int[])flashOrder.Clone()
+                : System.Array.Empty<int>();
+            progress = 0;
+            puzzleCompleted = false;
+            puzzleArmed = expectedOrder.Length > 0 && registered.Count > 0;
+
+            if (!puzzleArmed)
+            {
+                Debug.LogWarning("[InteractableObjectStreetLamp] Wall lamp sequence completed but puzzle could not be armed.");
+                return;
+            }
+
+            Debug.Log(
+                $"[InteractableObjectStreetLamp] Registered {registered.Count} lamps by X; expected order=[{string.Join(",", expectedOrder)}]");
+        }
+
+        private static int CompareByXThenId(InteractableObjectStreetLamp a, InteractableObjectStreetLamp b)
+        {
+            if (ReferenceEquals(a, b))
+                return 0;
+            if (a == null)
+                return 1;
+            if (b == null)
+                return -1;
+
+            int cmp = a.transform.position.x.CompareTo(b.transform.position.x);
+            if (cmp != 0)
+                return cmp;
+
+            return a.GetInstanceID().CompareTo(b.GetInstanceID());
+        }
+
         public override bool CanInteract(PlayerInteractor interactor)
         {
             if (!isActiveAndEnabled || !gameObject.activeInHierarchy)
@@ -60,7 +151,13 @@ namespace BokeGameJam.Gameplay
             if (interactOnlyInOuterWorld && IsInUnderworld())
                 return false;
 
-            // Already on: allow E to turn off (toggle).
+            if (puzzleCompleted)
+                return false;
+
+            if (puzzleArmed)
+                return !IsActivated;
+
+            // 表演前：可自由开关。
             if (IsActivated)
                 return true;
 
@@ -72,50 +169,79 @@ namespace BokeGameJam.Gameplay
             if (!CanInteract(interactor))
                 return;
 
-            if (IsActivated)
+            if (!puzzleArmed)
             {
-                SetActivated(false);
-                wasActivated = false;
-                ApplyLampState();
+                if (IsActivated)
+                {
+                    SetActivated(false);
+                    wasActivated = false;
+                    return;
+                }
+
+                base.OnInteract(interactor);
+                wasActivated = IsActivated;
                 return;
             }
 
-            base.OnInteract(interactor);
-            wasActivated = IsActivated;
-            ApplyLampState();
+            TryActivateInPuzzleOrder();
+        }
 
-            if (IsActivated && AreAllLampsInSequenceGroupActivated())
-                PlaySequenceSuccessAudio();
+        private void TryActivateInPuzzleOrder()
+        {
+            if (puzzleCompleted || expectedOrder == null || progress >= expectedOrder.Length)
+                return;
+
+            int expectedLamp = expectedOrder[progress];
+            if (lampNumber != expectedLamp)
+            {
+                TurnOffAllRegistered();
+                progress = 0;
+                return;
+            }
+
+            SetActivated(true);
+            wasActivated = true;
+            progress++;
+
+            if (progress < expectedOrder.Length)
+                return;
+
+            CompleteLevel2Puzzle();
+        }
+
+        private static void TurnOffAllRegistered()
+        {
+            for (int i = 0; i < registered.Count; i++)
+            {
+                InteractableObjectStreetLamp lamp = registered[i];
+                if (lamp == null)
+                    continue;
+
+                lamp.SetActivated(false);
+                lamp.wasActivated = false;
+            }
+        }
+
+        private void CompleteLevel2Puzzle()
+        {
+            if (puzzleCompleted)
+                return;
+
+            puzzleCompleted = true;
+            PlaySequenceSuccessAudio();
+
+            LevelManager levelManager = LevelManager.Instance;
+            if (levelManager != null && levelManager.HasCurrentLevel)
+                levelManager.CompleteCurrentLevel();
+            else
+                EventManager.Emit(GameEvents.LevelCompleted, Level2Id);
+
+            Debug.Log("[InteractableObjectStreetLamp] Street lamp sequence correct — Level2 completed.", this);
         }
 
         protected override void ApplyVisual()
         {
             ApplyLampState();
-        }
-
-        private bool AreAllLampsInSequenceGroupActivated()
-        {
-            string groupId = SequenceGroupId;
-            if (string.IsNullOrWhiteSpace(groupId))
-                return false;
-
-            InteractableObjectStreetLamp[] lamps = FindObjectsOfType<InteractableObjectStreetLamp>();
-            bool foundMember = false;
-            for (int i = 0; i < lamps.Length; i++)
-            {
-                InteractableObjectStreetLamp lamp = lamps[i];
-                if (lamp == null)
-                    continue;
-
-                if (!string.Equals(lamp.SequenceGroupId, groupId, System.StringComparison.Ordinal))
-                    continue;
-
-                foundMember = true;
-                if (!lamp.IsActivated)
-                    return false;
-            }
-
-            return foundMember;
         }
 
         private void ResolveLightGlow()
@@ -181,7 +307,6 @@ namespace BokeGameJam.Gameplay
                 return;
             }
 
-            // Fallback cue when no clip / SFX id is assigned yet.
             localAudioSource.PlayOneShot(GetFallbackBeepClip());
         }
 

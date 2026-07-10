@@ -237,15 +237,19 @@ PrefabInstance:
     - target: {fileID: 3281336027739035581, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 71d0224e0cbaab34fa45d91e965dbac0, type: 3}
+      objectReference: {fileID: 21300000, guid: e0aff2700ed8f664ea1f78b561a72f24, type: 3}
+    - target: {fileID: 3281336027739035581, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4340439550777877636, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
       propertyPath: underworldSprite
       value: 
-      objectReference: {fileID: 21300000, guid: 6ea456d03e313864c838cb853f2e9ac8, type: 3}
+      objectReference: {fileID: 21300000, guid: 1b409319ab31a5a489efa42a8ed33a65, type: 3}
     - target: {fileID: 4340439550777877636, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
       propertyPath: livingWorldSprite
       value: 
-      objectReference: {fileID: 21300000, guid: 71d0224e0cbaab34fa45d91e965dbac0, type: 3}
+      objectReference: {fileID: 21300000, guid: e0aff2700ed8f664ea1f78b561a72f24, type: 3}
     - target: {fileID: 6219774574562559890, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 55.64
@@ -699,11 +703,19 @@ PrefabInstance:
     - target: {fileID: 3281336027739035581, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 9a0d113f08ded594daa9059bb206c408, type: 3}
+      objectReference: {fileID: 21300000, guid: 59e55dca1b222784da3e91e9563225d1, type: 3}
+    - target: {fileID: 3281336027739035581, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4340439550777877636, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
+      propertyPath: underworldSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d033934fbb86547459d03fe4f09be75c, type: 3}
     - target: {fileID: 4340439550777877636, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
       propertyPath: livingWorldSprite
       value: 
-      objectReference: {fileID: 21300000, guid: 9a0d113f08ded594daa9059bb206c408, type: 3}
+      objectReference: {fileID: 21300000, guid: 59e55dca1b222784da3e91e9563225d1, type: 3}
     - target: {fileID: 6219774574562559890, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 24.2
@@ -961,6 +973,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: "\u524D\u8857\u9053"
       objectReference: {fileID: 0}
+    - target: {fileID: 2677670495659346456, guid: b558b390fb40ad748bbf65a3aa4398b5, type: 3}
+      propertyPath: livingWorldSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 92f55f01ca874094ea20dc7286208a61, type: 3}
+    - target: {fileID: 6133548657630117871, guid: b558b390fb40ad748bbf65a3aa4398b5, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 92f55f01ca874094ea20dc7286208a61, type: 3}
     - target: {fileID: 8439988422742375071, guid: b558b390fb40ad748bbf65a3aa4398b5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5
@@ -1050,9 +1070,29 @@ PrefabInstance:
       value: "\u540E\u8857\u9053"
       objectReference: {fileID: 0}
     - target: {fileID: 3281336027739035581, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 1c20ea8dacb1497449eb5d7ad48a60d1, type: 3}
+    - target: {fileID: 3281336027739035581, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
       propertyPath: m_SortingOrder
       value: -1094
       objectReference: {fileID: 0}
+    - target: {fileID: 3281336027739035581, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4340439550777877636, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
+      propertyPath: lightsOffSprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4340439550777877636, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
+      propertyPath: underworldSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 2f46387bd3c4fd54c99efa28c70f8b61, type: 3}
+    - target: {fileID: 4340439550777877636, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
+      propertyPath: livingWorldSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 1c20ea8dacb1497449eb5d7ad48a60d1, type: 3}
     - target: {fileID: 6219774574562559890, guid: 7a5783ccebe84ef4a87c12cef195aca3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 41.47
