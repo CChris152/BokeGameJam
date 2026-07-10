@@ -108,6 +108,7 @@ namespace BokeGameJam.Puzzles
 
             solved = true;
             onSolved?.Run(new PuzzleActionContext(signal, gameObject));
+            PlaySuccessSfx();
 
             if (resetAfterSolved && !solveOnlyOnce)
                 ResetProgress();
@@ -116,6 +117,24 @@ namespace BokeGameJam.Puzzles
         private void RunFailure(PuzzleSignal signal)
         {
             onFailed?.Run(new PuzzleActionContext(signal, gameObject));
+            PlayFailureSfx();
+        }
+
+        private static void PlaySuccessSfx()
+        {
+            if (GameAudioManager.Instance != null)
+                GameAudioManager.Instance.PlaySFXByResourcePath(GameSfxPaths.PuzzleSuccess);
+        }
+
+        private static void PlayFailureSfx()
+        {
+            if (GameAudioManager.Instance == null)
+                return;
+
+            GameAudioManager.Instance.PlayRandomSFXByResourcePaths(
+                1f,
+                GameSfxPaths.PuzzleFailure1,
+                GameSfxPaths.PuzzleFailure3);
         }
 
         private static string Normalize(string value)

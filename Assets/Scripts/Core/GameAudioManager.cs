@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace BokeGameJam.Core
 {
@@ -31,6 +32,8 @@ namespace BokeGameJam.Core
 
         private readonly Dictionary<string, AudioSource> loopingSfxSources = new();
         private readonly Dictionary<string, float> loopingSfxVolumeScales = new();
+        private readonly Dictionary<string, AudioClip> resourcePathClips = new();
+        private readonly HashSet<string> missingResourcePaths = new();
 
         private string currentBgmId;
         private float currentBgmVolumeScale = 1f;
@@ -59,10 +62,35 @@ namespace BokeGameJam.Core
             ApplyVolumes();
         }
 
+        private void OnEnable()
+        {
+            if (Instance != this)
+                return;
+
+            EventManager.On<string>(GameEvents.LevelCompleted, OnLevelCompleted);
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        private void OnDisable()
+        {
+            if (Instance != this)
+                return;
+
+            EventManager.Off<string>(GameEvents.LevelCompleted, OnLevelCompleted);
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        private void OnDestroy()
+        {
+            if (Instance == this)
+                Instance = null;
+        }
+
         private void Start()
         {
             // 启动时从 DataManager 分别恢复 BGM / SFX 音量
             LoadVolumesFromDataManager();
+            ApplySceneAmbience(SceneManager.GetActiveScene().name);
         }
 
         /// <summary>
@@ -220,6 +248,39 @@ namespace BokeGameJam.Core
             PlaySFX(sfx, volumeScale);
         }
 
+        /// <summary>
+        /// 直接播放 Resources 下的音效。路径相对 Assets/Resources，且不含扩展名。
+        /// 适合尚未录入 ResourceDefinitionDatabase 的快速迭代音效。
+        /// </summary>
+        public void PlaySFXByResourcePath(string resourcePath, float volumeScale = 1f)
+        {
+            AudioClip clip = LoadSfxByResourcePath(resourcePath);
+            if (clip == null)
+                return;
+
+            sfxOneShotSource.PlayOneShot(clip, sfxVolume * Mathf.Max(0f, volumeScale));
+        }
+
+        public void PlayRandomSFXByResourcePaths(float volumeScale, params string[] resourcePaths)
+        {
+            if (resourcePaths == null || resourcePaths.Length == 0)
+                return;
+
+            var availableClips = new List<AudioClip>(resourcePaths.Length);
+            for (int i = 0; i < resourcePaths.Length; i++)
+            {
+                AudioClip clip = LoadSfxByResourcePath(resourcePaths[i]);
+                if (clip != null)
+                    availableClips.Add(clip);
+            }
+
+            if (availableClips.Count == 0)
+                return;
+
+            AudioClip selected = availableClips[Random.Range(0, availableClips.Count)];
+            sfxOneShotSource.PlayOneShot(selected, sfxVolume * Mathf.Max(0f, volumeScale));
+        }
+
         public void PlaySFXLoop(ResourceDefinitionDatabase.SoundResource sfx, float volumeScale = 1f)
         {
             if (!TryLoadSound(sfx, ResourceDefinitionDatabase.SoundCategory.SFX, out AudioClip clip))
@@ -246,6 +307,33 @@ namespace BokeGameJam.Core
             }
 
             PlaySFXLoop(sfx, volumeScale);
+        }
+
+        public void PlaySFXLoopByResourcePath(string resourcePath, float volumeScale = 1f)
+        {
+            AudioClip clip = LoadSfxByResourcePath(resourcePath);
+            if (clip == null)
+                return;
+
+            string loopKey = GetResourceLoopKey(resourcePath);
+            StopSFXById(loopKey);
+
+            AudioSource source = CreateChildSource($"SFX_Loop_{clip.name}", loop: true);
+            float finalVolumeScale = Mathf.Max(0f, volumeScale);
+            source.clip = clip;
+            source.volume = sfxVolume * finalVolumeScale;
+            source.Play();
+
+            loopingSfxSources[loopKey] = source;
+            loopingSfxVolumeScales[loopKey] = finalVolumeScale;
+        }
+
+        public void StopSFXLoopByResourcePath(string resourcePath)
+        {
+            if (string.IsNullOrWhiteSpace(resourcePath))
+                return;
+
+            StopSFXById(GetResourceLoopKey(resourcePath));
         }
 
         public void StopSFX(ResourceDefinitionDatabase.SoundResource sfx)
@@ -317,6 +405,59 @@ namespace BokeGameJam.Core
             source.playOnAwake = false;
             source.loop = loop;
             return source;
+        }
+
+        private AudioClip LoadSfxByResourcePath(string resourcePath)
+        {
+            if (string.IsNullOrWhiteSpace(resourcePath))
+            {
+                Debug.LogWarning("[GameAudioManager] SFX resource path is empty.");
+                return null;
+            }
+
+            string normalizedPath = resourcePath.Trim();
+            if (resourcePathClips.TryGetValue(normalizedPath, out AudioClip cachedClip))
+                return cachedClip;
+
+            AudioClip clip = Resources.Load<AudioClip>(normalizedPath);
+            if (clip != null)
+            {
+                resourcePathClips[normalizedPath] = clip;
+                missingResourcePaths.Remove(normalizedPath);
+                return clip;
+            }
+
+            if (missingResourcePaths.Add(normalizedPath))
+                Debug.LogWarning($"[GameAudioManager] Missing SFX at Resources/{normalizedPath}");
+
+            return null;
+        }
+
+        private static string GetResourceLoopKey(string resourcePath)
+        {
+            return $"resource:{resourcePath.Trim()}";
+        }
+
+        private void OnLevelCompleted(string _)
+        {
+            PlaySFXByResourcePath(GameSfxPaths.LevelCompleted);
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (mode == LoadSceneMode.Single)
+                ApplySceneAmbience(scene.name);
+        }
+
+        private void ApplySceneAmbience(string sceneName)
+        {
+            StopSFXLoopByResourcePath(GameSfxPaths.FireplaceLoop);
+            StopSFXLoopByResourcePath(GameSfxPaths.ClockTickLoop);
+
+            if (string.Equals(sceneName, "Level1", System.StringComparison.Ordinal))
+                PlaySFXLoopByResourcePath(GameSfxPaths.FireplaceLoop, 0.65f);
+            else if (string.Equals(sceneName, "Level3", System.StringComparison.Ordinal))
+                PlaySFXLoopByResourcePath(GameSfxPaths.ClockTickLoop, 0.55f);
         }
 
         private void ApplyVolumes()
@@ -475,5 +616,27 @@ namespace BokeGameJam.Core
         }
 
         #endregion
+    }
+
+    /// <summary>已通过音效在 Resources/Audio/SFX 下的统一路径。</summary>
+    public static class GameSfxPaths
+    {
+        private const string Root = "Audio/SFX/";
+
+        public const string WorldSwitch2 = Root + "切换2";
+        public const string WorldSwitch4 = Root + "切换4";
+        public const string InteractionConfirm = Root + "交互-获得或收取成功-v2";
+        public const string PuzzleSuccess = Root + "提示-顺序正确";
+        public const string PuzzleFailure1 = Root + "切换1";
+        public const string PuzzleFailure3 = Root + "切换3";
+        public const string UiHover = Root + "交互-鼠标悬停";
+        public const string UiConfirm = Root + "交互-点击";
+        public const string UiBack = Root + "返回";
+        public const string PauseToggle = Root + "暂停";
+        public const string LevelCompleted = Root + "关卡完成-找到本关记忆";
+        public const string FireplaceLoop = Root + "木材在火炉里燃烧_耳聆网_[声音ID：10744]";
+        public const string LightSwitch = Root + "开灯-拉绳灯";
+        public const string ClockTickLoop = Root + "钟表-滴答滴答";
+        public const string ClockHourBell = Root + "完成谜题-钟声到整点提示音";
     }
 }

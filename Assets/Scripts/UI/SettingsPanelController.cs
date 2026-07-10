@@ -209,12 +209,18 @@ namespace BokeGameJam.UI
         /// <summary>清空数据按钮回调（占位，后续接入存档清理）。</summary>
         private void OnClearDataClicked()
         {
+            if (GameAudioManager.Instance != null)
+                GameAudioManager.Instance.PlaySFXByResourcePath(GameSfxPaths.UiConfirm);
+
             // TODO: 清除存档数据
         }
 
         /// <summary>关闭按钮：通过 UIManager 卸载本弹窗。</summary>
         private void OnCloseClicked()
         {
+            if (GameAudioManager.Instance != null)
+                GameAudioManager.Instance.PlaySFXByResourcePath(GameSfxPaths.UiBack);
+
             if (UIManager.Instance == null)
             {
                 Debug.LogError("[SettingsPanelController] UIManager instance is missing.", this);

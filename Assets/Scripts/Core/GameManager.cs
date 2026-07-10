@@ -132,7 +132,18 @@ namespace BokeGameJam.Core
 
         // ---------- 事件处理 ----------
 
-        private void OnWorldToggle() => ToggleWorld();
+        private void OnWorldToggle()
+        {
+            ToggleWorld();
+
+            if (GameAudioManager.Instance != null)
+            {
+                GameAudioManager.Instance.PlayRandomSFXByResourcePaths(
+                    1f,
+                    GameSfxPaths.WorldSwitch2,
+                    GameSfxPaths.WorldSwitch4);
+            }
+        }
 
         /// <summary>切换阳间 / 阴间。</summary>
         public void ToggleWorld()

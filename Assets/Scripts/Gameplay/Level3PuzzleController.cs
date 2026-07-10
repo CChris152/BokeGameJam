@@ -149,7 +149,7 @@ namespace BokeGameJam.Gameplay
             {
                 RestoreAllShards();
                 mirrorFrame.RefreshTargetVisual();
-                PlayFeedback(shardRejectedSfxOverride, shardRejectedSfxId);
+                PlayFailureFeedback(shardRejectedSfxOverride, shardRejectedSfxId);
                 EventManager.Emit(Level3PuzzleEvents.SequenceReset);
                 Debug.Log("[Level3] Mirror shard order was incorrect; sequence reset.", this);
                 return;
@@ -158,7 +158,10 @@ namespace BokeGameJam.Gameplay
             shard.Drop(shard.Origin);
             shard.MarkDelivered();
             mirrorFrame.RefreshTargetVisual();
-            PlayFeedback(shardAcceptedSfxOverride, shardAcceptedSfxId);
+            PlayFeedback(
+                shardAcceptedSfxOverride,
+                shardAcceptedSfxId,
+                GameSfxPaths.InteractionConfirm);
 
             if (result != MirrorShardDeliveryResult.SequenceCompleted)
                 return;
@@ -182,7 +185,10 @@ namespace BokeGameJam.Gameplay
 
         public void NotifyMirrorPiecePlaced()
         {
-            PlayFeedback(mirrorPieceSfxOverride, mirrorPieceSfxId);
+            PlayFeedback(
+                mirrorPieceSfxOverride,
+                mirrorPieceSfxId,
+                GameSfxPaths.InteractionConfirm);
         }
 
         public void CompleteMirrorAssembly()
@@ -518,7 +524,7 @@ namespace BokeGameJam.Gameplay
                 body.velocity = Vector2.zero;
         }
 
-        private void PlayFeedback(AudioClip clipOverride, string resourceId)
+        private void PlayFeedback(AudioClip clipOverride, string resourceId, string fallbackResourcePath = null)
         {
             if (clipOverride != null)
             {
@@ -535,7 +541,30 @@ namespace BokeGameJam.Gameplay
             }
 
             if (!string.IsNullOrWhiteSpace(resourceId) && GameAudioManager.Instance != null)
+            {
                 GameAudioManager.Instance.PlaySFXById(resourceId.Trim());
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(fallbackResourcePath) && GameAudioManager.Instance != null)
+                GameAudioManager.Instance.PlaySFXByResourcePath(fallbackResourcePath);
+        }
+
+        private void PlayFailureFeedback(AudioClip clipOverride, string resourceId)
+        {
+            if (clipOverride != null || !string.IsNullOrWhiteSpace(resourceId))
+            {
+                PlayFeedback(clipOverride, resourceId);
+                return;
+            }
+
+            if (GameAudioManager.Instance == null)
+                return;
+
+            GameAudioManager.Instance.PlayRandomSFXByResourcePaths(
+                1f,
+                GameSfxPaths.PuzzleFailure1,
+                GameSfxPaths.PuzzleFailure3);
         }
 
         private static Sprite CreateFallbackSprite()

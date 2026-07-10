@@ -54,6 +54,9 @@ namespace BokeGameJam.Gameplay
                 return;
 
             SetLightsOn(!lightsOn);
+
+            if (GameAudioManager.Instance != null)
+                GameAudioManager.Instance.PlaySFXByResourcePath(GameSfxPaths.LightSwitch);
         }
 
         /// <summary>关卡编辑器 / 外部写入房间 id。</summary>
