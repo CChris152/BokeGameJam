@@ -119,8 +119,9 @@ namespace BokeGameJam.UI
                 {
                     MediaSequenceItem.Text(1),
                     MediaSequenceItem.Text(2),
-                    MediaSequenceItem.Video(1),
                     MediaSequenceItem.Text(3),
+                    MediaSequenceItem.Video(1),
+                    MediaSequenceItem.Text(4),
                 }
             }
         };

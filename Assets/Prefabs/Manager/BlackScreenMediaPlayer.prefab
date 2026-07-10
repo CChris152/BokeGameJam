@@ -61,10 +61,12 @@ MonoBehaviour:
   - id: 0
     text: "\u7B2C\u4E00\u7AE0"
   - id: 1
-    text: "\u2026\u2026\u59D0\u59D0\u8BF4\uFF0C\u8FD9\u4E24\u6735\u8981\u4E00\u76F4\u6446\u5728\u7A97\u8FB9\u3002"
+    text: "\u2026\u2026\u6709\u4E2A\u58F0\u97F3\uFF0C\u90A3\u4E48\u8FD1\uFF0C\u90A3\u4E48\u719F\u2014\u2014"
   - id: 2
-    text: "\u5979\u8BF4\uFF0C\u8FD9\u6837\u6211\u4EEC\u5C31\u6C38\u8FDC\u2026\u2026"
+    text: "\u8FD9\u4E24\u6735\uFF0C\u8981\u4E00\u76F4\u6446\u5728\u7A97\u8FB9\u3002\u8FD9\u6837\u6211\u4EEC\u5C31\u2026\u2026"
   - id: 3
+    text: "\u518D\u5F80\u4E0B\uFF0C\u662F\u4E00\u7247\u7A7A\u767D\u3002\u6211\u60F3\u6293\u4F4F\u90A3\u4E2A\u58F0\u97F3\uFF0C\u53EF\u5B83\u50CF\u6C34\u4E00\u6837\uFF0C\u4ECE\u6307\u7F1D\u91CC\u6F0F\u8D70\u4E86\u3002"
+  - id: 4
     text: "\u7B2C\u4E8C\u7AE0"
   videos:
   - id: 0
@@ -84,10 +86,12 @@ MonoBehaviour:
       Id: 1
     - Kind: 0
       Id: 2
+    - Kind: 0
+      Id: 3
     - Kind: 1
       Id: 1
     - Kind: 0
-      Id: 3
+      Id: 4
   textHoldDuration: 3
   contentFadeDuration: 1
   fallbackBlackFadeInDuration: 1
