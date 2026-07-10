@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f4d05d0ebf78042b77867a97716f36, type: 3}
   m_Name: Story4
   m_EditorClassIdentifier: 
-  storyId: "4"
+  storyId: 4
   lines:
-  - "???: 这个相片……"
+  - "???\uFF1A\u8FD9\u4E2A\u76F8\u7247\u2026\u2026\u8FD9\u4E9B\u82B1\u2026\u2026"

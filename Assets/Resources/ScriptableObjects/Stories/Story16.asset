@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   storyId: 16
   lines:
-  - "???\u300C\u6CA1\u5173\u7CFB\uFF0C\u518D\u6765\u300D"
-  - "???\u300C\u518D\u6765\u4E00\u6B21\u5427\u300D\u3002"
+  - "???\uFF1A\u6CA1\u5173\u7CFB\uFF0C\u518D\u6765\u3002"
+  - "???\uFF1A\u518D\u6765\u4E00\u6B21\u5427\u3002"

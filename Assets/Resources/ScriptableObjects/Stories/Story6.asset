@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f4d05d0ebf78042b77867a97716f36, type: 3}
   m_Name: Story6
   m_EditorClassIdentifier: 
-  storyId: "6"
+  storyId: 6
   lines:
-  - "???: ……好像，不是这一朵呢。"
+  - "???\uFF1A\u2026\u2026\u597D\u50CF\uFF0C\u4E0D\u662F\u8FD9\u4E00\u6735\u5462\u3002"

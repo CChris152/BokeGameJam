@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f4d05d0ebf78042b77867a97716f36, type: 3}
   m_Name: Story5
   m_EditorClassIdentifier: 
-  storyId: "5"
+  storyId: 5
   lines:
-  - "???: 只有这些花儿还在这里"
+  - "???\uFF1A\u53EA\u6709\u8FD9\u4E9B\u82B1\u513F\u8FD8\u5728\u8FD9\u91CC"
