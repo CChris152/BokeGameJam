@@ -12,10 +12,12 @@ namespace BokeGameJam.Gameplay
     /// 可交互物体基类。默认可捡起；子类可改为 Trigger 模式。
     /// mechanismId 用于把同一机制下的 A/B/C 绑在一起，避免多机制交叉。
     /// 所属层级由 <see cref="LevelObject.LevelLayer"/> 决定（Shared / A / B）。
+    /// Prefab 结构：根节点挂交互脚本；子物体 Image 挂 SpriteRenderer + Collider2D。
     /// </summary>
-    [RequireComponent(typeof(Collider2D))]
     public class InteractableObject : LevelObject, IInteractable
     {
+        private const string ImageChildName = "Image";
+
         [SerializeField] private string mechanismId;
         [SerializeField] private string displayName;
         [SerializeField] private Sprite iconOverride;
@@ -46,9 +48,32 @@ namespace BokeGameJam.Gameplay
 
         protected virtual void Awake()
         {
-            col = GetComponent<Collider2D>();
-            spriteRenderer = GetComponent<SpriteRenderer>();
+            ResolveVisualAndCollider();
             originalLocalScale = transform.localScale;
+        }
+
+        /// <summary>
+        /// 优先从子物体 Image 取 SpriteRenderer / Collider2D；
+        /// 兼容旧 prefab（组件仍在根节点上）。
+        /// </summary>
+        protected void ResolveVisualAndCollider()
+        {
+            Transform image = transform.Find(ImageChildName);
+            if (image != null)
+            {
+                col = image.GetComponent<Collider2D>();
+                spriteRenderer = image.GetComponent<SpriteRenderer>();
+            }
+
+            if (col == null)
+                col = GetComponent<Collider2D>();
+            if (spriteRenderer == null)
+                spriteRenderer = GetComponent<SpriteRenderer>();
+
+            if (col == null)
+                col = GetComponentInChildren<Collider2D>(true);
+            if (spriteRenderer == null)
+                spriteRenderer = GetComponentInChildren<SpriteRenderer>(true);
         }
 
         public virtual bool CanInteract(PlayerInteractor interactor)

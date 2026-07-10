@@ -23,6 +23,7 @@ namespace BokeGameJam.Gameplay
 
         private bool wasActivated;
         private AudioSource localAudioSource;
+        private static AudioClip fallbackBeepClip;
 
         protected override void Awake()
         {
@@ -58,20 +59,33 @@ namespace BokeGameJam.Gameplay
             wasActivated = IsActivated;
             ApplyLightGlow();
 
-            if (ShouldPlaySequenceSuccessAudio())
+            if (IsActivated && AreAllLampsInSequenceGroupActivated())
                 PlaySequenceSuccessAudio();
         }
 
-        private bool ShouldPlaySequenceSuccessAudio()
+        private bool AreAllLampsInSequenceGroupActivated()
         {
-            if (string.IsNullOrWhiteSpace(SequenceGroupId))
+            string groupId = SequenceGroupId;
+            if (string.IsNullOrWhiteSpace(groupId))
                 return false;
 
-            string id = MechanismId;
-            if (string.IsNullOrEmpty(id))
-                return false;
+            InteractableObjectStreetLamp[] lamps = FindObjectsOfType<InteractableObjectStreetLamp>();
+            bool foundMember = false;
+            for (int i = 0; i < lamps.Length; i++)
+            {
+                InteractableObjectStreetLamp lamp = lamps[i];
+                if (lamp == null)
+                    continue;
 
-            return IsActivated && IsMechanismSatisfied(id);
+                if (!string.Equals(lamp.SequenceGroupId, groupId, System.StringComparison.Ordinal))
+                    continue;
+
+                foundMember = true;
+                if (!lamp.IsActivated)
+                    return false;
+            }
+
+            return foundMember;
         }
 
         private void ResolveLightGlow()
@@ -94,24 +108,57 @@ namespace BokeGameJam.Gameplay
 
         private void PlaySequenceSuccessAudio()
         {
+            EnsureLocalAudioSource();
+
             if (sequenceSuccessClip != null)
             {
-                if (localAudioSource == null)
-                {
-                    localAudioSource = GetComponent<AudioSource>();
-                    if (localAudioSource == null)
-                    {
-                        localAudioSource = gameObject.AddComponent<AudioSource>();
-                        localAudioSource.playOnAwake = false;
-                    }
-                }
-
                 localAudioSource.PlayOneShot(sequenceSuccessClip);
                 return;
             }
 
             if (!string.IsNullOrWhiteSpace(sequenceSuccessSfxId) && GameAudioManager.Instance != null)
+            {
                 GameAudioManager.Instance.PlaySFXById(sequenceSuccessSfxId.Trim());
+                return;
+            }
+
+            // Fallback cue when no clip / SFX id is assigned yet.
+            localAudioSource.PlayOneShot(GetFallbackBeepClip());
+        }
+
+        private void EnsureLocalAudioSource()
+        {
+            if (localAudioSource != null)
+                return;
+
+            localAudioSource = GetComponent<AudioSource>();
+            if (localAudioSource == null)
+            {
+                localAudioSource = gameObject.AddComponent<AudioSource>();
+                localAudioSource.playOnAwake = false;
+            }
+        }
+
+        private static AudioClip GetFallbackBeepClip()
+        {
+            if (fallbackBeepClip != null)
+                return fallbackBeepClip;
+
+            const int sampleRate = 44100;
+            const float duration = 0.18f;
+            int sampleCount = Mathf.CeilToInt(sampleRate * duration);
+            float[] samples = new float[sampleCount];
+
+            for (int i = 0; i < sampleCount; i++)
+            {
+                float t = i / (float)sampleRate;
+                float envelope = 1f - (t / duration);
+                samples[i] = Mathf.Sin(2f * Mathf.PI * 880f * t) * envelope * 0.35f;
+            }
+
+            fallbackBeepClip = AudioClip.Create("StreetLampSequenceBeep", sampleCount, 1, sampleRate, false);
+            fallbackBeepClip.SetData(samples, 0);
+            return fallbackBeepClip;
         }
 
         private static bool IsInUnderworld()
