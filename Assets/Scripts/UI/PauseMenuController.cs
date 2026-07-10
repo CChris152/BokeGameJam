@@ -8,6 +8,7 @@ namespace BokeGameJam.UI
 {
     /// <summary>
     /// 暂停弹窗控制器：返回主菜单、音乐/音效音量调节、关闭弹窗。
+    /// 打开时不暂停时间，仅切换到 UI 输入上下文以屏蔽游戏按键；ESC 仍由 PauseMenuTrigger 处理。
     /// 通常由 <see cref="PauseMenuTrigger"/> 在按下 Escape 时打开。
     /// </summary>
     public class PauseMenuController : MonoBehaviour
@@ -41,7 +42,6 @@ namespace BokeGameJam.UI
 
         private CanvasGroup contentCanvasGroup;
         private Coroutine openRoutine;
-        private float previousTimeScale = 1f;
         private InputContext previousInputContext = InputContext.Gameplay;
         private bool pauseStateApplied;
 
@@ -127,13 +127,18 @@ namespace BokeGameJam.UI
                 slider.onValueChanged.RemoveListener(callback);
         }
 
+        /// <summary>
+        /// 打开暂停页：不暂停时间，只切到 UI 输入上下文，屏蔽 WASD / E / Shift 等游戏输入。
+        /// ESC 由 <see cref="PauseMenuTrigger"/> 单独处理，不受此上下文影响。
+        /// </summary>
         private void ApplyPauseState()
         {
             if (pauseStateApplied)
                 return;
 
-            previousTimeScale = Time.timeScale;
-            Time.timeScale = 0f;
+            // 若此前误把 timeScale 置 0，打开暂停页时先恢复，避免卡死。
+            if (Time.timeScale <= 0f)
+                Time.timeScale = 1f;
 
             if (InputManager.Instance != null)
             {
@@ -148,8 +153,6 @@ namespace BokeGameJam.UI
         {
             if (!pauseStateApplied)
                 return;
-
-            Time.timeScale = previousTimeScale;
 
             if (InputManager.Instance != null && InputManager.Instance.CurrentContext == InputContext.UI)
                 InputManager.Instance.SetContext(previousInputContext);

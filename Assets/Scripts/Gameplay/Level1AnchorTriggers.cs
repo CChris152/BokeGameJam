@@ -3,6 +3,7 @@ using BokeGameJam.CameraSystem;
 using BokeGameJam.Core;
 using BokeGameJam.Data;
 using BokeGameJam.Input;
+using BokeGameJam.Levels;
 using BokeGameJam.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,7 +15,8 @@ namespace BokeGameJam.Gameplay
     /// 玩家 X 从左到右越过 Anchor1 → 平滑移到 Place2；
     /// 越过 Anchor2 → Place3；反向越过则反向切换。
     /// 子物体命名：Place1 / Place2 / Place3 / Anchor1 / Anchor2（也可在 Inspector 拖引用）。
-    /// 开场可播放配置的剧情字幕。
+    /// 开场 / 首次摘花 / 首次 Shift 剧情；
+    /// 通关需同时满足：红黄花交付完成 + 表世界灯光（卧室亮、客厅暗、厨房亮）。
     /// </summary>
     [DefaultExecutionOrder(200)]
     public sealed class Level1AnchorTriggers : MonoBehaviour
@@ -56,8 +58,20 @@ namespace BokeGameJam.Gameplay
         [SerializeField] private string firstShiftStoryResourcePath = DefaultFirstShiftStoryResourcePath;
         [SerializeField] private bool playStoryOnFirstShift = true;
 
+        [Header("Level Clear Conditions")]
+        [Tooltip("红黄花交付完成后为 true；由本脚本轮询 FlowerCollector。")]
+        [SerializeField] private bool flowersDelivered;
+        [SerializeField] private string bedroomRoomId = "room_1";
+        [SerializeField] private string livingRoomId = "room_2";
+        [SerializeField] private string kitchenRoomId = "room_3";
+        [Tooltip("目标：卧室亮、客厅暗、厨房亮。")]
+        [SerializeField] private bool requireBedroomLightsOn = true;
+        [SerializeField] private bool requireLivingRoomLightsOn = false;
+        [SerializeField] private bool requireKitchenLightsOn = true;
+
         private PlayerController player;
         private PlayerInteractor playerInteractor;
+        private InteractableObjectFlowerCollector flowerCollector;
         private float previousPlayerX;
         private bool hasPreviousPlayerX;
         private Coroutine moveRoutine;
@@ -66,6 +80,7 @@ namespace BokeGameJam.Gameplay
         private Transform currentPlace;
         private bool hasPlayedFirstFlowerStory;
         private bool hasPlayedFirstShiftStory;
+        private bool levelAdvanceStarted;
 
         private void Awake()
         {
@@ -88,6 +103,7 @@ namespace BokeGameJam.Gameplay
                 return;
 
             EventManager.On(InputEvents.WorldToggle, OnWorldTogglePressed);
+            EventManager.On<RoomLightsInfo>(GameEvents.LightsOffChanged, OnLightsOffChanged);
         }
 
         private void Start()
@@ -109,6 +125,7 @@ namespace BokeGameJam.Gameplay
         private void OnDisable()
         {
             EventManager.Off(InputEvents.WorldToggle, OnWorldTogglePressed);
+            EventManager.Off<RoomLightsInfo>(GameEvents.LightsOffChanged, OnLightsOffChanged);
 
             if (introStoryRoutine != null)
             {
@@ -193,6 +210,8 @@ namespace BokeGameJam.Gameplay
                 return;
 
             TryTriggerFirstFlowerStory();
+            TrySyncFlowerDeliveryCondition();
+            TryAdvanceLevelIfReady();
 
             float x = playerTransform.position.x;
             if (!hasPreviousPlayerX)
@@ -290,6 +309,64 @@ namespace BokeGameJam.Gameplay
 
             playerInteractor = interactor;
             return interactor != null;
+        }
+
+        private void OnLightsOffChanged(RoomLightsInfo _)
+        {
+            TryAdvanceLevelIfReady();
+        }
+
+        /// <summary>红黄花交付完成后，将 flowersDelivered 置为 true（不再由收集器直接切关）。</summary>
+        private void TrySyncFlowerDeliveryCondition()
+        {
+            if (flowersDelivered)
+                return;
+
+            if (flowerCollector == null)
+                flowerCollector = FindObjectOfType<InteractableObjectFlowerCollector>();
+
+            if (flowerCollector != null && flowerCollector.IsCompleted)
+                flowersDelivered = true;
+        }
+
+        /// <summary>
+        /// 灯光目标：卧室亮、客厅暗、厨房亮（room_1 / room_2 / room_3）。
+        /// 未写入缓存时按初始态：卧室亮、客厅暗、厨房暗。
+        /// </summary>
+        private bool IsLightsConditionMet()
+        {
+            return IsRoomLightsOn(bedroomRoomId, requireBedroomLightsOn, defaultLightsOn: true)
+                && IsRoomLightsOn(livingRoomId, requireLivingRoomLightsOn, defaultLightsOn: false)
+                && IsRoomLightsOn(kitchenRoomId, requireKitchenLightsOn, defaultLightsOn: false);
+        }
+
+        private static bool IsRoomLightsOn(string roomId, bool requireOn, bool defaultLightsOn)
+        {
+            bool lightsOn = defaultLightsOn;
+            if (RoomLightsState.TryGet(roomId, out bool lightsOff))
+                lightsOn = !lightsOff;
+
+            return lightsOn == requireOn;
+        }
+
+        private void TryAdvanceLevelIfReady()
+        {
+            if (!sceneReady || levelAdvanceStarted)
+                return;
+
+            TrySyncFlowerDeliveryCondition();
+            if (!flowersDelivered || !IsLightsConditionMet())
+                return;
+
+            levelAdvanceStarted = true;
+            LevelManager manager = LevelManager.EnsureExists();
+            if (!manager.CompleteAndLoadNextLevel())
+            {
+                Debug.LogWarning(
+                    "[Level1AnchorTriggers] 通关条件已满足，但没有下一关可加载。",
+                    this);
+                levelAdvanceStarted = false;
+            }
         }
 
         private void SnapCameraTo(Transform place)

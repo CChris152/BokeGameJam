@@ -46,6 +46,9 @@ namespace BokeGameJam.Gameplay
 
         public override bool CanInteract(PlayerInteractor interactor)
         {
+            if (!base.CanInteract(interactor))
+                return false;
+
             if (completed)
                 return false;
 

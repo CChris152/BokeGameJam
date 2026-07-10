@@ -55,7 +55,7 @@ MonoBehaviour:
   completedColor: {r: 0.25, g: 0.45, b: 0.9, a: 1}
   requiredRedFlowers: 1
   requiredYellowFlowers: 1
-  loadNextLevelOnComplete: 1
+  loadNextLevelOnComplete: 0
 --- !u!1 &7816960226681675066
 GameObject:
   m_ObjectHideFlags: 0

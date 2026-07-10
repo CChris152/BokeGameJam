@@ -513,7 +513,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "2D\u6A2A\u677F\u8DF3\u8DC3\u6E38\u620F"
+  m_text: RE:MEMBER
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f809cf5b21a4b58489166c1657a71121, type: 2}
   m_sharedMaterial: {fileID: -2087841283807870798, guid: f809cf5b21a4b58489166c1657a71121, type: 2}

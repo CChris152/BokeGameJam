@@ -140,13 +140,39 @@ namespace BokeGameJam.Gameplay
             EmitHeldChanged();
         }
 
-        /// <summary>切换到里世界（B）时，自动丢弃手中的花。</summary>
+        /// <summary>切换世界时清理失效 nearby；切到里世界（B）时自动丢弃手中的花。</summary>
         private void OnActiveWorldChanged(WorldId world)
         {
+            PruneInactiveNearby();
+
             if (world != WorldId.B || held is not InteractableObjectFlower)
                 return;
 
             DropHeld();
+        }
+
+        /// <summary>
+        /// 切世界时 SetActive(false) 往往不会触发 OnTriggerExit，
+        /// 表世界物体会残留在 nearby，导致里世界误交互。
+        /// </summary>
+        private void PruneInactiveNearby()
+        {
+            removeBuffer.Clear();
+
+            foreach (IInteractable interactable in nearby)
+            {
+                if (!IsValidInteractable(interactable))
+                    removeBuffer.Add(interactable);
+            }
+
+            for (int i = 0; i < removeBuffer.Count; i++)
+            {
+                IInteractable interactable = removeBuffer[i];
+                if (IsUnityObjectAlive(interactable))
+                    interactable.SetInInteractRange(false);
+                nearby.Remove(interactable);
+                contactCounts.Remove(interactable);
+            }
         }
 
         /// <summary>交付处消耗当前持有物（销毁）。</summary>
@@ -321,7 +347,15 @@ namespace BokeGameJam.Gameplay
 
         private bool IsValidInteractable(IInteractable interactable)
         {
-            return IsUnityObjectAlive(interactable) && interactable.CanInteract(this);
+            if (!IsUnityObjectAlive(interactable))
+                return false;
+
+            // 非当前世界层被 SetActive(false) 后仍可能留在 nearby。
+            if (interactable is Behaviour behaviour
+                && (!behaviour.isActiveAndEnabled || !behaviour.gameObject.activeInHierarchy))
+                return false;
+
+            return interactable.CanInteract(this);
         }
 
         private static bool IsUnityObjectAlive(IInteractable interactable)

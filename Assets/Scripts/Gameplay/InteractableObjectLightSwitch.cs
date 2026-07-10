@@ -45,7 +45,7 @@ namespace BokeGameJam.Gameplay
 
         public override bool CanInteract(PlayerInteractor interactor)
         {
-            return true;
+            return base.CanInteract(interactor);
         }
 
         public override void OnInteract(PlayerInteractor interactor)

@@ -15,8 +15,8 @@ namespace BokeGameJam.Gameplay
         [SerializeField] private int requiredYellowFlowers = 1;
 
         [Header("Level Transition")]
-        [Tooltip("收集完成后是否自动进入下一关")]
-        [SerializeField] private bool loadNextLevelOnComplete = true;
+        [Tooltip("收集完成后是否自动进入下一关。第一关请关闭，由 Level1AnchorTriggers 统一判定通关。")]
+        [SerializeField] private bool loadNextLevelOnComplete = false;
 
         private int collectedRed;
         private int collectedYellow;
@@ -29,6 +29,9 @@ namespace BokeGameJam.Gameplay
 
         public override bool CanInteract(PlayerInteractor interactor)
         {
+            if (!base.CanInteract(interactor))
+                return false;
+
             if (completed)
                 return false;
 
